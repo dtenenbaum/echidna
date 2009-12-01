@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" y="39" x="11" width="100%" height="100%" backgroundColor="0x000000" verticalScrollPolicy="off"
+	 xmlns:local="flexlib.containers.*" creationComplete="load()">
+	<mx:Script>
+		<![CDATA[
+		
+		import mx.controls.Alert;
+		import mx.collections.Sort;
+		import mx.controls.LinkButton;
+		import mx.collections.SortField;
+		import mx.rpc.events.FaultEvent;
+		import mx.rpc.events.ResultEvent;
+		import mx.collections.ArrayCollection;
+		
+		[Bindable]
+		public var MinFontSize:Number = 10;
+		
+		[Bindable]
+		public var MaxFontSize:Number = 25;
+		
+		[Bindable]
+		public var HoverColor:uint = 0xFF66666;
+		
+		[Bindable]
+		public var FontColor:uint = 0x303030;
+		
+		[Bindable]
+		public var XmlFileSource:String = "";
+		
+		[Bindable]
+		public var TagFieldName:String = "";
+		
+		[Bindable]
+		public var BackgroundColor:uint = 0xFFFFFF;
+		
+		[Bindable]
+		public var BackgroundAlpha:Number = 1;
+		
+		private var tag:LinkButton;
+		
+		private function load():void
+		{
+			if(XmlFileSource != '' && TagFieldName != '')
+			{
+				XMLService.send();
+			}
+			else
+			{
+				Alert.show("XML source not specified.");	
+			}		
+		}
+		
+		private function resultHandler(evt:ResultEvent):void
+		{
+			buildTagCloud(new XML(evt.result));
+		}
+		
+		private function errorHandler(evt:FaultEvent):void
+		{
+			Alert.show("Error: " + evt.fault.message);
+		}
+		
+		private function buildTagCloud(xml:XML):void
+		{
+			var x:XMLList = xml.children();
+			var a:ArrayCollection = new ArrayCollection();
+			var s:String = ""; 
+			var last:String = "";
+			var n:int = 1;
+			var max:int = 1;
+			
+			for(var i:Number = 0; i < x.length(); i++)
+			{
+				if(x[i].toString().indexOf(TagFieldName) > -1)
+				{
+					var node:XML = x[i];
+					//trace(TagFieldName + "(" + i + ") = " + node.child(TagFieldName).toString());
+					a.addItem(node.child(TagFieldName).toString());
+				}
+			}
+			
+			// sort alphabetically
+			var sort:Sort = new Sort();
+			a.sort = sort;
+			a.refresh();
+			
+			max = getMaxOccur(a);
+			
+			// Figure out how many times each word appears
+			for(i = 0; i < a.length; i++)
+			{
+				if(i > 0) // no comparison to do on the first one
+				{ 
+					s = a[i].toString();
+					
+					if(last == s)
+					{
+						n++;
+					}
+					else
+					{
+						// whatever term was last appears n times then reset n
+						tagContainer.addChild(createTagLink(last, getFontHeight(n, max)));
+						n = 1;
+					}
+				}
+				
+				last = a[i].toString();	
+			}
+		}
+		
+		private function createTagLink(label:String, size:Number):LinkButton
+		{
+			tag = new LinkButton();
+			tag.label = label;
+			tag.setStyle("fontWeight","normal");
+			tag.setStyle("fontFamily","Verdana");
+			tag.setStyle("paddingRight",0);
+			tag.setStyle("paddingLeft",0);
+			tag.setStyle("fontSize", size);
+			tag.setStyle("color", FontColor);
+			tag.setStyle("textRollOverColor", HoverColor)
+			tag.alpha = 0;
+			tag.addEventListener(MouseEvent.CLICK, tagClickHandler);
+			return tag;	
+		}
+        
+        // get the maximum times a tag occurs for scaling.
+		private function getMaxOccur(arr:ArrayCollection):Number
+		{
+			var max:int = 1;
+			var n:int = 1;
+			var last:String = "";
+			
+			for(var i:Number = 0; i < arr.length; i++)
+			{
+				if(i > 0)
+				{ 
+					if(last != arr[i].toString())
+					{
+						if(n > max) max = n;
+						n = 1;
+					}
+					else
+					{
+						n++;
+					}					
+				}	
+				
+				last = arr[i].toString();					
+			} 
+			
+			return max;
+		}
+		
+		public function tagClickHandler(evt:MouseEvent):void
+		{
+			Alert.show("You clicked: " + evt.target.label);
+		}
+		
+		// scaling between occurences and font size
+		// @occurences - the # of times a tag has occured in the xml
+		// @maxoccur - the largest occurence value 
+		public function getFontHeight(occurences:int, maxoccur:int):int
+		{
+			var interval:int = Math.round((MaxFontSize - MinFontSize) / 3);
+			var ht:int = MinFontSize;
+			
+			if(occurences == maxoccur)
+			{
+				// largest size
+				ht = MaxFontSize;
+			}
+			else if(occurences >= (maxoccur / 2))
+			{
+				ht = MaxFontSize - interval;
+			}
+			else if(occurences > 1)
+			{
+				ht = MinFontSize + interval;
+			}
+			else
+			{
+				// smallest/default size
+				ht = MinFontSize;
+			}
+			
+			return ht;
+		}
+
+		]]>
+	</mx:Script>
+	<mx:HTTPService fault="errorHandler(event)" id="XMLService" resultFormat="e4x" url="{XmlFileSource}" result="resultHandler(event)" />
+	<local:FlowBox width="100%" height="100%" horizontalScrollPolicy="off" id="tagContainer" verticalAlign="bottom" backgroundColor="{BackgroundColor}"
+	  	 backgroundAlpha="{BackgroundAlpha}" horizontalAlign="center" horizontalGap="0" verticalGap="0" />
+</mx:Canvas>

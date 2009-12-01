@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:local="*">
+
+	<mx:Script>
+		<![CDATA[
+			
+			
+		]]>
+	</mx:Script>
+	<local:TagCloud id="LocalTagCloud" 
+		MaxFontSize="25" MinFontSize="10" 
+		width="400" height="125" x="10" y="10" 
+		XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
+		BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
+</mx:Application>

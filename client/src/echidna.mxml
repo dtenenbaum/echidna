@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" color="#000000" backgroundColor="#FFFFFF" pageTitle="EchiDNA" xmlns:local="*"
+	applicationComplete="init()">
+	<mx:Panel x="5" y="10" width="952" height="662" layout="absolute" borderStyle="solid">
+		<mx:Text x="10" y="0" text="Echidna" width="135" height="21"/>
+		<mx:Canvas x="10" y="29" width="191" height="583">
+			<mx:Accordion  width="100%" height="100%">
+				<mx:Canvas label="Results" width="100%" height="100%">
+					<mx:Accordion  width="80%" height="100%">
+						<mx:Canvas label="All" width="100%" height="100%">
+						</mx:Canvas>
+						<mx:Canvas label="Ungrouped" width="100%" height="100%">
+						</mx:Canvas>
+						<mx:Canvas label="Grouped" width="100%" height="100%">
+						</mx:Canvas>
+						<mx:Canvas label="Shared By Others" width="100%" height="100%">
+						</mx:Canvas>
+
+					</mx:Accordion>
+				</mx:Canvas>
+				<mx:Canvas label="Experiments" width="100%" height="100%">
+				</mx:Canvas>
+				<mx:Canvas label="Tags" width="100%" height="100%">
+				</mx:Canvas>
+			</mx:Accordion>
+		</mx:Canvas>
+		<mx:VDividedBox x="209" y="19" height="593" width="703">
+			<mx:HDividedBox width="100%" height="80%">
+				<mx:Canvas width="547" height="467" borderStyle="solid">
+					<mx:Button x="20" y="10" label="Import"/>
+					<mx:Button x="95" y="10" label="..."/>
+					<mx:AdvancedDataGrid x="20" y="58" id="adg1" designViewDataType="flat">
+						<mx:columns>
+							<mx:AdvancedDataGridColumn headerText="Name" dataField="col1"/>
+							<mx:AdvancedDataGridColumn headerText="SBEAMS ID" dataField="col2"/>
+							<mx:AdvancedDataGridColumn headerText="Slide ID" dataField="col3"/>
+							<mx:AdvancedDataGridColumn headerText="Owner" dataField="col3"/>
+							<mx:AdvancedDataGridColumn headerText="Access" dataField="col3"/>
+						</mx:columns>
+					</mx:AdvancedDataGrid>
+				</mx:Canvas>
+
+					<mx:VDividedBox x="10" y="10" height="455" id="coams" width="116">
+						<mx:Canvas width="100%" height="70%" borderStyle="solid" id="t">
+							<mx:Text x="10" y="10" text="Grouped In:"/>
+							<mx:DataGrid x="10" y="36" width="94">
+								<mx:columns>
+									<mx:DataGridColumn headerText="ID" dataField="col1"/>
+									<mx:DataGridColumn headerText="Name" dataField="col2"/>
+								</mx:columns>
+							</mx:DataGrid>
+						</mx:Canvas>
+						<mx:Canvas width="100%" height="171" borderStyle="solid" id="b">
+							<mx:Text x="10" y="10" text="Tags:"/>
+								<local:TagCloud id="LocalTagCloud" 
+									MaxFontSize="16" MinFontSize="8" 
+									width="100%" height="80%"  
+									XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
+									BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
+
+						</mx:Canvas>
+					</mx:VDividedBox>
+			</mx:HDividedBox>
+			<mx:Canvas width="100%" height="20%" borderStyle="solid">
+				<mx:Text x="47" y="22" text="Description of condition" width="412"/>
+			</mx:Canvas>
+			
+		</mx:VDividedBox>
+		<mx:Text id="emailAddressTextBox" x="539" y="0" text="Not logged in" width="162"/>
+		<mx:Text x="709" y="0" text="Edit Profile" width="98"/>
+		<mx:Text x="815" y="0" text="Logout" width="79"/>
+		
+	</mx:Panel>
+	<mx:HTTPService id="getLoggedInUser" url="main/get_logged_in_user" result="populateEmailAddress(event)" fault="failedToPopulateEmailAddress(event)"
+		resultFormat="text">
+		
+	</mx:HTTPService>
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import org.systemsbiology.echidna.events.GotLoginInfoEvent;
+			import mx.containers.TitleWindow;
+			import org.systemsbiology.echidna.dialog.LoginDialog;
+			import mx.managers.PopUpManager;
+			import mx.controls.Alert;
+
+		import mx.rpc.events.FaultEvent;
+		import mx.rpc.events.ResultEvent;
+		
+		
+		
+			
+		public function init():void {
+			trace("in init function");
+			addEventListener(GotLoginInfoEvent.GOT_LOGIN_INFO_EVENT, gotEmailAddressFromUser);
+			trace("added event listener");
+			getLoggedInUser.send();
+		}
+		
+		public function gotEmailAddressFromUser(event:GotLoginInfoEvent):void {
+			trace("unfancy event handler");
+			Alert.show("email is: " + event.email);
+		}
+		
+		public function gotLoginInfoEventListener(event:GotLoginInfoEvent):void {
+			trace("fancy event handler");
+			Alert.show("email is: " + event.email);
+		}
+		
+		public function populateEmailAddress(event:ResultEvent):void {
+			var email:String = event.result as String;
+			trace("in populateEmailAddress, result is " + email);
+			if (email == 'not logged in') {
+				var loginDialog:LoginDialog = LoginDialog(PopUpManager.createPopUp(this, LoginDialog, true));
+				loginDialog.title = 'Login';
+				PopUpManager.centerPopUp(loginDialog);
+				trace("dialog has been popped up");
+			} else {
+				emailAddressTextBox.text = email;
+			}
+			
+		}
+		
+		public function failedToPopulateEmailAddress(event:FaultEvent):void {
+			Alert("Failed to find out who you are!");
+		}
+		
+		]]>
+	</mx:Script>
+	
+</mx:Application>
