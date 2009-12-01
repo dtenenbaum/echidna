@@ -1,4 +1,6 @@
 class MainController < ApplicationController
+
+  include Util
   
   def get_logged_in_user
     if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
@@ -22,6 +24,14 @@ class MainController < ApplicationController
   
   #cookies[:gwap2_cookie] = {:value => user.email,
   #  :expires => 1000.days.from_now }
+  
+  def get_all_conditions
+    conds = Condition.find :all, :order => 'id'
+    sorted_conds = sort_conditions_for_time_series(conds)
+    headers['Content-type'] = 'text/plain'
+    
+    render :text => sorted_conds.to_json#.map{|i|i.name}.join("\n")
+  end
   
   
 end

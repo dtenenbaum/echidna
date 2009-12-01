@@ -28,16 +28,20 @@
 			<mx:HDividedBox width="100%" height="80%">
 				<mx:Canvas width="547" height="467" borderStyle="solid">
 					<mx:Button x="20" y="10" label="Import"/>
-					<mx:Button x="95" y="10" label="..."/>
-					<mx:AdvancedDataGrid x="20" y="58" id="adg1" designViewDataType="flat">
+					<mx:Button x="95" y="10" label="Edit"/>
+					<mx:DataGrid x="10" y="57" id="adg1"  width="535" height="380" dataProvider="{conditionsAC}">
 						<mx:columns>
-							<mx:AdvancedDataGridColumn headerText="Name" dataField="col1"/>
-							<mx:AdvancedDataGridColumn headerText="SBEAMS ID" dataField="col2"/>
-							<mx:AdvancedDataGridColumn headerText="Slide ID" dataField="col3"/>
-							<mx:AdvancedDataGridColumn headerText="Owner" dataField="col3"/>
-							<mx:AdvancedDataGridColumn headerText="Access" dataField="col3"/>
+							<mx:DataGridColumn headerText="Name" dataField="name"/>
+							<mx:DataGridColumn headerText="SBEAMS ID" dataField="col2"/>
+							<mx:DataGridColumn headerText="Forward Slide ID" dataField="forward_slide_number"/>
+							<mx:DataGridColumn headerText="Reverse Slide ID" dataField="reverse_slide_number"/>
+							<mx:DataGridColumn headerText="Owner" dataField="col5"/>
+							<mx:DataGridColumn headerText="Access" dataField="col6"/>
 						</mx:columns>
-					</mx:AdvancedDataGrid>
+					</mx:DataGrid>
+					<mx:Button x="151" y="10" label="Group..."/>
+					<mx:Button x="231" y="10" label="DMV"/>
+					<mx:TextInput x="309" y="10" text="search" enabled="true" editable="false"/>
 				</mx:Canvas>
 
 					<mx:VDividedBox x="10" y="10" height="455" id="coams" width="116">
@@ -66,65 +70,105 @@
 			</mx:Canvas>
 			
 		</mx:VDividedBox>
-		<mx:Text id="emailAddressTextBox" x="539" y="0" text="Not logged in" width="162"/>
+		<mx:Text id="emailAddressTextBox" x="383" y="0" text="Not logged in" width="318"/>
 		<mx:Text x="709" y="0" text="Edit Profile" width="98"/>
 		<mx:Text x="815" y="0" text="Logout" width="79"/>
 		
 	</mx:Panel>
-	<mx:HTTPService id="getLoggedInUser" url="main/get_logged_in_user" result="populateEmailAddress(event)" fault="failedToPopulateEmailAddress(event)"
-		resultFormat="text">
-		
-	</mx:HTTPService>
-	
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.ChildExistenceChangedEvent;
+			import mx.events.CloseEvent;
 			import org.systemsbiology.echidna.events.GotLoginInfoEvent;
 			import mx.containers.TitleWindow;
 			import org.systemsbiology.echidna.dialog.LoginDialog;
 			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
+			import mx.rpc.http.HTTPService;
 
 		import mx.rpc.events.FaultEvent;
 		import mx.rpc.events.ResultEvent;
 		
+		import com.adobe.serialization.json.JSON;
 		
+		
+		protected var loggedInUser:String;
+		protected var conditionData:Object;
+		[Bindable]
+		protected var conditionsAC:ArrayCollection = new ArrayCollection();
 		
 			
 		public function init():void {
 			trace("in init function");
-			addEventListener(GotLoginInfoEvent.GOT_LOGIN_INFO_EVENT, gotEmailAddressFromUser);
-			trace("added event listener");
-			getLoggedInUser.send();
+			ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault);
 		}
 		
 		public function gotEmailAddressFromUser(event:GotLoginInfoEvent):void {
-			trace("unfancy event handler");
-			Alert.show("email is: " + event.email);
+			loggedInUser = event.email;
+			var loginService:mx.rpc.http.HTTPService = new mx.rpc.http.HTTPService();
+			loginService.url = "main/login";
+			loginService.send({email: loggedInUser});
+			loginService.resultFormat = "text";
+			ajax('main/login', {"email": loggedInUser}, loggedIn, ajaxFault); 
+			emailAddressTextBox.text = loggedInUser;
 		}
 		
-		public function gotLoginInfoEventListener(event:GotLoginInfoEvent):void {
-			trace("fancy event handler");
-			Alert.show("email is: " + event.email);
+		public function loggedIn(event:ResultEvent):void {
+			trace("logged in");
+			getConditions();
+		}
+
+		public function getConditions():void {
+			ajax('main/get_all_conditions',null,gotConditions,ajaxFault);
+		}
+				
+		public function gotConditions(event:ResultEvent):void {
+			conditionData = JSON.decode(event.result.toString());
+			conditionsAC = objectToArrayCollection(conditionData, 'condition');
+		}
+		
+		public function objectToArrayCollection(obj:Object, type:String):ArrayCollection {
+			var ac:ArrayCollection = new ArrayCollection();
+			for (var i:Object in obj) {
+				var item:Object = obj[i][type];
+				ac.addItem(item);
+			}
+			return ac;
 		}
 		
 		public function populateEmailAddress(event:ResultEvent):void {
 			var email:String = event.result as String;
 			trace("in populateEmailAddress, result is " + email);
 			if (email == 'not logged in') {
-				var loginDialog:LoginDialog = LoginDialog(PopUpManager.createPopUp(this, LoginDialog, true));
+				var loginDialog:LoginDialog;
+				loginDialog = LoginDialog(PopUpManager.createPopUp(this, LoginDialog, true));
+				loginDialog.addEventListener(GotLoginInfoEvent.GOT_LOGIN_INFO_EVENT, gotEmailAddressFromUser);
 				loginDialog.title = 'Login';
 				PopUpManager.centerPopUp(loginDialog);
 				trace("dialog has been popped up");
 			} else {
 				emailAddressTextBox.text = email;
+				getConditions();
 			}
 			
 		}
 		
-		public function failedToPopulateEmailAddress(event:FaultEvent):void {
-			Alert("Failed to find out who you are!");
+		public function ajaxFault(event:FaultEvent):void {
+			Alert.show("Server error!");
 		}
+		
+		
+		public function ajax(url:String, params:Object, result:Function, fault:Function): void {
+			var service:HTTPService = new HTTPService();
+			service.url = url;
+			service.resultFormat = "text";
+			service.addEventListener(ResultEvent.RESULT, result);
+			service.addEventListener(FaultEvent.FAULT, fault);
+			service.send(params);
+		}
+		
 		
 		]]>
 	</mx:Script>

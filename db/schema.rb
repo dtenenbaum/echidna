@@ -9,6 +9,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20091201195218) do
+
+  create_table "conditions", :force => true do |t|
+    t.integer  "experiment_id",        :limit => 11
+    t.string   "name"
+    t.integer  "sequence",             :limit => 11
+    t.boolean  "has_data"
+    t.integer  "forward_slide_number", :limit => 11
+    t.integer  "reverse_slide_number", :limit => 11
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

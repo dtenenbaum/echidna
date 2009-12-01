@@ -3,6 +3,7 @@ namespace "echidna" do
   task :deploy_client do
     puts "in deploy_client"
     cp_r 'client/bin-debug/.', 'public'
-    mv 'public/echidna.html', 'public/index.html'
+    cp 'public/echidna.html', 'public/index.html'
+    #ln_s 'public/index.html', 'public/echidna.html'
   end
 end
