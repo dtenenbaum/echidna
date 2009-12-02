@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" color="#000000" backgroundColor="#FFFFFF" pageTitle="EchiDNA" xmlns:local="*"
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" color="#000000" backgroundColor="#FFFFFF" pageTitle="Echidna" xmlns:local="*"
 	applicationComplete="init()">
 	<mx:Panel x="5" y="10" width="952" height="662" layout="absolute" borderStyle="solid">
 		<mx:Text x="10" y="0" text="Echidna" width="135" height="21"/>
@@ -18,7 +18,7 @@
 
 					</mx:Accordion>
 				</mx:Canvas>
-				<mx:Canvas label="Experiments" width="100%" height="100%">
+				<mx:Canvas label="Groupings" width="100%" height="100%">
 				</mx:Canvas>
 				<mx:Canvas label="Tags" width="100%" height="100%">
 				</mx:Canvas>
@@ -31,7 +31,7 @@
 					<mx:Button x="95" y="10" label="Edit"/>
 					<mx:DataGrid x="10" y="57" id="adg1"  width="535" height="380" dataProvider="{conditionsAC}">
 						<mx:columns>
-							<mx:DataGridColumn headerText="Name" dataField="name"/>
+							<mx:DataGridColumn headerText="Name" dataField="name" width="200"/>
 							<mx:DataGridColumn headerText="SBEAMS ID" dataField="col2"/>
 							<mx:DataGridColumn headerText="Forward Slide ID" dataField="forward_slide_number"/>
 							<mx:DataGridColumn headerText="Reverse Slide ID" dataField="reverse_slide_number"/>

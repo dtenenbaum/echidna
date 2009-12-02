@@ -19,12 +19,9 @@
 			}
 			
 			public function onOk():void {
-				trace("in onOk");
 				var evt:GotLoginInfoEvent = new GotLoginInfoEvent(GotLoginInfoEvent.GOT_LOGIN_INFO_EVENT);
 				evt.email = emailTxt.text;
-				trace("about to dispatch an event with this email: " + emailTxt.text);
-				var ret:Boolean = dispatchEvent(evt);
-				trace("return of event dispatch: " + ret);
+				dispatchEvent(evt);
 				PopUpManager.removePopUp(this);
 			}
 		]]>
