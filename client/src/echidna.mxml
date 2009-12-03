@@ -29,7 +29,8 @@
 				<mx:Canvas width="547" height="467" borderStyle="solid">
 					<mx:Button x="20" y="10" label="Import"/>
 					<mx:Button x="95" y="10" label="Edit"/>
-					<mx:DataGrid x="10" y="57" id="adg1"  width="535" height="380" dataProvider="{conditionsAC}">
+					<mx:DataGrid x="10" y="57" id="adg1"  width="535" height="380" dataProvider="{conditionsAC}"
+						allowMultipleSelection="true">
 						<mx:columns>
 							<mx:DataGridColumn headerText="Name" dataField="name" width="200"/>
 							<mx:DataGridColumn headerText="SBEAMS ID" dataField="col2"/>
@@ -39,9 +40,12 @@
 							<mx:DataGridColumn headerText="Access" dataField="col6"/>
 						</mx:columns>
 					</mx:DataGrid>
-					<mx:Button x="151" y="10" label="Group..."/>
-					<mx:Button x="231" y="10" label="DMV"/>
+					<mx:Button x="246.5" y="10" label="DMV"/>
 					<mx:TextInput x="309" y="10" text="search" enabled="true" editable="false"/>
+					<mx:PopUpMenuButton x="151" y="10" label="Groups..." width="81" dataProvider="{groupMenuItems}"
+						labelField="@label" itemClick="groupMenuClick(event)">
+						
+					</mx:PopUpMenuButton>
 				</mx:Canvas>
 
 					<mx:VDividedBox x="10" y="10" height="455" id="coams" width="116">
@@ -76,8 +80,16 @@
 		
 	</mx:Panel>
 	
+	<mx:XMLList id="groupMenuItems">
+        <node label="Add Selected Items To New Group..."/>
+        <node label="Add Selected Items To Existing Group..."/>
+        <node label="Go To Groups View"/>
+    </mx:XMLList>
+	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.dialog.NewGroupDialog;
+			import mx.events.MenuEvent;
 			import mx.collections.ArrayCollection;
 			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.CloseEvent;
@@ -103,6 +115,21 @@
 		public function init():void {
 			trace("in init function");
 			ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault);
+		}
+		
+		public function groupMenuClick(event:MenuEvent):void {
+			trace("group menu item clicked: " + event.label + ", index = " + event.index);
+			if (event.index == 0) {
+				return; // main button was clicked
+			}
+			
+			if (event.index == 1) { // add new group
+				var addGroupDialog:NewGroupDialog = NewGroupDialog(PopUpManager.createPopUp(this, NewGroupDialog, true));
+				PopUpManager.centerPopUp(addGroupDialog);
+				
+				
+			}
+			//Alert.show("group menu item clicked: " + event.label + ", index: " + event.index);
 		}
 		
 		public function gotEmailAddressFromUser(event:GotLoginInfoEvent):void {

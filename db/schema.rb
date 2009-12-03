@@ -9,7 +9,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091201195218) do
+ActiveRecord::Schema.define(:version => 20091202234330) do
+
+  create_table "condition_groupings", :force => true do |t|
+    t.integer  "condition_id",       :limit => 11
+    t.integer  "condition_group_id", :limit => 11
+    t.integer  "sequence",           :limit => 11
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "condition_groups", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "conditions", :force => true do |t|
     t.integer  "experiment_id",        :limit => 11

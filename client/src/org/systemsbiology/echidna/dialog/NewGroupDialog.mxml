@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="228" height="176" title="Add New Group" showCloseButton="true"
+	close="PopUpManager.removePopUp(this)" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			protected function init():void {
+				groupTxt.setFocus();
+			}
+			
+			protected function onOk():void {
+				
+			}
+		]]>
+	</mx:Script>
+	<mx:Label x="22" y="19" text="Name For New Group:" width="210"/>
+	<mx:TextInput x="22" y="45" id="groupTxt" enter="onOk()"/>
+	<mx:Button x="22" y="84" label="OK" id="okButton" click="onOk()"/>
+	<mx:Button x="86" y="84" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
+	
+</mx:TitleWindow>
