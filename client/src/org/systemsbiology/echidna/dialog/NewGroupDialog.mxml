@@ -3,6 +3,7 @@
 	close="PopUpManager.removePopUp(this)" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.GotNewGroupNameEvent;
 			import mx.managers.PopUpManager;
 			
 			protected function init():void {
@@ -10,7 +11,10 @@
 			}
 			
 			protected function onOk():void {
-				
+				var evt:GotNewGroupNameEvent = new GotNewGroupNameEvent(GotNewGroupNameEvent.GOT_NEW_GROUP_NAME_EVENT);
+				evt.groupName = groupTxt.text;
+				dispatchEvent(evt);
+				PopUpManager.removePopUp(this);	
 			}
 		]]>
 	</mx:Script>

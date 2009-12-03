@@ -1,5 +1,5 @@
 class MainController < ApplicationController
-
+  require 'json'
   include Util
   
   def get_logged_in_user
@@ -33,5 +33,17 @@ class MainController < ApplicationController
     render :text => sorted_conds.to_json#.map{|i|i.name}.join("\n")
   end
   
+  def check_if_group_exists
+    group = ConditionGroup.find_by_name params[:group_name]
+    render :text => (not group.nil?)
+  end
   
+  def create_new_group
+    ids = JSON.parse params[:ids]
+    group = ConditionGroup.new(:name => params[:name])
+    group.save
+    ids.each_with_index {|i,index|ConditionGrouping.new(:condition_id => i, :condition_group_id => group.id, :sequence => index +1).save}
+    render :text => "ok"
+  end
+    
 end
