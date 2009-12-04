@@ -9,7 +9,7 @@
 
 		<mx:MenuBar x="79" y="-1" width="273" dataProvider="{groupMenuItems}"
 			labelField="@label" itemClick="groupMenuClick(event)" fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #FFFFFF]"
-			borderColor="#FFFFFF">
+			borderColor="#FFFFFF" id="menuBar">
 			
 		</mx:MenuBar>
 
@@ -62,12 +62,19 @@
 							<mx:Button label="Remove" enabled="false"/>
 							<mx:Button label="..." enabled="false"/>
 						</mx:HBox>
-						<mx:DataGrid height="337" id="smallConditionGrid">
-							<mx:columns>
-								<mx:DataGridColumn headerText="Name" dataField="name"/>
-								<mx:DataGridColumn headerText="ID" dataField="description"/>
-							</mx:columns>
-						</mx:DataGrid>
+						<mx:VBox>
+						    <mx:Label text="Drag conditions to change order."/>							
+							<mx:DataGrid height="337" id="smallConditionGrid" dataProvider="{smallConditionsAC}"
+								dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragStart="smallConditionsGridStatus.text=''"
+								itemRollOver="createSCGTooltip(event)" itemRollOut="deleteSCGTooltip(event)"
+								dragDrop="conditionDropped(event)">
+								<mx:columns>
+									<mx:DataGridColumn headerText="Name" dataField="name"/>
+									<mx:DataGridColumn headerText="ID" dataField="description"/>
+								</mx:columns>
+							</mx:DataGrid>
+							<mx:Label id="smallConditionsGridStatus"></mx:Label>
+						</mx:VBox>
 						<mx:Canvas width="296" height="177">
 											<local:TagCloud id="LocalTagCloudInGroupView" 
 												MaxFontSize="16" MinFontSize="8" 
@@ -140,22 +147,25 @@
 	
 	<mx:XMLList id="groupMenuItems">
 		<menuItem label="File">
-			<menuItem label="Edit Profile"/>
-			<menuItem label="Log Out"/>
+			<menuItem label="Edit Profile" enabled="false"/>
+			<menuItem label="Log Out" enabled="false"/>
 		</menuItem>
 		<menuItem label="Edit"/>
 		<menuItem label="Groups">
 			<menuItem label="Add Selected Items to New Group..." eventName="group.addToNew"/>
-	        <menuItem label="Add Selected Items To Existing Group..."/>
+	        <menuItem label="Add Selected Items To Existing Group..." enabled="false"/>
     	    <menuItem label="Go To Groups View" eventName="group.goToGroupsView"/>
 		</menuItem>
 		<menuItem label="Visualization">
-			<menuItem label="DMV"/>
+			<menuItem label="DMV" enabled="false"/>
 		</menuItem>
     </mx:XMLList>
 	
 	<mx:Script>
 		<![CDATA[
+			import flash.utils.setInterval;
+			import mx.events.DragEvent;
+			import mx.controls.dataGridClasses.DataGridItemRenderer;
 			import mx.events.ListEvent;
 			import org.systemsbiology.echidna.events.GotNewGroupNameEvent;
 			import org.systemsbiology.echidna.dialog.NewGroupDialog;
@@ -184,6 +194,9 @@
 		[Bindable]
 		protected var groupsAC:ArrayCollection = new ArrayCollection();
 		
+		[Bindable]
+		protected var smallConditionsAC:ArrayCollection = new ArrayCollection();
+		
 		private var newGroupName:String;
 		/*
 		to disable menu items do something like this:
@@ -196,7 +209,10 @@
 			trace("in init function");
 			viewStack.selectedChild = resultsView;
 			
+			//menuBar.dataProvider.source[0].menuitem[0].menuItem[0].@enabled=false;
+			
 			ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault);
+			
 		}
 		
 		
@@ -223,6 +239,16 @@
 			onGroupRowSelected(event.rowIndex);
 		}
 		
+		protected function createSCGTooltip(event:ListEvent):void {
+			//todo make this specific to columns
+			var str:String = DataGridItemRenderer(event.itemRenderer).data.name;
+			smallConditionGrid.toolTip = str;
+		}
+		
+		protected function deleteSCGTooltip(event:ListEvent):void {
+			smallConditionGrid.toolTip = null;
+		}
+		
 		protected function userChoseNewGroupName(event:GotNewGroupNameEvent):void {
 			newGroupName = event.groupName;
 			ajax('main/check_if_group_exists',{'group_name': newGroupName},checkForExistingGroupName,ajaxFault);
@@ -241,6 +267,25 @@
 					return;
 			}
 			createNewGroup();
+		}
+		
+		protected function conditionDropped(event:DragEvent):void {
+			trace("dropping science");
+			debugSCG();
+			var ids:Array = new Array();
+			for (var i:int = 0; i < smallConditionsAC.length; i++) {
+				ids.push(smallConditionsAC.getItemAt(i)['id']);
+			}
+			ajax('main/reorder_group',{"group_id" : groupsGrid.selectedItem['id'], "ids" : JSON.encode(ids)},function(event:ResultEvent):void{
+				trace("reordered group: " + event.result.toString());
+				smallConditionsGridStatus.text = "Changed sort order";
+				/*
+				setInterval(function():void{smallConditionsGridStatus.visible = false;}, 500);
+				setInterval(function():void{smallConditionsGridStatus.visible = true;}, 750);
+				smallConditionsGridStatus.visible = true;
+				smallConditionsGridStatus.text = '';
+				*/
+			},ajaxFault); 
 		}
 		
 		protected function createNewGroup():void {
@@ -279,8 +324,23 @@
 			},ajaxFault);
 		}
 		
+		
+		protected function debugSCG():void {
+			for (var i:int = 0; i <  smallConditionsAC.length; i++) {
+				trace("" + i + ": " + smallConditionsAC.getItemAt(i)['id']);
+			}
+			trace();			
+		}
+		
 		protected function onGroupRowSelected(rowIndex:int):void {
 			trace("i think that this row has been clicked: " + rowIndex);
+			trace("the id is " + groupsGrid.selectedItem['id']);
+			ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
+				var obj:Object = JSON.decode(event.result.toString());
+				smallConditionsAC = objectToArrayCollection(obj,'condition');
+				trace("ok");
+				debugSCG();
+			}, ajaxFault);
 		}
 		
 		public function gotEmailAddressFromUser(event:GotLoginInfoEvent):void {

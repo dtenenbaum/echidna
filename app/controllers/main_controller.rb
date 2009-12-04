@@ -56,5 +56,33 @@ class MainController < ApplicationController
     end
     render :text => ret.to_json # todo find out how to run the AR::B version of to_json
   end
+  
+  def get_conditions_for_group
+    conds = Condition.find_by_sql(\
+      ["select * from conditions where id in (select condition_id from condition_groupings where condition_group_id = ? order by sequence)",
+      params[:group_id]])
+      render :text => conds.to_json
+  end
+  
+  def reorder_group
+    conds = Condition.find_by_sql(\
+      ["select * from conditions where id in (select condition_id from condition_groupings where condition_group_id = ? order by sequence)",
+      params[:group_id]])
+    sequence = JSON.parse(params[:ids])
+    begin
+      ConditionGrouping.transaction do
+        sequence.each_with_index do |s,index|
+          item = ConditionGrouping.find_by_condition_id_and_condition_group_id(s,params[:group_id])
+          item.sequence = (index+1)
+          item.save
+        end
+      end
+    rescue Exception => ex
+      puts ex.message
+      puts ex.backtrace
+    end
+    render :text => "ok"#{}"#{params[:group_id]} :: #{params[:ids]} old order: #{conds.map{|i|i.id}.join(",")}"
+    
+  end
     
 end
