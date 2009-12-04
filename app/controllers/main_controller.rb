@@ -43,7 +43,18 @@ class MainController < ApplicationController
     group = ConditionGroup.new(:name => params[:name])
     group.save
     ids.each_with_index {|i,index|ConditionGrouping.new(:condition_id => i, :condition_group_id => group.id, :sequence => index +1).save}
-    render :text => "ok"
+    render :text => group.id
+  end
+  
+  def get_all_groups
+    groups = ConditionGroup.find :all, :order => 'name'
+    ret = []
+    groups.each do |g|
+      h = g.attributes
+      h['num_results'] = g.num_results
+      ret << {"condition_group" => h}
+    end
+    render :text => ret.to_json # todo find out how to run the AR::B version of to_json
   end
     
 end

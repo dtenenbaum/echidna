@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" color="#000000" backgroundColor="#FFFFFF" pageTitle="Echidna" xmlns:local="*"
 	applicationComplete="init()">
+	
+	
 	<mx:Panel x="5" y="0" width="952" height="672" layout="absolute" borderStyle="solid">
-		<mx:Text x="10" y="0" text="Echidna" width="135" height="21"/>
+
+		<mx:Text x="10" y="0" text="Echidna" width="61" height="21"/>
+
+		<mx:MenuBar x="79" y="-1" width="273" dataProvider="{groupMenuItems}"
+			labelField="@label" itemClick="groupMenuClick(event)" fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #FFFFFF]"
+			borderColor="#FFFFFF">
+			
+		</mx:MenuBar>
+
+		<mx:Text id="emailAddressTextBox" x="594" y="1" text="Not logged in" width="318"/>
+
+
+
 		<mx:Canvas x="10" y="29" width="191" height="583">
+
+
+
 			<mx:Accordion  width="100%" height="100%" enabled="false">
 				<mx:Canvas label="Results" width="100%" height="100%" enabled="false">
 					<mx:Accordion  width="80%" height="100%">
@@ -24,72 +41,122 @@
 				</mx:Canvas>
 			</mx:Accordion>
 		</mx:Canvas>
-		<mx:VDividedBox x="209" y="19" height="593" width="703">
-			<mx:HDividedBox width="100%" height="80%">
-				<mx:Canvas width="547" height="439" borderStyle="solid">
-					<mx:Button x="20" y="10" label="Import" enabled="false"/>
-					<mx:Button x="95" y="10" label="Edit" enabled="false"/>
-					<mx:DataGrid x="10" y="57" id="conditionGrid"  width="535" height="380" dataProvider="{conditionsAC}"
-						allowMultipleSelection="true">
+		
+
+
+			
+		
+			<mx:ViewStack x="209" y="19" height="593" width="703" id="viewStack">
+			<!-- whichever child is *first* will show up in design mode  after the reload button is hit -->
+				
+			<mx:Canvas id="groupView">
+				<mx:HDividedBox x="0" y="0" width="703" height="593">
+					<mx:DataGrid width="50%" id="groupsGrid" height="591" dataProvider="{groupsAC}" itemClick="groupClick(event)">
 						<mx:columns>
-							<mx:DataGridColumn headerText="Name" dataField="name" width="200"/>
-							<mx:DataGridColumn headerText="SBEAMS ID" dataField="col2"/>
-							<mx:DataGridColumn headerText="Forward Slide ID" dataField="forward_slide_number"/>
-							<mx:DataGridColumn headerText="Reverse Slide ID" dataField="reverse_slide_number"/>
-							<mx:DataGridColumn headerText="Owner" dataField="col5"/>
-							<mx:DataGridColumn headerText="Access" dataField="col6"/>
+							<mx:DataGridColumn headerText="Name" dataField="name"/>
+							<mx:DataGridColumn headerText="# Results" dataField="num_results"/>
 						</mx:columns>
 					</mx:DataGrid>
-					<mx:Button x="246.5" y="10" label="DMV" enabled="false"/>
-					<mx:TextInput x="309" y="10" text="search" enabled="true" editable="false"/>
-					<mx:MenuBar x="151" y="10" width="81" dataProvider="{groupMenuItems}"
-						labelField="@label" itemClick="groupMenuClick(event)">
-						
-					</mx:MenuBar>
-				</mx:Canvas>
-
-					<mx:VDividedBox x="10" y="10" height="455" id="coams" width="116">
-						<mx:Canvas width="100%" height="239" borderStyle="solid" id="t">
-							<mx:Text x="10" y="10" text="Grouped In:"/>
-							<mx:DataGrid x="10" y="36" width="94">
-								<mx:columns>
-									<mx:DataGridColumn headerText="ID" dataField="col1"/>
-									<mx:DataGridColumn headerText="Name" dataField="col2"/>
-								</mx:columns>
-							</mx:DataGrid>
-						</mx:Canvas>
-						<mx:Canvas width="100%" height="171" borderStyle="solid" id="b">
-							<mx:Text x="10" y="10" text="Tags:"/>
-								<local:TagCloud id="LocalTagCloud" 
-									MaxFontSize="16" MinFontSize="8" 
-									width="100%" height="80%"  
-									XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
-									BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
-
+					<mx:VDividedBox height="100%" width="295">
+						<mx:HBox>
+							<mx:Button label="Remove" enabled="false"/>
+							<mx:Button label="..." enabled="false"/>
+						</mx:HBox>
+						<mx:DataGrid height="337" id="smallConditionGrid">
+							<mx:columns>
+								<mx:DataGridColumn headerText="Name" dataField="name"/>
+								<mx:DataGridColumn headerText="ID" dataField="description"/>
+							</mx:columns>
+						</mx:DataGrid>
+						<mx:Canvas width="296" height="177">
+											<local:TagCloud id="LocalTagCloudInGroupView" 
+												MaxFontSize="16" MinFontSize="8" 
+												width="100%" height="80%"  
+												XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
+												BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
 						</mx:Canvas>
 					</mx:VDividedBox>
-			</mx:HDividedBox>
-			<mx:Canvas width="100%" height="20%" borderStyle="solid">
-				<mx:Text x="47" y="22" text="Description of condition" width="412"/>
+				</mx:HDividedBox>
 			</mx:Canvas>
+
+				
+
+				<mx:Canvas id="resultsView">
+					
+					<mx:VDividedBox>
+						<mx:HDividedBox width="100%" height="80%">
+							<mx:Canvas width="547" height="439" borderStyle="solid">
+								<mx:DataGrid x="10" y="10" id="conditionGrid"  width="535" height="427" dataProvider="{conditionsAC}"
+									allowMultipleSelection="true">
+									<mx:columns>
+										<mx:DataGridColumn headerText="Name" dataField="name" width="200"/>
+										<mx:DataGridColumn headerText="SBEAMS ID" dataField="col2"/>
+										<mx:DataGridColumn headerText="Forward Slide ID" dataField="forward_slide_number"/>
+										<mx:DataGridColumn headerText="Reverse Slide ID" dataField="reverse_slide_number"/>
+										<mx:DataGridColumn headerText="Owner" dataField="col5"/>
+										<mx:DataGridColumn headerText="Access" dataField="col6"/>
+									</mx:columns>
+								</mx:DataGrid>
+							</mx:Canvas>
 			
-		</mx:VDividedBox>
-		<mx:Text id="emailAddressTextBox" x="383" y="0" text="Not logged in" width="318"/>
-		<mx:Button x="709" y="-2" label="Edit Profile" enabled="false"/>
-		<mx:Button x="806" y="-2" label="Logout" enabled="false"/>
+								<mx:VDividedBox x="10" y="10" height="455" id="coams" width="116">
+									<mx:Canvas width="100%" height="239" borderStyle="solid" id="t">
+										<mx:Text x="10" y="10" text="Grouped In:"/>
+										<mx:DataGrid x="10" y="36" width="94">
+											<mx:columns>
+												<mx:DataGridColumn headerText="ID" dataField="col1"/>
+												<mx:DataGridColumn headerText="Name" dataField="col2"/>
+											</mx:columns>
+										</mx:DataGrid>
+									</mx:Canvas>
+									<mx:Canvas width="100%" height="171" borderStyle="solid" id="b">
+										<mx:Text x="10" y="10" text="Tags:"/>
+											<local:TagCloud id="LocalTagCloud" 
+												MaxFontSize="16" MinFontSize="8" 
+												width="100%" height="80%"  
+												XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
+												BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
+			
+									</mx:Canvas>
+								</mx:VDividedBox>
+						</mx:HDividedBox>
+						<mx:Canvas width="676" height="133" borderStyle="solid">
+							<mx:Text x="47" y="22" text="Description of condition" width="412"/>
+						</mx:Canvas>
+						
+					</mx:VDividedBox>
+
+				</mx:Canvas>						
+
+				
+
+				
+
+			</mx:ViewStack>
+		
+		
 		
 	</mx:Panel>
 	
 	<mx:XMLList id="groupMenuItems">
-		<menuItem label="Groups...">
-			<menuItem label="Add Selected Items to New Group..."/>
+		<menuItem label="File">
+			<menuItem label="Edit Profile"/>
+			<menuItem label="Log Out"/>
+		</menuItem>
+		<menuItem label="Edit"/>
+		<menuItem label="Groups">
+			<menuItem label="Add Selected Items to New Group..." eventName="group.addToNew"/>
 	        <menuItem label="Add Selected Items To Existing Group..."/>
-    	    <menuItem label="Go To Groups View"/>
+    	    <menuItem label="Go To Groups View" eventName="group.goToGroupsView"/>
+		</menuItem>
+		<menuItem label="Visualization">
+			<menuItem label="DMV"/>
 		</menuItem>
     </mx:XMLList>
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.events.ListEvent;
 			import org.systemsbiology.echidna.events.GotNewGroupNameEvent;
 			import org.systemsbiology.echidna.dialog.NewGroupDialog;
 			import mx.events.MenuEvent;
@@ -114,11 +181,21 @@
 		[Bindable]
 		protected var conditionsAC:ArrayCollection = new ArrayCollection();
 		
-		private var newGroupName:String;
+		[Bindable]
+		protected var groupsAC:ArrayCollection = new ArrayCollection();
 		
+		private var newGroupName:String;
+		/*
+		to disable menu items do something like this:
+		cbMainMenu.dataprovider.source[0].menuitem[1].submenuitem[1].@enabled = false;
+		from
+		http://molaro.wordpress.com/2008/08/07/flex-programmatically-disableenable-items-in-a-menubar-component/
+		 */
 			
 		public function init():void {
 			trace("in init function");
+			viewStack.selectedChild = resultsView;
+			
 			ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault);
 		}
 		
@@ -127,18 +204,23 @@
 			trace("group menu item clicked: " + event.label + ", index = " + event.index);
 			
 			
-			if (conditionGrid.selectedItems.length == 0) {
-				Alert.show("You must select some conditions.");
-				return;
-			}
 			
-			if (event.index == 0) { // add new group
+			if (event.item.@eventName == "group.addToNew") {
+				if (conditionGrid.selectedItems.length == 0) {
+					Alert.show("You must select some conditions.");
+					return;
+				}
 				var addGroupDialog:NewGroupDialog = NewGroupDialog(PopUpManager.createPopUp(this, NewGroupDialog, true));
 				addGroupDialog.addEventListener(GotNewGroupNameEvent.GOT_NEW_GROUP_NAME_EVENT, userChoseNewGroupName);
 				PopUpManager.centerPopUp(addGroupDialog);
-				
-				
+			} else if (event.item.@eventName == "group.goToGroupsView") {
+				viewStack.selectedChild = groupView;
+				populateGroupGrid(null);
 			}
+		}
+		
+		protected function groupClick(event:ListEvent):void {
+			onGroupRowSelected(event.rowIndex);
 		}
 		
 		protected function userChoseNewGroupName(event:GotNewGroupNameEvent):void {
@@ -169,8 +251,36 @@
 			var json:String = JSON.encode(ids);
 			trace("selected items: " + json);
 			ajax('main/create_new_group',{"name" : newGroupName, "ids" : json},function(event:ResultEvent):void {
-				Alert.show("New group created.");
+				var newGroupId:String = event.result.toString();
+				viewStack.selectedChild = groupView;
+				populateGroupGrid(newGroupId);
 			},ajaxFault);
+		}
+		
+		protected function populateGroupGrid(initialRow:String):void {
+				ajax('main/get_all_groups', null, function(event:ResultEvent):void {
+					var groupsObj:Object = JSON.decode(event.result.toString());
+					groupsAC = objectToArrayCollection(groupsObj,"condition_group");
+					//todo set selected item
+					if (initialRow == null) {
+						return;
+					} else {
+						var data:Object = groupsGrid.dataProvider;
+						for(var i:int = 0; i < groupsAC.length; i++) {
+							if (groupsAC.getItemAt(i)['id'] == initialRow) {
+								groupsGrid.selectedIndex = i;
+								groupsGrid.validateNow();
+								groupsGrid.scrollToIndex(i);
+								onGroupRowSelected(i);
+								break;
+							}
+						}
+				  	}
+			},ajaxFault);
+		}
+		
+		protected function onGroupRowSelected(rowIndex:int):void {
+			trace("i think that this row has been clicked: " + rowIndex);
 		}
 		
 		public function gotEmailAddressFromUser(event:GotLoginInfoEvent):void {
