@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="278" height="296" 
+	title="Add Selected Conditions to Existing Group" showCloseButton="true" close="PopUpManager.removePopUp(this)">
+
+<mx:Script>
+	<![CDATA[
+		import mx.controls.Alert;
+		import org.systemsbiology.echidna.events.GotExistingGroupIdEvent;
+		import mx.collections.ArrayCollection;
+		import mx.managers.PopUpManager;
+		
+		public function setData(data:ArrayCollection):void {
+			groupList.dataProvider = data;
+		}
+		
+		protected function onOk():void {
+			if (groupList.selectedItem == null) {
+				Alert.show("You must choose a group!");
+				return;
+			}
+			var evt:GotExistingGroupIdEvent = new GotExistingGroupIdEvent(GotExistingGroupIdEvent.GOT_EXISTING_GROUP_ID_EVENT);
+			evt.groupId = groupList.selectedItem['data'];
+			dispatchEvent(evt);
+			PopUpManager.removePopUp(this);
+		}	
+	]]>
+</mx:Script>
+
+	<mx:Label x="10" y="10" text="Choose a group:"/>
+	<mx:List id="groupList" x="10" y="36" width="238" height="145"></mx:List>
+	<mx:Button x="10" y="198" label="OK" id="okButton" click="onOk()"/>
+	<mx:Button x="61" y="198" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
+	
+</mx:TitleWindow>

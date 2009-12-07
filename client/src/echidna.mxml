@@ -7,7 +7,7 @@
 
 		<mx:Text x="10" y="0" text="Echidna" width="61" height="21"/>
 
-		<mx:MenuBar x="79" y="-1" width="273" dataProvider="{groupMenuItems}"
+		<mx:MenuBar x="79" y="-1" width="273" 
 			labelField="@label" itemClick="groupMenuClick(event)" fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #FFFFFF]"
 			borderColor="#FFFFFF" id="menuBar">
 			
@@ -67,7 +67,7 @@
 							<mx:DataGrid height="337" id="smallConditionGrid" dataProvider="{smallConditionsAC}"
 								dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragStart="smallConditionsGridStatus.text=''"
 								itemRollOver="createSCGTooltip(event)" itemRollOut="deleteSCGTooltip(event)"
-								dragDrop="conditionDropped(event)">
+								dragDrop="conditionDropped(event)" enabled="false">
 								<mx:columns>
 									<mx:DataGridColumn headerText="Name" dataField="name"/>
 									<mx:DataGridColumn headerText="ID" dataField="description"/>
@@ -145,7 +145,7 @@
 		
 	</mx:Panel>
 	
-	<mx:XMLList id="groupMenuItems">
+	<mx:XMLList id="menuItems_resultsView">
 		<menuItem label="File">
 			<menuItem label="Edit Profile" enabled="false"/>
 			<menuItem label="Log Out" enabled="false"/>
@@ -153,16 +153,35 @@
 		<menuItem label="Edit"/>
 		<menuItem label="Groups">
 			<menuItem label="Add Selected Items to New Group..." eventName="group.addToNew"/>
-	        <menuItem label="Add Selected Items To Existing Group..." enabled="false"/>
+	        <menuItem label="Add Selected Items To Existing Group..." eventName="group.addToExisting"/>
     	    <menuItem label="Go To Groups View" eventName="group.goToGroupsView"/>
 		</menuItem>
 		<menuItem label="Visualization">
 			<menuItem label="DMV" enabled="false"/>
 		</menuItem>
     </mx:XMLList>
+    
+	<mx:XMLList id="menuItems_groupsView">
+		<menuItem label="File">
+			<menuItem label="Edit Profile" enabled="false"/>
+			<menuItem label="Log Out" enabled="false"/>
+		</menuItem>
+		<menuItem label="Edit"/>
+		<menuItem label="Groups">
+    	    <menuItem label="Go To Results View" eventName="group.goToResultsView"/>
+		</menuItem>
+		<menuItem label="Visualization">
+			<menuItem label="DMV" enabled="false"/>
+		</menuItem>
+    </mx:XMLList>
+
+
+
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.GotExistingGroupIdEvent;
+			import org.systemsbiology.echidna.dialog.AddToExistingGroupDialog;
 			import flash.utils.setInterval;
 			import mx.events.DragEvent;
 			import mx.controls.dataGridClasses.DataGridItemRenderer;
@@ -198,19 +217,9 @@
 		protected var smallConditionsAC:ArrayCollection = new ArrayCollection();
 		
 		private var newGroupName:String;
-		/*
-		to disable menu items do something like this:
-		cbMainMenu.dataprovider.source[0].menuitem[1].submenuitem[1].@enabled = false;
-		from
-		http://molaro.wordpress.com/2008/08/07/flex-programmatically-disableenable-items-in-a-menubar-component/
-		 */
 			
 		public function init():void {
-			trace("in init function");
-			viewStack.selectedChild = resultsView;
-			
-			//menuBar.dataProvider.source[0].menuitem[0].menuItem[0].@enabled=false;
-			
+			switchToResultsView();
 			ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault);
 			
 		}
@@ -230,9 +239,60 @@
 				addGroupDialog.addEventListener(GotNewGroupNameEvent.GOT_NEW_GROUP_NAME_EVENT, userChoseNewGroupName);
 				PopUpManager.centerPopUp(addGroupDialog);
 			} else if (event.item.@eventName == "group.goToGroupsView") {
-				viewStack.selectedChild = groupView;
+				switchToGroupsView();
 				populateGroupGrid(null);
+			} else if (event.item.@eventName == "group.goToResultsView") {
+				switchToResultsView();
+			} else if (event.item.@eventName == "group.addToExisting") {
+				//todo - handle it if there are no groups!
+				if (conditionGrid.selectedItems.length == 0) {
+					Alert.show("You must select some conditions.");
+					return;
+				}
+				var groupListAC:ArrayCollection = new ArrayCollection();
+				var addToExistingDialog:AddToExistingGroupDialog = AddToExistingGroupDialog(PopUpManager.createPopUp(this, AddToExistingGroupDialog, true));
+				ajax('main/get_all_groups',null,function(event:ResultEvent):void{
+					var obj:Object = JSON.decode(event.result.toString());
+					for (var i:Object in obj) {
+						var item:Object = new Object();
+						item['data'] = obj[i]['condition_group']['id'];
+						item['label']= obj[i]['condition_group']['name']
+						groupListAC.addItem(item);
+					}
+					addToExistingDialog.setData(groupListAC);
+				},ajaxFault);
+				PopUpManager.centerPopUp(addToExistingDialog);
+				addToExistingDialog.addEventListener(GotExistingGroupIdEvent.GOT_EXISTING_GROUP_ID_EVENT, function(event:GotExistingGroupIdEvent):void {
+					trace("got back this group id: " + event.groupId);
+					var ids:Array = new Array();
+					for (var i:int = 0; i < conditionGrid.selectedItems.length; i++) {
+						ids.push(conditionGrid.selectedItems[i]['id']);
+					}
+					
+					ajax('main/add_conditions_to_existing_group',{"group_id": event.groupId, "ids" : JSON.encode(ids)},
+						function(ajaxEvent:ResultEvent):void{
+							trace('back from add_conditions_to_existing_group');
+							if (ajaxEvent.result.toString() == "warning") {
+								Alert.show("One or more of these conditions were already in that group. Duplicate assignments ignored.","Warning");
+							}
+							//show groups view
+							//set selection
+							populateGroupGrid("" + event.groupId);
+							switchToGroupsView();
+						}, ajaxFault);
+				});
+				
 			}
+		}
+		
+		protected function switchToGroupsView():void {
+			viewStack.selectedChild = groupView;
+			menuBar.dataProvider = menuItems_groupsView;
+		}
+		
+		protected function switchToResultsView(): void {
+			viewStack.selectedChild = resultsView;
+			menuBar.dataProvider = menuItems_resultsView;
 		}
 		
 		protected function groupClick(event:ListEvent):void {
@@ -270,21 +330,13 @@
 		}
 		
 		protected function conditionDropped(event:DragEvent):void {
-			trace("dropping science");
 			debugSCG();
 			var ids:Array = new Array();
 			for (var i:int = 0; i < smallConditionsAC.length; i++) {
 				ids.push(smallConditionsAC.getItemAt(i)['id']);
 			}
 			ajax('main/reorder_group',{"group_id" : groupsGrid.selectedItem['id'], "ids" : JSON.encode(ids)},function(event:ResultEvent):void{
-				trace("reordered group: " + event.result.toString());
 				smallConditionsGridStatus.text = "Changed sort order";
-				/*
-				setInterval(function():void{smallConditionsGridStatus.visible = false;}, 500);
-				setInterval(function():void{smallConditionsGridStatus.visible = true;}, 750);
-				smallConditionsGridStatus.visible = true;
-				smallConditionsGridStatus.text = '';
-				*/
 			},ajaxFault); 
 		}
 		
@@ -294,10 +346,9 @@
 				ids.push(conditionGrid.selectedItems[i]['id']);	
 			}
 			var json:String = JSON.encode(ids);
-			trace("selected items: " + json);
 			ajax('main/create_new_group',{"name" : newGroupName, "ids" : json},function(event:ResultEvent):void {
 				var newGroupId:String = event.result.toString();
-				viewStack.selectedChild = groupView;
+				switchToGroupsView();
 				populateGroupGrid(newGroupId);
 			},ajaxFault);
 		}
@@ -306,7 +357,6 @@
 				ajax('main/get_all_groups', null, function(event:ResultEvent):void {
 					var groupsObj:Object = JSON.decode(event.result.toString());
 					groupsAC = objectToArrayCollection(groupsObj,"condition_group");
-					//todo set selected item
 					if (initialRow == null) {
 						return;
 					} else {
@@ -333,13 +383,9 @@
 		}
 		
 		protected function onGroupRowSelected(rowIndex:int):void {
-			trace("i think that this row has been clicked: " + rowIndex);
-			trace("the id is " + groupsGrid.selectedItem['id']);
 			ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
 				var obj:Object = JSON.decode(event.result.toString());
 				smallConditionsAC = objectToArrayCollection(obj,'condition');
-				trace("ok");
-				debugSCG();
 			}, ajaxFault);
 		}
 		
@@ -354,7 +400,6 @@
 		}
 		
 		public function loggedIn(event:ResultEvent):void {
-			trace("logged in");
 			getConditions();
 		}
 
@@ -378,14 +423,12 @@
 		
 		public function populateEmailAddress(event:ResultEvent):void {
 			var email:String = event.result as String;
-			trace("in populateEmailAddress, result is " + email);
 			if (email == 'not logged in') {
 				var loginDialog:LoginDialog;
 				loginDialog = LoginDialog(PopUpManager.createPopUp(this, LoginDialog, true));
 				loginDialog.addEventListener(GotLoginInfoEvent.GOT_LOGIN_INFO_EVENT, gotEmailAddressFromUser);
 				loginDialog.title = 'Login';
 				PopUpManager.centerPopUp(loginDialog);
-				trace("dialog has been popped up");
 			} else {
 				emailAddressTextBox.text = email;
 				getConditions();

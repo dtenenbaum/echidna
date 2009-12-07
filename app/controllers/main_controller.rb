@@ -84,5 +84,30 @@ class MainController < ApplicationController
     render :text => "ok"#{}"#{params[:group_id]} :: #{params[:ids]} old order: #{conds.map{|i|i.id}.join(",")}"
     
   end
-    
+
+  def add_conditions_to_existing_group
+    ids = JSON.parse(params[:ids])
+    existing = ConditionGrouping.find_by_sql(["select * from condition_groupings where condition_id in (?) and condition_group_id = ?",
+      ids,params['group_id'].to_i])
+    max_seq = ConditionGrouping.find_by_sql(["select count(id) as result from condition_groupings where condition_group_id = ?",params[:group_id].to_i]).first().result().to_i
+    max_seq += 1
+      
+    result = 'ok'
+    result = 'warning' unless existing.empty?
+    begin
+      ConditionGrouping.transaction do
+        ids.each do |id|
+          already = existing.find{|i|i.condition_id == id}
+          next unless already.nil?
+          cg = ConditionGrouping.new(:sequence => max_seq, :condition_group_id => params[:group_id], :condition_id => id)
+          cg.save
+          max_seq += 1
+        end
+      end
+    rescue Exception => ex
+      puts ex.message
+      puts ex.backtrace
+    end
+    render :text => result
+  end
 end
