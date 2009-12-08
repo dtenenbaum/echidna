@@ -6,6 +6,9 @@ class MainController < ApplicationController
     if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
       render :text => 'not logged in' and return false
     end
+    if session[:user].nil?
+      session[:user] = cookies[:echidna_cookie][:value]
+    end
     render :text => session[:user]
   end
   
