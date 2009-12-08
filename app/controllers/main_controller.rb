@@ -1,5 +1,6 @@
 class MainController < ApplicationController
-  require 'json'
+  
+
   include Util
   
   def get_logged_in_user
@@ -33,7 +34,7 @@ class MainController < ApplicationController
     sorted_conds = sort_conditions_for_time_series(conds)
     headers['Content-type'] = 'text/plain'
     
-    render :text => sorted_conds.to_json#.map{|i|i.name}.join("\n")
+    render :text => sorted_conds.to_json(:methods => :num_groups) 
   end
   
   def check_if_group_exists
@@ -42,7 +43,7 @@ class MainController < ApplicationController
   end
   
   def create_new_group
-    ids = JSON.parse params[:ids]
+    ids = ActiveSupport::JSON.decode params[:ids]
     group = ConditionGroup.new(:name => params[:name])
     group.save
     ids.each_with_index {|i,index|ConditionGrouping.new(:condition_id => i, :condition_group_id => group.id, :sequence => index +1).save}
@@ -71,7 +72,7 @@ class MainController < ApplicationController
     conds = Condition.find_by_sql(\
       ["select * from conditions where id in (select condition_id from condition_groupings where condition_group_id = ? order by sequence)",
       params[:group_id]])
-    sequence = JSON.parse(params[:ids])
+    sequence = ActiveSupport::JSON.decode(params[:ids])
     begin
       ConditionGrouping.transaction do
         sequence.each_with_index do |s,index|
@@ -89,7 +90,7 @@ class MainController < ApplicationController
   end
 
   def add_conditions_to_existing_group
-    ids = JSON.parse(params[:ids])
+    ids = ActiveSupport::JSON.decode(params[:ids])
     existing = ConditionGrouping.find_by_sql(["select * from condition_groupings where condition_id in (?) and condition_group_id = ?",
       ids,params['group_id'].to_i])
     max_seq = ConditionGrouping.find_by_sql(["select count(id) as result from condition_groupings where condition_group_id = ?",params[:group_id].to_i]).first().result().to_i

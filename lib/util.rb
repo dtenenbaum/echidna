@@ -1,5 +1,6 @@
 module Util
   
+  
   def sort_conditions_for_time_series(conds)
     regex = /_t([+-][0-9]*)/
     conds.sort() do |a,b|
