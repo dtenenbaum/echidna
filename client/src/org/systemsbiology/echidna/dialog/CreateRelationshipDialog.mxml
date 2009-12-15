@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="946" height="338" title="Create Relationship"
+	creationComplete="init()" showCloseButton="true" close="PopUpManager.removePopUp(this)">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.ListEvent;
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			
+			
+			[Bindable]
+			public var relationshipAC:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var condition1:String;
+			
+			[Bindable]
+			public var condition2:String;
+			
+			
+			
+			
+			
+			// todo - think about using states to enable/disable custom relationship button
+			protected function init():void {
+			}
+			
+			
+			public function setInverse(inverse:String):void {
+				inverseRelationshipText.text = inverse;
+			}
+			
+			protected function onOk():void {
+			}
+			
+			protected function swap():void {
+				var temp:String = condition1;
+				condition1 = condition2;
+				condition2 = temp;
+			}
+			
+			protected function comboBoxListener(event:ListEvent):void {
+				for (var i:String in relationshipComboBox.selectedItem) {
+					trace("key = " + i + ", value = " + relationshipComboBox.selectedItem[i]);
+				}
+				
+				
+				if (relationshipComboBox.selectedItem['name'] == 'Other') {
+					addNewRelationshipCanvas.visible = true;
+					inverseCanvas.visible = false;
+					newRelationshipText.setFocus();
+					
+				} else {
+					inverseCanvas.visible = true;
+					inverseRelationshipText.text = relationshipComboBox.selectedItem['inverse'];
+					addNewRelationshipCanvas.visible = false;
+				}
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:Canvas id="addNewRelationshipCanvas" x="26" y="77" width="453" height="128" borderThickness="1" visible="false" borderStyle="solid">
+		<mx:Label x="10" y="10" text="Add a new type of relationship:" width="211"/>
+		<mx:TextInput x="10" y="66" id="newRelationshipText"/>
+		<mx:TextInput x="178" y="66" id="inverseNameText"/>
+		<mx:Button x="10" y="96" label="Add" id="addNewRelationshipButton"/>
+		<mx:Label x="10" y="36" text="Name:"/>
+		<mx:Label x="178" y="36" text="Inverse:"/>
+	</mx:Canvas>
+	<mx:Button x="26" y="213" label="OK" id="okButton" click="onOk()"/>
+	<mx:Button x="77" y="213" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
+	<mx:Text x="10" y="10" width="261" id="condition1Text" text="{condition1}"/>
+	<mx:Label x="279" y="10" text="is"/>
+	<mx:ComboBox id="relationshipComboBox" x="301" y="8" dataProvider="{relationshipAC}" labelField="name" change="comboBoxListener(event)"></mx:ComboBox>
+	<mx:Label x="469" y="10" text="for"/>
+	<mx:Text x="497" y="10" width="318" id="condition2Text" text="{condition2}"/>
+	<mx:Button x="860" y="8" label="Swap" id="swapButton" click="swap()"/>
+	<mx:Canvas x="26" y="36" width="890" height="33" id="inverseCanvas">
+		<mx:Label x="10" y="10" text="(Inverse:"/>
+		<mx:Text x="75" y="10" width="187" id="inverseText1" text="{condition2}"/>
+		<mx:Label x="270" y="10" text="is"/>
+		<mx:Text x="292" y="10" width="219" id="inverseRelationshipText"/>
+		<mx:Label x="519" y="10" text="of"/>
+		<mx:Text x="560" y="10" width="213" id="inverseText2" text="{condition1}"/>
+		<mx:Label x="781" y="10" text=")"/>
+	</mx:Canvas>
+	
+</mx:TitleWindow>

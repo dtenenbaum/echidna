@@ -4,7 +4,13 @@
 	applicationComplete="init()">
 	
 	<mx:states>
-		<mx:State name="groupState" id="groupState"/>
+		<mx:State name="groupState" id="groupState">
+			<mx:AddChild relativeTo="{hbox1}" position="lastChild">
+				<mx:Button label="Relate" id="relateButton" toolTip="Relate two groups" enabled="false" click="relateTwoGroups()"/>
+			</mx:AddChild>
+			<mx:RemoveChild target="{button1}"/>
+			<mx:AddChild relativeTo="{relateButton}" position="before" target="{button1}"/>
+		</mx:State>
 	</mx:states>
 	
 	<mx:Panel x="5" y="0" width="955" height="672" layout="absolute" borderStyle="solid">
@@ -55,18 +61,19 @@
 				
 			<mx:Canvas id="groupView">
 				<mx:HDividedBox x="0" y="0" width="703" height="593">
-					<mx:DataGrid width="50%" id="groupsGrid" height="591" dataProvider="{groupsAC}" itemClick="groupClick(event)">
+					<mx:DataGrid width="50%" id="groupsGrid" height="591" dataProvider="{groupsAC}" itemClick="groupClick(event)"
+						allowMultipleSelection="true">
 						<mx:columns>
 							<mx:DataGridColumn headerText="Name" dataField="name"/>
 							<mx:DataGridColumn headerText="# Results" dataField="num_results"/>
 						</mx:columns>
 					</mx:DataGrid>
 					<mx:VDividedBox height="100%" width="295">
-						<mx:HBox>
+						<mx:HBox id="hbox1">
 							<mx:Button label="Remove" enabled="false"/>
-							<mx:Button label="..." enabled="false"/>
+							<mx:Button label="..." enabled="false" id="button1"/>
 						</mx:HBox>
-						<mx:VBox>
+						<mx:VBox id="vbox1">
 						    <mx:Label text="Drag conditions to change order."/>							
 							<mx:DataGrid height="337" id="smallConditionGrid" dataProvider="{smallConditionsAC}" 
 								dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragStart="smallConditionsGridStatus.text=''"
@@ -98,7 +105,7 @@
 						<mx:HDividedBox width="100%" height="80%">
 							<mx:Canvas width="547" height="439" borderStyle="solid">
 								<mx:DataGrid x="10" y="10" id="conditionGrid"  width="535" height="427" dataProvider="{conditionsAC}"
-									allowMultipleSelection="true">
+									allowMultipleSelection="true" itemClick="conditionGridItemClick(event)">
 									<mx:columns>
 										<ui:DataGridToolTipColumn headerText="#"
 										 headerToolTip="Number of groups this condition appears in"  dataField="num_groups" width="20"/>
@@ -115,10 +122,10 @@
 								<mx:VDividedBox x="10" y="10" height="455" id="coams" width="116">
 									<mx:Canvas width="100%" height="239" borderStyle="solid" id="t">
 										<mx:Text x="10" y="10" text="Grouped In:"/>
-										<mx:DataGrid x="10" y="36" width="94">
+										<mx:DataGrid x="10" y="36" width="94" id="groupedInGrid" dataProvider="{groupedInAC}">
 											<mx:columns>
-												<mx:DataGridColumn headerText="ID" dataField="col1"/>
-												<mx:DataGridColumn headerText="Name" dataField="col2"/>
+												<mx:DataGridColumn headerText="ID" dataField="id"/>
+												<mx:DataGridColumn dataTipField="name"  showDataTips="true" headerText="Name" dataField="name"/>
 											</mx:columns>
 										</mx:DataGrid>
 									</mx:Canvas>
@@ -134,7 +141,8 @@
 								</mx:VDividedBox>
 						</mx:HDividedBox>
 						<mx:Canvas width="676" height="133" borderStyle="solid">
-							<mx:Text x="47" y="22" text="Description of condition" width="412"/>
+							<mx:Text x="10" y="10" text="Description of condition:&#xd;" width="412"/>
+							<mx:Text x="34" y="25" width="461" height="96" id="descriptionText"/>
 						</mx:Canvas>
 						
 					</mx:VDividedBox>
@@ -186,6 +194,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.dialog.CreateRelationshipDialog;
 			import mx.events.StateChangeEvent;
 			import mx.states.State;
 			import org.systemsbiology.echidna.events.GotExistingGroupIdEvent;
@@ -224,6 +233,9 @@
 		[Bindable]
 		protected var smallConditionsAC:ArrayCollection = new ArrayCollection();
 		
+		[Bindable]
+		protected var groupedInAC:ArrayCollection = new ArrayCollection();
+		
 		private var newGroupName:String;
 			
 		public function init():void {
@@ -243,6 +255,62 @@
 			ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault);
 		}
 		
+		
+		protected function conditionGridItemClick(event:ListEvent):void {
+			if (conditionGrid.selectedItems.length > 1) {
+				descriptionText.text = '';
+				groupedInAC = new ArrayCollection();
+				return;
+			}
+			
+			ajax('main/get_condition_detail',{"condition_id": conditionGrid.selectedItem['id']},
+			function(event:ResultEvent):void {
+				var obj:Object = JSON.decode(event.result.toString());
+				var keys:Array = new Array();
+				for (var k:String in obj) {
+					keys.push(k);
+				}
+				keys.sort();
+				descriptionText.text = 'Condition Name:  ' + conditionGrid.selectedItem['name'] + "\n";
+				for (var i:int = 0; i < keys.length; i++) {
+					descriptionText.text += "\t" +
+					keys[i] +
+					": " +
+					obj[keys[i]] + 
+					"\n";
+			    }
+				
+			}, ajaxFault);
+			
+			if (conditionGrid.selectedItem['num_groups'] == 0) {
+				return;
+			} else {
+				ajax('main/get_groups_for_condition',{"condition_id": conditionGrid.selectedItem['id']},
+				function(event:ResultEvent):void {
+					groupedInAC =  objectToArrayCollection(JSON.decode(event.result.toString()), 'condition_group');
+				}, ajaxFault);
+			}
+		}
+		
+		protected function relateTwoGroups():void {
+			//todo --figure out a better way to refer to parent app
+			var savedThis:Application = this;
+			
+			ajax('main/get_relationship_types',null,function(event:ResultEvent):void{
+				var obj:Object = JSON.decode(event.result.toString());
+				var relAC:ArrayCollection = objectToArrayCollection(obj,'relationship_type');
+				var other:Object = new Object();
+				other = {"name": "Other", "inverse": "Other"};
+				relAC.addItem(other);
+				var createRelationshipDialog:CreateRelationshipDialog = CreateRelationshipDialog(PopUpManager.createPopUp(savedThis, CreateRelationshipDialog, true));
+				PopUpManager.centerPopUp(createRelationshipDialog);
+				createRelationshipDialog.relationshipAC = relAC;
+				createRelationshipDialog.setInverse(relAC.getItemAt(0)['inverse']);
+				createRelationshipDialog.condition1 = groupsGrid.selectedItems[0]['name'];
+				createRelationshipDialog.condition2 = groupsGrid.selectedItems[1]['name'];
+			}, ajaxFault);
+			
+		}
 		
 		public function menuClick(event:MenuEvent):void {
 			trace("menu item clicked: " + event.label + ", index = " + event.index);
@@ -417,10 +485,23 @@
 		}
 		
 		protected function onGroupRowSelected(rowIndex:int):void {
-			ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
-				var obj:Object = JSON.decode(event.result.toString());
-				smallConditionsAC = objectToArrayCollection(obj,'condition');
-			}, ajaxFault);
+			trace("# of selected items: " + groupsGrid.selectedItems.length);
+			if (groupsGrid.selectedItems.length == 2) {
+				relateButton.enabled = true;
+			} else {
+				relateButton.enabled = false;
+			}
+			
+			if (groupsGrid.selectedItems.length == 1) {
+				ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
+					var obj:Object = JSON.decode(event.result.toString());
+					smallConditionsAC = objectToArrayCollection(obj,'condition');
+				}, ajaxFault);
+			} else {
+				smallConditionsAC = new ArrayCollection();
+			}
+			
+
 		}
 		
 		public function gotEmailAddressFromUser(event:GotLoginInfoEvent):void {

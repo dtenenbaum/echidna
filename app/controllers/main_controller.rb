@@ -114,4 +114,21 @@ class MainController < ApplicationController
     end
     render :text => result
   end
+
+  def get_groups_for_condition
+    groups = \
+      ConditionGroup.find_by_sql\
+      (["select * from condition_groups where id in (select distinct condition_group_id from condition_groupings where condition_id = ?) order by name",
+      params[:condition_id]])
+    render :text => groups.to_json
+  end
+  
+  def get_condition_detail
+    render :text => Condition.find(params[:condition_id]).parse_name.to_json
+  end
+  
+  def get_relationship_types
+    render :text => RelationshipType.find(:all, :order => 'name').to_json
+  end
+
 end
