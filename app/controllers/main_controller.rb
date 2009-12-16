@@ -4,7 +4,7 @@ class MainController < ApplicationController
   include Util
   
   def index
-    redirect_to "/index.html"
+    redirect_to "index.html"
   end
   
   def get_logged_in_user
