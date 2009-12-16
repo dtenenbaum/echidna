@@ -4,7 +4,15 @@ class MainController < ApplicationController
   include Util
   
   def index
-    redirect_to "index.html"
+    url = request.url
+    if RAILS_ENV == 'production'
+      redirect_to "#{url}/index.html"
+    else
+      render :text => "not implemented in development mode"
+    end
+    
+    #render :text => request.url
+    #render :text => "#{url}/index.html"
   end
   
   def get_logged_in_user
