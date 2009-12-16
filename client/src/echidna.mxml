@@ -552,6 +552,8 @@
 		}
 		
 		public function ajaxFault(event:FaultEvent):void {
+			trace("ajax fault!");
+			trace(event.message);
 			Alert.show("Server error!");
 		}
 		

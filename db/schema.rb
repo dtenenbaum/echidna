@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091209000203) do
+ActiveRecord::Schema.define(:version => 20091216192536) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -34,6 +34,28 @@ ActiveRecord::Schema.define(:version => 20091209000203) do
     t.integer  "reverse_slide_number", :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "features", :force => true do |t|
+    t.integer "track_id",     :limit => 11
+    t.float   "value"
+    t.integer "data_type",    :limit => 11
+    t.integer "gene_id",      :limit => 11
+    t.integer "location_id",  :limit => 11
+    t.integer "condition_id", :limit => 11
+    t.integer "sequence_id",  :limit => 11
+    t.integer "start",        :limit => 11
+    t.integer "end",          :limit => 11
+    t.boolean "strand"
+  end
+
+  add_index "features", ["gene_id"], :name => "index_features_on_gene_id"
+  add_index "features", ["condition_id"], :name => "index_features_on_condition_id"
+  add_index "features", ["data_type"], :name => "index_features_on_data_type"
+
+  create_table "genes", :force => true do |t|
+    t.string "name"
+    t.string "alias"
   end
 
   create_table "relationship_types", :force => true do |t|

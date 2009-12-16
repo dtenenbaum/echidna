@@ -3,6 +3,10 @@ class MainController < ApplicationController
 
   include Util
   
+  def index
+    redirect_to "/index.html"
+  end
+  
   def get_logged_in_user
     if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
       render :text => 'not logged in' and return false
