@@ -6,7 +6,7 @@ class MainController < ApplicationController
   def index
     url = request.url
     if RAILS_ENV == 'production'
-      redirect_to "#{url}/index.html"
+      redirect_to "#{url}/"
     else
       render :text => "not implemented in development mode"
     end
