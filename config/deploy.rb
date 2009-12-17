@@ -106,7 +106,7 @@ load 'deploy'
 
   desc "Link in assorted bits that aren't in git, get permissions fixed"
 task :after_update_code do
-# local_rails_root = "/Users/dtenenbaum/dev/echidna"
+ local_rails_root = `pwd`
  run "echo '__BEGINNING OF after_update_code recipe'"
  
  #run "echo #{shared_dir} #{shared_path}"
@@ -118,13 +118,27 @@ task :after_update_code do
  run "cp #{shared_path}/config/database.yml #{release_path}/config/database.yml"
  run "mv #{release_path}/app/controllers/application.rb #{release_path}/app/controllers/application_controller.rb"
  # todo deal with history
- files = %w{AC_OETags.js index.html echidna.swf}
- files.reverse.each do |file|
-  upload "#{RAILS_ROOT}/public/#{file}", "#{release_path}/public", :via => :scp
+# files = %w{AC_OETags.js index.html echidna.swf}
+# files.reverse.each do |file|
+#  upload "public/#{file}", "#{release_path}/public", :via => :scp
+# end
+ 
+ # uh, may not want to do this each time.....
+ bindebug = Dir.new('client/bin-debug')
+ bindebug.each do |item|
+   file = "client/bin-debug/#{item}"
+   if (test(?f, file))
+     upload "client/bin-debug/#{item}", "#{release_path}/public", :via => :scp
+   end
  end
- run "mkdir #{release_path}/public/test"
- upload "#{RAILS_ROOT}/public/test/XmlTest.xml", "#{release_path}/public/test", :via => :scp
 
+ run "mkdir #{release_path}/public/test"
+ upload "public/test/XmlTest.xml", "#{release_path}/public/test", :via => :scp
+
+ # todo - deal with history
+
+ # restart app - not sure if this is already done by cap deploy:update
+ run "touch #{current_release}/tmp/restart.txt"
 end
 
 

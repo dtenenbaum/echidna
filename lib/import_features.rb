@@ -28,7 +28,7 @@ class ImportFeatures
           hsh["condition_id"] = cond.id
 #          pp hsh
           new_feature  = Feature.new(hsh)
-          feature.save
+          new_feature.save
         end
       end
       
