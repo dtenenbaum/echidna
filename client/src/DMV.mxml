@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV"
-	applicationComplete="init()">
+	applicationComplete="init()" xmlns:bridge="bridge.*">
 	<mx:DataGrid id="dmvGrid" x="90" y="184" width="670" height="211" dataProvider="{dmvData}" allowMultipleSelection="true" sortableColumns="false"
 		itemClick="gridClick(event)">
 	</mx:DataGrid>
-	
+	<bridge:FABridge bridgeName="flex"/>
 	<mx:Script>
 	
 		
 		<![CDATA[
+			import org.systemsbiology.echidna.events.DMVSelectionChangedEvent;
 			import mx.events.ListEvent;
 			import mx.events.ItemClickEvent;
 			import com.adobe.serialization.json.JSON;
@@ -107,6 +108,12 @@
             		trace("column " + i + ": " + dmvGrid.columns[i].dataField);
             	}
             }
+            
+            protected function testEventButtonClicked():void {
+            	var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
+            	evt.message = "hello from flex";
+            	dispatchEvent(evt);
+            }
 
 		]]>
 	</mx:Script>
@@ -114,5 +121,6 @@
 	<mx:Text x="247" y="403" width="39" id="numSelectedRowsText" text="{dmvGrid.selectedItems.length}"/>
 	<mx:Button x="325" y="403" label="Show" id="showButton" click="onShow()"/>
 	<mx:Label x="427" y="407" width="131" id="loadingLabel"/>
+	<mx:Button x="677" y="403" label="TestEvent" id="testEventButton" click="testEventButtonClicked()"/>
 	
 </mx:Application>

@@ -103,9 +103,10 @@ load 'deploy'
 # CUSTOM RECIPES
 # ================================================================
 
+  after "deploy:update_code", :post_update_code_hook
 
   desc "Link in assorted bits that aren't in git, get permissions fixed"
-task :after_update_code do
+task :post_update_code_hook do
  local_rails_root = `pwd`
  run "echo '__BEGINNING OF after_update_code recipe'"
  
