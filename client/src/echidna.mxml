@@ -215,6 +215,7 @@
 			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
 			import mx.rpc.http.HTTPService;
+			import org.systemsbiology.echidna.common.Util;
 
 		import mx.rpc.events.FaultEvent;
 		import mx.rpc.events.ResultEvent;
@@ -252,7 +253,7 @@
 			
 			
 			switchToResultsView();
-			ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault);
+			Util.ajax('main/get_logged_in_user', null, populateEmailAddress, Util.ajaxFault);
 		}
 		
 		
@@ -263,7 +264,7 @@
 				return;
 			}
 			
-			ajax('main/get_condition_detail',{"condition_id": conditionGrid.selectedItem['id']},
+			Util.ajax('main/get_condition_detail',{"condition_id": conditionGrid.selectedItem['id']},
 			function(event:ResultEvent):void {
 				var obj:Object = JSON.decode(event.result.toString());
 				var keys:Array = new Array();
@@ -280,15 +281,15 @@
 					"\n";
 			    }
 				
-			}, ajaxFault);
+			}, Util.ajaxFault);
 			
 			if (conditionGrid.selectedItem['num_groups'] == 0) {
 				return;
 			} else {
-				ajax('main/get_groups_for_condition',{"condition_id": conditionGrid.selectedItem['id']},
+				Util.ajax('main/get_groups_for_condition',{"condition_id": conditionGrid.selectedItem['id']},
 				function(event:ResultEvent):void {
 					groupedInAC =  objectToArrayCollection(JSON.decode(event.result.toString()), 'condition_group');
-				}, ajaxFault);
+				}, Util.ajaxFault);
 			}
 		}
 		
@@ -296,7 +297,7 @@
 			//todo --figure out a better way to refer to parent app
 			var savedThis:Application = this;
 			
-			ajax('main/get_relationship_types',null,function(event:ResultEvent):void{
+			Util.ajax('main/get_relationship_types',null,function(event:ResultEvent):void{
 				var obj:Object = JSON.decode(event.result.toString());
 				var relAC:ArrayCollection = objectToArrayCollection(obj,'relationship_type');
 				var other:Object = new Object();
@@ -308,7 +309,7 @@
 				createRelationshipDialog.setInverse(relAC.getItemAt(0)['inverse']);
 				createRelationshipDialog.condition1 = groupsGrid.selectedItems[0]['name'];
 				createRelationshipDialog.condition2 = groupsGrid.selectedItems[1]['name'];
-			}, ajaxFault);
+			}, Util.ajaxFault);
 			
 		}
 		
@@ -340,7 +341,7 @@
 				}
 				var groupListAC:ArrayCollection = new ArrayCollection();
 				var addToExistingDialog:AddToExistingGroupDialog = AddToExistingGroupDialog(PopUpManager.createPopUp(this, AddToExistingGroupDialog, true));
-				ajax('main/get_all_groups',null,function(event:ResultEvent):void{
+				Util.ajax('main/get_all_groups',null,function(event:ResultEvent):void{
 					var obj:Object = JSON.decode(event.result.toString());
 					for (var i:Object in obj) {
 						var item:Object = new Object();
@@ -349,7 +350,7 @@
 						groupListAC.addItem(item);
 					}
 					addToExistingDialog.setData(groupListAC);
-				},ajaxFault);
+				},Util.ajaxFault);
 				PopUpManager.centerPopUp(addToExistingDialog);
 				addToExistingDialog.addEventListener(GotExistingGroupIdEvent.GOT_EXISTING_GROUP_ID_EVENT, function(event:GotExistingGroupIdEvent):void {
 					trace("got back this group id: " + event.groupId);
@@ -358,7 +359,7 @@
 						ids.push(conditionGrid.selectedItems[i]['id']);
 					}
 					
-					ajax('main/add_conditions_to_existing_group',{"group_id": event.groupId, "ids" : JSON.encode(ids)},
+					Util.ajax('main/add_conditions_to_existing_group',{"group_id": event.groupId, "ids" : JSON.encode(ids)},
 						function(ajaxEvent:ResultEvent):void{
 							trace('back from add_conditions_to_existing_group');
 							if (ajaxEvent.result.toString() == "warning") {
@@ -369,7 +370,7 @@
 							populateGroupGrid("" + event.groupId);
 							//switchToGroupsView();
 							currentState = 'groupState';
-						}, ajaxFault);
+						}, Util.ajaxFault);
 				});
 				
 			}
@@ -412,7 +413,7 @@
 		
 		protected function userChoseNewGroupName(event:GotNewGroupNameEvent):void {
 			newGroupName = event.groupName;
-			ajax('main/check_if_group_exists',{'group_name': newGroupName},checkForExistingGroupName,ajaxFault);
+			Util.ajax('main/check_if_group_exists',{'group_name': newGroupName},checkForExistingGroupName,Util.ajaxFault);
 		}
 		
 		protected function checkForExistingGroupName(event:ResultEvent):void {
@@ -436,9 +437,9 @@
 			for (var i:int = 0; i < smallConditionsAC.length; i++) {
 				ids.push(smallConditionsAC.getItemAt(i)['id']);
 			}
-			ajax('main/reorder_group',{"group_id" : groupsGrid.selectedItem['id'], "ids" : JSON.encode(ids)},function(event:ResultEvent):void{
+			Util.ajax('main/reorder_group',{"group_id" : groupsGrid.selectedItem['id'], "ids" : JSON.encode(ids)},function(event:ResultEvent):void{
 				smallConditionsGridStatus.text = "Changed sort order";
-			},ajaxFault); 
+			},Util.ajaxFault); 
 		}
 		
 		protected function createNewGroup():void {
@@ -447,16 +448,16 @@
 				ids.push(conditionGrid.selectedItems[i]['id']);	
 			}
 			var json:String = JSON.encode(ids);
-			ajax('main/create_new_group',{"name" : newGroupName, "ids" : json},function(event:ResultEvent):void {
+			Util.ajax('main/create_new_group',{"name" : newGroupName, "ids" : json},function(event:ResultEvent):void {
 				var newGroupId:String = event.result.toString();
 				//switchToGroupsView();
 				currentState = 'groupState';
 				populateGroupGrid(newGroupId);
-			},ajaxFault);
+			},Util.ajaxFault);
 		}
 		
 		protected function populateGroupGrid(initialRow:String):void {
-				ajax('main/get_all_groups', null, function(event:ResultEvent):void {
+				Util.ajax('main/get_all_groups', null, function(event:ResultEvent):void {
 					var groupsObj:Object = JSON.decode(event.result.toString());
 					groupsAC = objectToArrayCollection(groupsObj,"condition_group");
 					if (initialRow == null) {
@@ -473,7 +474,7 @@
 							}
 						}
 				  	}
-			},ajaxFault);
+			},Util.ajaxFault);
 		}
 		
 		
@@ -493,10 +494,10 @@
 			}
 			
 			if (groupsGrid.selectedItems.length == 1) {
-				ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
+				Util.ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
 					var obj:Object = JSON.decode(event.result.toString());
 					smallConditionsAC = objectToArrayCollection(obj,'condition');
-				}, ajaxFault);
+				}, Util.ajaxFault);
 			} else {
 				smallConditionsAC = new ArrayCollection();
 			}
@@ -510,7 +511,7 @@
 			loginService.url = "main/login";
 			loginService.send({email: loggedInUser});
 			loginService.resultFormat = "text";
-			ajax('main/login', {"email": loggedInUser}, loggedIn, ajaxFault); 
+			Util.ajax('main/login', {"email": loggedInUser}, loggedIn, Util.ajaxFault); 
 			emailAddressTextBox.text = loggedInUser;
 		}
 		
@@ -519,7 +520,7 @@
 		}
 
 		public function getConditions():void {
-			ajax('main/get_all_conditions',null,gotConditions,ajaxFault);
+			Util.ajax('main/get_all_conditions',null,gotConditions,Util.ajaxFault);
 		}
 				
 		public function gotConditions(event:ResultEvent):void {
@@ -551,21 +552,7 @@
 			
 		}
 		
-		public function ajaxFault(event:FaultEvent):void {
-			trace("ajax fault!");
-			trace(event.message);
-			Alert.show("Server error!");
-		}
 		
-		
-		public function ajax(url:String, params:Object, result:Function, fault:Function): void {
-			var service:HTTPService = new HTTPService();
-			service.url = url;
-			service.resultFormat = "text";
-			service.addEventListener(ResultEvent.RESULT, result);
-			service.addEventListener(FaultEvent.FAULT, fault);
-			service.send(params);
-		}
 		
 		
 		]]>

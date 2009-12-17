@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV"
+	applicationComplete="init()">
+	<mx:DataGrid id="dmvGrid" x="90" y="184" width="670" height="211" dataProvider="{dmvData}" allowMultipleSelection="true" sortableColumns="false"
+		itemClick="gridClick(event)">
+	</mx:DataGrid>
+	
+	<mx:Script>
+	
+		
+		<![CDATA[
+			import mx.events.ListEvent;
+			import mx.events.ItemClickEvent;
+			import com.adobe.serialization.json.JSON;
+			import mx.rpc.events.ResultEvent;
+			import org.systemsbiology.echidna.common.Util;
+			import org.systemsbiology.echidna.ui.checkboxColumns.CheckBoxItemRenderer;
+			import org.systemsbiology.echidna.ui.checkboxColumns.CheckBoxHeaderRenderer;
+			import org.systemsbiology.echidna.ui.checkboxColumns.CheckBoxHeaderColumn;
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import mx.collections.ArrayCollection;
+
+			[Bindable]
+			protected var dmvData:ArrayCollection = new ArrayCollection();
+
+
+
+			protected function init():void {
+				loadingLabel.text = "Loading...";
+				
+				Util.ajax('main/get_data',{'group_id' : 1, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
+				/*
+				var row1:Object = {"c1": 1, "c2" : 2, "c3" : 3};
+				var row2:Object = {"c1": 4, "c2" : 5, "c3" : 6};
+				
+				
+				for (var i:String in row1) {
+					addDataGridColumn(i);
+				}
+				dmvData.addItem(row1);
+				dmvData.addItem(row2);
+				*/
+			}
+			
+			protected function gridClick(event:ListEvent):void {
+				var obj:Object = dmvGrid.selectedItem;
+				for (var s:String in obj) {
+					trace(s + ": " + obj[s]);
+				}
+				trace("");
+			}
+			
+			protected function onGotData(event:ResultEvent):void {
+				dmvData = new ArrayCollection();
+				
+				var rawObj:Object = JSON.decode(event.result.toString());
+				var columns:Array = rawObj['columns'];
+				addDataGridColumn('gene','Gene');
+				var colHash:Dictionary = new Dictionary();
+				for (var c:int = 0; c < columns.length; c++) {
+					addDataGridColumn(columns[c],columns[c]);
+					colHash[c] = columns[c];
+				}
+				
+				
+				 
+				var rows:Array = rawObj['rows'];
+				
+				for (var i:int = 0; i < rows.length; i++) {
+					var curRow:Array = rows[i];
+					var tableItem:Object = new Object();
+					
+					for (var j:int = 0; j < curRow.length; j++) {
+						var item:Object = curRow[j];
+						//tableItem['value'] = item['v'];
+						tableItem['gene'] = item['g'];
+						tableItem[colHash[item['c']]] = item['v'];
+						/* 
+						for (var x:int = 0; x < columns.length; x++) {
+							tableItem[columns[x]] = item['v'];
+						}
+						*/
+					}
+					dmvData.addItem(tableItem);
+				}
+				loadingLabel.text = "";
+				trace("dmvData size = " + dmvData.length);
+			}
+			
+			
+			 private function addDataGridColumn(dataField:String, headerText:String):void {
+			 	var dgc:DataGridColumn = new DataGridColumn(dataField);
+			 	dgc.headerText = headerText;
+			 	
+                //var dgc:CheckBoxHeaderColumn = new CheckBoxHeaderColumn(dataField);
+                //dgc.itemRenderer=  new ClassFactory(CheckBoxItemRenderer);
+                //dgc.headerRenderer = new ClassFactory(CheckBoxHeaderRenderer);
+                //dgc.headerText = dataField;
+                //dgc.dataField = dataField;
+                var cols:Array = dmvGrid.columns;
+                cols.push(dgc);
+                dmvGrid.columns = cols;
+            }
+            
+            private function onShow():void {
+            	for (var i:int = 0; i < dmvGrid.columnCount; i++) {
+            		trace("column " + i + ": " + dmvGrid.columns[i].dataField);
+            	}
+            }
+
+		]]>
+	</mx:Script>
+	<mx:Label x="90" y="403" text="Number of selected rows:" width="149"/>
+	<mx:Text x="247" y="403" width="39" id="numSelectedRowsText" text="{dmvGrid.selectedItems.length}"/>
+	<mx:Button x="325" y="403" label="Show" id="showButton" click="onShow()"/>
+	<mx:Label x="427" y="407" width="131" id="loadingLabel"/>
+	
+</mx:Application>

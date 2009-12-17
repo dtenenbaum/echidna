@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091216192536) do
+ActiveRecord::Schema.define(:version => 20091217181757) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -34,6 +34,10 @@ ActiveRecord::Schema.define(:version => 20091216192536) do
     t.integer  "reverse_slide_number", :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "data_types", :force => true do |t|
+    t.string "name"
   end
 
   create_table "features", :force => true do |t|
