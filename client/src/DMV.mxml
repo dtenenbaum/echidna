@@ -2,7 +2,7 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV"
 	applicationComplete="init()" xmlns:bridge="bridge.*">
 	<mx:DataGrid id="dmvGrid" x="90" y="184" width="670" height="211" dataProvider="{dmvData}" allowMultipleSelection="true" sortableColumns="false"
-		itemClick="gridClick(event)">
+		itemClick="gridClick(event)" change="dmvSelectionChanged(event)">
 	</mx:DataGrid>
 	<bridge:FABridge bridgeName="flex"/>
 	<mx:Script>
@@ -27,20 +27,9 @@
 
 
 			protected function init():void {
-				loadingLabel.text = "Loading...";
+				loadingLabel.text = "Loading data...";
 				
 				Util.ajax('main/get_data',{'group_id' : 1, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
-				/*
-				var row1:Object = {"c1": 1, "c2" : 2, "c3" : 3};
-				var row2:Object = {"c1": 4, "c2" : 5, "c3" : 6};
-				
-				
-				for (var i:String in row1) {
-					addDataGridColumn(i);
-				}
-				dmvData.addItem(row1);
-				dmvData.addItem(row2);
-				*/
 			}
 			
 			protected function gridClick(event:ListEvent):void {
@@ -49,6 +38,17 @@
 					trace(s + ": " + obj[s]);
 				}
 				trace("");
+			}
+			
+			protected function dmvSelectionChanged(event:ListEvent):void {
+				var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
+				evt.message = "There are " + dmvGrid.selectedItems.length + " items selected.";
+				dispatchEvent(evt);
+			}
+			
+			protected function clearSelections():void {
+				dmvGrid.selectedItems = new Array();
+				dmvSelectionChanged(null);
 			}
 			
 			protected function onGotData(event:ResultEvent):void {
@@ -119,8 +119,7 @@
 	</mx:Script>
 	<mx:Label x="90" y="403" text="Number of selected rows:" width="149"/>
 	<mx:Text x="247" y="403" width="39" id="numSelectedRowsText" text="{dmvGrid.selectedItems.length}"/>
-	<mx:Button x="325" y="403" label="Show" id="showButton" click="onShow()"/>
-	<mx:Label x="427" y="407" width="131" id="loadingLabel"/>
-	<mx:Button x="677" y="403" label="TestEvent" id="testEventButton" click="testEventButtonClicked()"/>
+	<mx:Label x="430" y="403" width="131" id="loadingLabel"/>
+	<mx:Button x="306" y="401" label="Clear Selections" id="clearSelectionsButton" click="clearSelections()"/>
 	
 </mx:Application>

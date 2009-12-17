@@ -77,8 +77,8 @@ var initCallback = function() {
 FABridge.addInitializationCallback( "flex", initCallback );
 
 var dmvSelectionChangedCallback = function(event) {
-    log("got a dmv selection event from flex");
-    alert("Got a DMV selection event from Flex.");
+    log("got a dmv selection message: " + event.getMessage());
+    alert("Got a DMV selection event from Flex. Message is: " + event.getMessage());
 }
 
 
