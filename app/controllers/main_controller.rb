@@ -90,8 +90,10 @@ class MainController < ApplicationController
       ConditionGrouping.transaction do
         sequence.each_with_index do |s,index|
           item = ConditionGrouping.find_by_condition_id_and_condition_group_id(s,params[:group_id])
+          logger.info "old sequence: #{item.sequence} new sequence: #{index+1}"
           item.sequence = (index+1)
           item.save
+          logger.info "after save, sequence: #{item.sequence}"
         end
       end
     rescue Exception => ex

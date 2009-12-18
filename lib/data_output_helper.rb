@@ -56,9 +56,10 @@ EOF
       
       i.gene_name
     end
-    
+    rows << cur_row
     
     h['rows'] = rows
+    puts "NUMBER OF ROWS!!!!!! #{rows.size}"
     h.to_json
   end
 

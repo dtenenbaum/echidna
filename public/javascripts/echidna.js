@@ -79,8 +79,6 @@ var initCallback = function() {
 // todo, check here to make sure we are running firegoose before creating the callback
 // find out how to know if we are running FG or not.
 
-// register the callback to load reference to the Flex app
-FABridge.addInitializationCallback( "flex", initCallback );
 
 var dmvSelectionChangedCallback = function(event) {
     if (gaggleActivated && event.getNumRowsSelected() == 0) {
@@ -126,6 +124,19 @@ var toggleGaggle = function() {
 
 jQuery(document).ready(function(){       
     log("hello from js");
+    var moz = false;
+    
+    jQuery.each(jQuery.browser, function(i, val) {
+      if(i=="mozilla" && val==true) {
+          moz = true;
+      }
+    });
+    if (moz) {
+        // register the callback to load reference to the Flex app
+        FABridge.addInitializationCallback( "flex", initCallback );
+    } else {
+        log("Not using Firefox, disabling Gaggle.");
+    }
 });
 
 
