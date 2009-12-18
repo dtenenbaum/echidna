@@ -83,7 +83,6 @@ var initCallback = function() {
 FABridge.addInitializationCallback( "flex", initCallback );
 
 var dmvSelectionChangedCallback = function(event) {
-    log("got a dmv selection message: " + event.getMessage());
     if (gaggleActivated && event.getNumRowsSelected() == 0) {
         toggleGaggle();
         FG_fireDataEvent();
@@ -96,17 +95,25 @@ var dmvSelectionChangedCallback = function(event) {
 }
 
 var updateGaggleDivs = function(event) {
-    log("in updateGaggleDivs, gaggleActivated = " + gaggleActivated);
-    log("num rows: " + event.getNumRowsSelected());
     jQuery(".gaggle-species").html(event.getSpecies());
-    document.getElementById("namelist_size").innerHTML = event.getNumRowsSelected();
-    //jQuery("#namelist_size").html("" + event.getNumRowsSelected());
-    log ("namelist size = " + jQuery("#namelist_size").html())
-    log("setting namelist to " + event.getSelectedNames().join("\t"))
+    jQuery("#namelist_size").html("" + event.getNumRowsSelected());
     jQuery("#namelist_namelist").html(event.getSelectedNames().join("\t"));
-    log("namelist is: " + jQuery("#namelist_namelist").html());
     
-//    jQuery("#matrix_size").html(event.getNumRowsSelected()  + "x" + event.getNumColumns());
+    jQuery("#matrix_size").html(event.getNumRowsSelected()  + "x" + event.getNumColumns());
+    //todo - is it better to construct the string on the flex side and just send it over?
+    var matrix = "";
+    for (var i = 0; i < event.getMatrix().length; i++) {
+        var row = event.getMatrix()[i];
+        for (j = 0;j < row.length; j++) {
+            matrix += row[j]
+            if (j < (row.length-1)) {
+                matrix += "\t"
+            }
+        }
+        matrix += "\n"
+    }
+    //log("matrix = \n" + matrix);
+    jQuery("#matrix_matrix").html(matrix);
 }
 
 
