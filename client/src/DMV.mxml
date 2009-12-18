@@ -43,6 +43,15 @@
 			protected function dmvSelectionChanged(event:ListEvent):void {
 				var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
 				evt.message = "There are " + dmvGrid.selectedItems.length + " items selected.";
+				evt.numRowsSelected = dmvGrid.selectedItems.length;
+				evt.numColumns = dmvGrid.columnCount; //todo be aware of disabled columns
+				evt.species = "Halobacterium sp. NRC-1"; //todo unhardcode
+				var namelist:Array = new Array();
+				for (var i:int = 0; i < dmvGrid.selectedItems.length; i++) {
+					namelist.push(dmvGrid.selectedItems[i]['gene']);
+				}
+				trace("namelist has " + namelist.length + " items");
+				evt.selectedNames = namelist;
 				dispatchEvent(evt);
 			}
 			

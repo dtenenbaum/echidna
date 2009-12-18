@@ -6,6 +6,10 @@ package org.systemsbiology.echidna.events
 	{
 		public static const DMV_SELECTION_CHANGED_EVENT:String = "dmvSelectionChangedEvent";
 		public var message:String;
+		public var numRowsSelected:int;
+		public var numColumns:int;
+		public var selectedNames:Array;
+		public var species:String;
 		
 		public function DMVSelectionChangedEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{

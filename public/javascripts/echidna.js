@@ -64,6 +64,8 @@ function logAjaxEvent(element, event, request, settings, status) {
 // global variable, holds reference to the Flex application
 var flexApp;  
 var DMV_SELECTION_CHANGED_EVENT = "dmvSelectionChangedEvent";
+
+var gaggleActivated = false;
   
 var initCallback = function() {  
    log("Flex called us back!");
@@ -73,14 +75,45 @@ var initCallback = function() {
    
    return;  
 }  
+
+// todo, check here to make sure we are running firegoose before creating the callback
+// find out how to know if we are running FG or not.
+
 // register the callback to load reference to the Flex app
 FABridge.addInitializationCallback( "flex", initCallback );
 
 var dmvSelectionChangedCallback = function(event) {
     log("got a dmv selection message: " + event.getMessage());
-    alert("Got a DMV selection event from Flex. Message is: " + event.getMessage());
+    if (gaggleActivated && event.getNumRowsSelected() == 0) {
+        toggleGaggle();
+        FG_fireDataEvent();
+        return;
+    } else if (!gaggleActivated && event.getNumRowsSelected() > 0) {
+        toggleGaggle();
+    }
+    updateGaggleDivs(event);
+    FG_fireDataEvent();
 }
 
+var updateGaggleDivs = function(event) {
+    log("in updateGaggleDivs, gaggleActivated = " + gaggleActivated);
+    log("num rows: " + event.getNumRowsSelected());
+    jQuery(".gaggle-species").html(event.getSpecies());
+    document.getElementById("namelist_size").innerHTML = event.getNumRowsSelected();
+    //jQuery("#namelist_size").html("" + event.getNumRowsSelected());
+    log ("namelist size = " + jQuery("#namelist_size").html())
+    log("setting namelist to " + event.getSelectedNames().join("\t"))
+    jQuery("#namelist_namelist").html(event.getSelectedNames().join("\t"));
+    log("namelist is: " + jQuery("#namelist_namelist").html());
+    
+//    jQuery("#matrix_size").html(event.getNumRowsSelected()  + "x" + event.getNumColumns());
+}
+
+
+var toggleGaggle = function() {
+    gaggleActivated = !gaggleActivated;
+    jQuery(".gaggle-data-not").toggleClass("gaggle-data");
+}
 
 
 

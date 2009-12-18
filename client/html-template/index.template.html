@@ -49,8 +49,10 @@ var requiredRevision = ${version_revision};
 </head>
 
 <body scroll="no">
-<div id="gaggle_namelist_outer"></div>
-<div id="gaggle_matrix_outer"></div>
+
+
+
+
 <script language="JavaScript" type="text/javascript">
 <!--
 // Version check for the Flash Player that has the ability to start Player Product Install (6.0r65)
@@ -124,5 +126,30 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			</embed>
 	</object>
 </noscript>
+
+    <div style="display: none;">
+        <div id="gaggle_namelist_outer">
+	         <div class="gaggle-data-not" id="namelist_gaggle_data">
+		          <span class="gaggle-name" id="namelist_name">WebDMV Namelist selection</span>
+		          <span class="gaggle-species" id="namelist_species"></span>
+		          <span class="gaggle-size" id="namelist_size"></span>
+		          <span class="gaggle-namelist-tsv" id="namelist_namelist"></span>
+	         </div>
+        </div>
+        <div id="gaggle_matrix_outer">
+            <div class="gaggle-data-not" id="matrix_gaggle_data">
+	            <span class="gaggle-name" id="matrix_name">WebDMV Matrix selection</span>
+	            <span class="gaggle-description" id="matrix_description"></span>
+	
+	            <span class="gaggle-species" id="matrix_species"></span>
+	            <span class="gaggle-size" id="matrix_size"></span>
+                <div class="gaggle-matrix-tsv" id="matrix_matrix">
+                </div>
+             </div>
+        </div>
+    </div>
+
+
+
 </body>
 </html>
