@@ -78,7 +78,7 @@
 							<mx:DataGrid height="337" id="smallConditionGrid" dataProvider="{smallConditionsAC}" 
 								dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragStart="smallConditionsGridStatus.text=''"
 								itemRollOver="createSCGTooltip(event)" itemRollOut="deleteSCGTooltip(event)"
-								dragDrop="conditionDropped(event)" itemClick="trace('item clicked')">
+								dragComplete="conditionDropped(event)"  itemClick="smallConditionGridClicked(event)">
 								<mx:columns>
 									<mx:DataGridColumn headerText="Name" dataField="name" />
 									<mx:DataGridColumn headerText="ID" dataField="description"/>
@@ -256,6 +256,24 @@
 			Util.ajax('main/get_logged_in_user', null, populateEmailAddress, Util.ajaxFault);
 		}
 		
+
+		protected function smallConditionGridClicked(event:ListEvent):void {
+			/*
+			trace("listing of items in small CG:");
+			for (var i:int = 0; i < smallConditionsAC.length; i++) {
+				trace("\t" + smallConditionsAC.getItemAt(i)['id']);
+			}
+			*/	
+		}
+		
+		protected function smallConditionGridDragComplete(event:DragEvent):void {
+			/*
+			trace("in drag complete!");
+			for (var i:int = 0; i < smallConditionsAC.length; i++) {
+				trace("\t" + smallConditionsAC.getItemAt(i)['id']);
+			}	
+			*/
+		}
 		
 		protected function conditionGridItemClick(event:ListEvent):void {
 			if (conditionGrid.selectedItems.length > 1) {
@@ -437,6 +455,7 @@
 			for (var i:int = 0; i < smallConditionsAC.length; i++) {
 				ids.push(smallConditionsAC.getItemAt(i)['id']);
 			}
+			
 			Util.ajax('main/reorder_group',{"group_id" : groupsGrid.selectedItem['id'], "ids" : JSON.encode(ids)},function(event:ResultEvent):void{
 				smallConditionsGridStatus.text = "Changed sort order";
 			},Util.ajaxFault); 
@@ -496,6 +515,7 @@
 			if (groupsGrid.selectedItems.length == 1) {
 				Util.ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
 					var obj:Object = JSON.decode(event.result.toString());
+					
 					smallConditionsAC = objectToArrayCollection(obj,'condition');
 				}, Util.ajaxFault);
 			} else {

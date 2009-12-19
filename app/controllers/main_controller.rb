@@ -75,9 +75,13 @@ class MainController < ApplicationController
   end
   
   def get_conditions_for_group
-    conds = Condition.find_by_sql(\
-      ["select * from conditions where id in (select condition_id from condition_groupings where condition_group_id = ? order by sequence)",
-      params[:group_id]])
+    sql=<<"EOF"
+    select c.id as id, c.name from conditions c, condition_groupings g
+    where g.condition_id = c.id
+    and g.condition_group_id = ?
+    order by g.sequence
+EOF
+    conds = Condition.find_by_sql([sql, params[:group_id]])
       render :text => conds.to_json
   end
   
@@ -89,11 +93,12 @@ class MainController < ApplicationController
     begin
       ConditionGrouping.transaction do
         sequence.each_with_index do |s,index|
+          #logger.debug "s = #{s}"
           item = ConditionGrouping.find_by_condition_id_and_condition_group_id(s,params[:group_id])
-          logger.info "old sequence: #{item.sequence} new sequence: #{index+1}"
+          #logger.info "old sequence: #{item.sequence} new sequence: #{index+1}"
           item.sequence = (index+1)
           item.save
-          logger.info "after save, sequence: #{item.sequence}"
+          #logger.info "after save, sequence: #{item.sequence}"
         end
       end
     rescue Exception => ex

@@ -132,11 +132,6 @@
             	}
             }
             
-            protected function testEventButtonClicked():void {
-            	var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
-            	evt.message = "hello from flex";
-            	dispatchEvent(evt);
-            }
 
 		]]>
 	</mx:Script>
