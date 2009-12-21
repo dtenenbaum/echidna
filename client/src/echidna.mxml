@@ -350,6 +350,7 @@
 				populateGroupGrid(null);
 			} else if (event.item.@eventName == "group.goToResultsView") {
 				//switchToResultsView();
+				getConditions();
 				currentState = '';
 			} else if (event.item.@eventName == "group.addToExisting") {
 				//todo - handle it if there are no groups!
@@ -493,6 +494,7 @@
 							}
 						}
 				  	}
+				  	currentState = 'groupState';
 			},Util.ajaxFault);
 		}
 		
@@ -527,10 +529,13 @@
 		
 		public function gotEmailAddressFromUser(event:GotLoginInfoEvent):void {
 			loggedInUser = event.email;
+			
+			/*
 			var loginService:mx.rpc.http.HTTPService = new mx.rpc.http.HTTPService();
 			loginService.url = "main/login";
 			loginService.send({email: loggedInUser});
 			loginService.resultFormat = "text";
+			*/
 			Util.ajax('main/login', {"email": loggedInUser}, loggedIn, Util.ajaxFault); 
 			emailAddressTextBox.text = loggedInUser;
 		}
