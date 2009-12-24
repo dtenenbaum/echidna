@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="836" height="494" creationComplete="init()" showCloseButton="true"
+	close="PopUpManager.removePopUp(this)" title="DMV Plot">
+	<mx:Script>
+		<![CDATA[
+			import mx.charts.series.LineSeries;
+			import mx.charts.chartClasses.Series;
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			protected var _plotData:ArrayCollection = new ArrayCollection();
+			
+			protected var gridData:Array;
+			public var columns:Array;
+			
+			public function init():void {
+				
+			}
+			
+			
+			public function set plotData(value:Array):void {
+				trace("in set plotData");
+				gridData = value;
+				trace("grid data length = " + gridData.length);
+				for (var i:int = 0; i < gridData.length; i++) {
+					var row:Array = new Array();
+					for(var j:int = 0; j < columns.length; j++) {
+						var o:Object = new Object();
+						o['gene'] = gridData[i]['gene'];
+						o['value'] = gridData[columns[[j]]];
+						o['condition'] = columns['j'];
+						row.push(o);
+					}
+					_plotData.addItem(row);
+					var series:LineSeries = new LineSeries();
+					trace("gene  = " + gridData[i]['gene']);
+					series.yField = gridData[i]['gene'];
+					series.displayName = series.yField;
+					linechart.series.push(series);
+					//_plotData.addItem(gridData[i]);
+				}
+				trace("# of series is " + linechart.series.length + " + rows  = " + _plotData.length);
+				
+			}
+			
+			
+		]]>
+	</mx:Script>
+	<mx:Button x="10" y="422" label="OK" click="PopUpManager.removePopUp(this)"/>
+	<mx:LineChart x="93" y="10" id="linechart" width="680" height="434" dataProvider="{_plotData}">
+		<mx:horizontalAxis>
+			<mx:CategoryAxis categoryField="value"/>
+		</mx:horizontalAxis>
+	</mx:LineChart>
+	<mx:Legend dataProvider="{linechart}"/>
+	
+</mx:TitleWindow>

@@ -9,6 +9,9 @@
 	
 		
 		<![CDATA[
+			import mx.managers.PopUpManager;
+			import org.systemsbiology.echidna.dialog.PlotDialog;
+			import mx.controls.Alert;
 			import org.systemsbiology.echidna.events.DMVSelectionChangedEvent;
 			import mx.events.ListEvent;
 			import mx.events.ItemClickEvent;
@@ -27,19 +30,23 @@
 
 
 			protected function init():void {
+				trace("DMV init."); 
 				loadingLabel.text = "Loading data...";
 				
 				Util.ajax('main/get_data',{'group_id' : 1, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
 			}
 			
 			protected function gridClick(event:ListEvent):void {
+				/*
 				var obj:Object = dmvGrid.selectedItem;
 				for (var s:String in obj) {
 					trace(s + ": " + obj[s]);
 				}
 				trace("");
+				*/
 			}
 			
+			// todo also fire event if column order is changed
 			protected function dmvSelectionChanged(event:ListEvent):void {
 				var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
 				evt.numRowsSelected = dmvGrid.selectedItems.length;
@@ -132,6 +139,22 @@
             	}
             }
             
+            protected function showPlot():void {
+            	if (dmvGrid.selectedItems.length == 0) {
+            		Alert.show("No Rows Selected");
+            		return;
+            	}
+            	//				var addGroupDialog:NewGroupDialog = NewGroupDialog(PopUpManager.createPopUp(this, NewGroupDialog, true));
+            	var plotDialog:PlotDialog = PlotDialog(PopUpManager.createPopUp(this, PlotDialog, true));
+            	var columns:Array = new Array();
+            	for (var i:int = 0; i < dmvGrid.columnCount; i++) {
+            		columns.push(dmvGrid.columns[i].dataField);
+            	}
+            	plotDialog.columns = columns;
+            	plotDialog.plotData = dmvGrid.selectedItems;
+            	PopUpManager.centerPopUp(plotDialog);
+            }
+            
 
 		]]>
 	</mx:Script>
@@ -139,5 +162,6 @@
 	<mx:Text x="247" y="403" width="39" id="numSelectedRowsText" text="{dmvGrid.selectedItems.length}"/>
 	<mx:Label x="430" y="403" width="131" id="loadingLabel"/>
 	<mx:Button x="306" y="401" label="Clear Selections" id="clearSelectionsButton" click="clearSelections()"/>
+	<mx:Button x="593" y="401" label="Plot" id="plotButton" click="showPlot()"/>
 	
 </mx:Application>
