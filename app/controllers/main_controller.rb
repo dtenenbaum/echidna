@@ -42,6 +42,25 @@ class MainController < ApplicationController
   #cookies[:gwap2_cookie] = {:value => user.email,
   #  :expires => 1000.days.from_now }
   
+  def get_filtered_conditions
+    if params[:result_type] == 'all'
+      conds = Condition.find :all, :order => 'id'
+    elsif params['result_type'] == 'ungrouped'
+      conds = Condition.find_by_sql "select * from conditions where id not in (select distinct condition_id from condition_groupings)"
+    elsif params['result_type'] == 'grouped'
+      conds = Condition.find_by_sql "select * from conditions where id in (select distinct condition_id from condition_groupings)"
+    #elsif params['result_type'] == 'sharedbyothers'
+    end
+
+    sorted_conds = sort_conditions_for_time_series(conds)
+    headers['Content-type'] = 'text/plain'
+    
+    render :text => sorted_conds.to_json(:methods => :num_groups) 
+
+
+  end
+  
+  
   def get_all_conditions
     conds = Condition.find :all, :order => 'id'
     sorted_conds = sort_conditions_for_time_series(conds)

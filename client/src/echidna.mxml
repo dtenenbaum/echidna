@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" color="#000000" backgroundColor="#FFFFFF" pageTitle="Echidna" xmlns:local="*"
 	xmlns:ui="flex.utils.ui.*"
-	applicationComplete="init()">
+	applicationComplete="init()" height="100%" width="100%" creationComplete="creationComplete()">
 	
 	<mx:states>
 		<mx:State name="groupState" id="groupState">
@@ -13,7 +13,26 @@
 		</mx:State>
 	</mx:states>
 	
-	<mx:Panel x="5" y="0" width="955" height="672" layout="absolute" borderStyle="solid">
+	<mx:XMLList id="resultCategories">
+        <category>
+            <name>All</name>
+            <shortname>all</shortname>
+        </category>
+        <category>
+            <name>Ungrouped</name>
+            <shortname>ungrouped</shortname>
+        </category>
+        <category>
+            <name>Grouped</name>
+            <shortname>grouped</shortname>
+        </category>
+        <category>
+            <name>Shared By others</name>
+            <shortname>sharedbyothers</shortname>
+        </category>
+    </mx:XMLList>
+	
+	<mx:Panel x="5" y="0" width="100%" height="100%" layout="absolute" borderStyle="solid">
 
 		<mx:Text x="10" y="0" text="Echidna" width="61" height="21"/>
 
@@ -27,27 +46,21 @@
 
 
 
-		<mx:Canvas x="10" y="29" width="191" height="583">
+		<mx:Canvas x="10" y="29" width="191" height="100%" id="groupingCanvas">
 
 
 
-			<mx:Accordion  width="100%" height="100%" enabled="false">
-				<mx:Canvas label="Results" width="100%" height="100%" enabled="false">
-					<mx:Accordion  width="80%" height="100%">
-						<mx:Canvas label="All" width="100%" height="100%" enabled="true">
-						</mx:Canvas>
-						<mx:Canvas label="Ungrouped" width="100%" height="100%">
-						</mx:Canvas>
-						<mx:Canvas label="Grouped" width="100%" height="100%">
-						</mx:Canvas>
-						<mx:Canvas label="Shared By Others" width="100%" height="100%">
-						</mx:Canvas>
-
-					</mx:Accordion>
+			<mx:Accordion id="accordion" width="100%" height="100%" enabled="true" click="accordionClick(event)">
+				<mx:Canvas label="Results" width="100%" height="100%" enabled="true" click="accordionClick(event)">
+					<mx:DataGrid id="resultsChoicesGrid" dataProvider="{resultCategories}" width="100%" showHeaders="false" itemClick="setResultsShown(event)">
+						<mx:columns>
+							<mx:DataGridColumn dataField="name"/> 
+						</mx:columns>													
+					</mx:DataGrid>
 				</mx:Canvas>
 				<mx:Canvas label="Groupings" width="100%" height="100%">
 				</mx:Canvas>
-				<mx:Canvas label="Tags" width="100%" height="100%">
+				<mx:Canvas label="Tags" width="100%" height="100%" enabled="false">
 				</mx:Canvas>
 			</mx:Accordion>
 		</mx:Canvas>
@@ -56,51 +69,60 @@
 
 			
 		
-			<mx:ViewStack x="209" y="19" height="593" width="703" id="viewStack">
+			<mx:ViewStack x="209" y="19" height="100%" width="100%" id="viewStack">
 			<!-- whichever child is *first* will show up in design mode  after the reload button is hit -->
 				
 			<mx:Canvas id="groupView">
-				<mx:HDividedBox x="0" y="0" width="703" height="593">
-					<mx:DataGrid width="50%" id="groupsGrid" height="591" dataProvider="{groupsAC}" itemClick="groupClick(event)"
-						allowMultipleSelection="true">
-						<mx:columns>
-							<mx:DataGridColumn headerText="Name" dataField="name"/>
-							<mx:DataGridColumn headerText="# Results" dataField="num_results"/>
-						</mx:columns>
-					</mx:DataGrid>
-					<mx:VDividedBox height="100%" width="295">
-						<mx:HBox id="hbox1">
-							<mx:Button label="Remove" enabled="false"/>
-							<mx:Button label="..." enabled="false" id="button1"/>
-						</mx:HBox>
-						<mx:VBox id="vbox1">
-						    <mx:Label text="Drag conditions to change order."/>							
-							<mx:DataGrid height="337" id="smallConditionGrid" dataProvider="{smallConditionsAC}" 
-								dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragStart="smallConditionsGridStatus.text=''"
-								itemRollOver="createSCGTooltip(event)" itemRollOut="deleteSCGTooltip(event)"
-								dragComplete="conditionDropped(event)"  itemClick="smallConditionGridClicked(event)">
-								<mx:columns>
-									<mx:DataGridColumn headerText="Name" dataField="name" />
-									<mx:DataGridColumn headerText="ID" dataField="description"/>
-								</mx:columns>
-							</mx:DataGrid>
-							<mx:Label id="smallConditionsGridStatus"></mx:Label>
-						</mx:VBox>
-						<mx:Canvas width="296" height="177">
-											<local:TagCloud id="LocalTagCloudInGroupView" 
-												MaxFontSize="16" MinFontSize="8" 
-												width="100%" height="80%"  
-												XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
-												BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
-						</mx:Canvas>
-					</mx:VDividedBox>
-				</mx:HDividedBox>
+				<mx:VBox>
+					<mx:HDividedBox x="0" y="0" width="725" height="100%">
+						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}" itemClick="groupClick(event)"
+							allowMultipleSelection="true">
+							<mx:columns>
+								<mx:DataGridColumn headerText="Name" dataField="name"/>
+								<mx:DataGridColumn headerText="# Results" dataField="num_results"/>
+							</mx:columns>
+						</mx:DataGrid>
+						<mx:VDividedBox height="100%" width="295">
+							<mx:HBox id="hbox1">
+								<mx:Button label="Remove" enabled="false"/>
+								<mx:Button label="..." enabled="false" id="button1"/>
+							</mx:HBox>
+							<mx:VBox id="vbox1">
+							    <mx:Label text="Drag conditions to change order."/>							
+								<mx:DataGrid height="337" id="smallConditionGrid" dataProvider="{smallConditionsAC}" 
+									dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragStart="smallConditionsGridStatus.text=''"
+									itemRollOver="createSCGTooltip(event)" itemRollOut="deleteSCGTooltip(event)"
+									dragComplete="conditionDropped(event)"  itemClick="smallConditionGridClicked(event)">
+									<mx:columns>
+										<mx:DataGridColumn headerText="Name" dataField="name" />
+										<mx:DataGridColumn headerText="ID" dataField="description"/>
+									</mx:columns>
+								</mx:DataGrid>
+								<mx:Label id="smallConditionsGridStatus"></mx:Label>
+							</mx:VBox>
+							<mx:Canvas width="296" height="177">
+												<local:TagCloud id="LocalTagCloudInGroupView" 
+													MaxFontSize="16" MinFontSize="8" 
+													width="100%" height="80%"  
+													XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
+													BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
+							</mx:Canvas>
+						</mx:VDividedBox>
+					</mx:HDividedBox>
+					<mx:HBox>
+						<mx:Label text="Groups shown:"></mx:Label>
+						<mx:Text text="{groupsAC.length}"></mx:Text>
+						<mx:Label text="Selected Rows"/>
+						<mx:Text text="{groupsGrid.selectedItems.length}"/>
+					</mx:HBox>
+				</mx:VBox>
+				
 			</mx:Canvas>
 
 				
 
-				<mx:Canvas id="resultsView">
-					
+				<mx:Canvas id="resultsView" height="100%" width="100%">
+					<mx:VBox>
 					<mx:VDividedBox>
 						<mx:HDividedBox width="100%" height="80%">
 							<mx:Canvas width="547" height="439" borderStyle="solid">
@@ -142,10 +164,17 @@
 						</mx:HDividedBox>
 						<mx:Canvas width="676" height="133" borderStyle="solid">
 							<mx:Text x="10" y="10" text="Description of condition:&#xd;" width="412"/>
-							<mx:Text x="34" y="25" width="461" height="96" id="descriptionText"/>
+							<mx:Text x="34" y="25" width="461" height="86" id="descriptionText"/>
 						</mx:Canvas>
 						
 					</mx:VDividedBox>
+					<mx:HBox>
+						<mx:Label text="Conditions shown:"></mx:Label>
+						<mx:Text text="{conditionsAC.length}"></mx:Text>
+						<mx:Label text="Selected Rows"/>
+						<mx:Text text="{conditionGrid.selectedItems.length}"/>
+					</mx:HBox>
+				</mx:VBox>
 
 				</mx:Canvas>						
 
@@ -240,8 +269,14 @@
 		private var newGroupName:String;
 			
 		public function init():void {
+			//currentState = '';
+			setCurrentState('');
+			trace("app init, current state is " + currentState);
+			resultsChoicesGrid.selectedItem = resultCategories[0];
+			accordion.selectedIndex = 0;
 			addEventListener(StateChangeEvent.CURRENT_STATE_CHANGE, function(event:StateChangeEvent):void {
 				trace('state changed to: ' + event.newState);
+				trace("currentState is: " + currentState);
 				if (event.newState == 'groupState') {
 					switchToGroupsView();
 				} else if (event.newState == '') {
@@ -254,6 +289,11 @@
 			
 			switchToResultsView();
 			Util.ajax('main/get_logged_in_user', null, populateEmailAddress, Util.ajaxFault);
+		}
+		
+		public function creationComplete():void {
+			trace("in creationComplete");
+			//currentState = '';
 		}
 		
 
@@ -273,6 +313,20 @@
 				trace("\t" + smallConditionsAC.getItemAt(i)['id']);
 			}	
 			*/
+		}
+		
+		
+		protected function setResultsShown(event:ListEvent):void {
+			trace("in setResultsShown()");
+			if (resultsChoicesGrid.selectedItems.length == 0) {
+				Alert.show("You must choose some category of conditions");
+				return;			
+			}
+			if (resultsChoicesGrid.selectedItem.shortname == 'sharedbyothers') {
+				Alert.show("This is not supported yet");
+				return;
+			}
+			Util.ajax("main/get_filtered_conditions", {"result_type" : resultsChoicesGrid.selectedItem.shortname}, gotConditions, Util.ajaxFault);
 		}
 		
 		protected function conditionGridItemClick(event:ListEvent):void {
@@ -309,6 +363,27 @@
 					groupedInAC =  objectToArrayCollection(JSON.decode(event.result.toString()), 'condition_group');
 				}, Util.ajaxFault);
 			}
+		}
+		
+		protected function accordionClick(event:MouseEvent):void {
+			trace("accordion clicked, current state is " + currentState);
+			if (accordion.selectedIndex == 0) { // Results/conditions
+				if (currentState == '' || currentState == null) { // condition state
+				} else {
+					trace("changing state, i think");
+					currentState = '';
+				}
+			} else if (accordion.selectedIndex == 1) { //groupings
+				if (currentState == '' || currentState == null) { //Results/conditions
+					trace("changing state, i think(2)");
+					if (groupsAC.length == 0) {
+						populateGroupGrid(null);
+					}
+					currentState = 'groupState';
+				} else {
+					
+				}
+			} // todo handle 'Tags' tab
 		}
 		
 		protected function relateTwoGroups():void {
@@ -398,11 +473,18 @@
 		protected function switchToGroupsView():void {
 			viewStack.selectedChild = groupView;
 			menuBar.dataProvider = menuItems_groupsView;
+			accordion.selectedIndex=1;
+			
+			//rowCountText.text = "{groupsAC.size}";
+			//rowsSelectedText.text = "{groupsGrid.selectedItems.length}";
 		}
 		
 		protected function switchToResultsView(): void {
 			viewStack.selectedChild = resultsView;
 			menuBar.dataProvider = menuItems_resultsView;
+			accordion.selectedIndex=0;
+			//rowCountText.text = "{conditionsAC.size}";
+			//rowsSelectedText.text = "{conditionGrid.selectedItems.length}";
 		}
 		
 		protected function groupClick(event:ListEvent):void {
