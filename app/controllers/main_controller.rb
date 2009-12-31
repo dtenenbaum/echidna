@@ -60,6 +60,15 @@ class MainController < ApplicationController
 
   end
   
+  def remove_conditions_from_group
+    ids_to_remove = ActiveSupport::JSON.decode(params[:ids_to_remove])
+    records_to_remove = ConditionGrouping.find_by_sql([\
+      "select id from condition_groupings where condition_group_id = ? and condition_id in (?)",
+      params[:group_id],ids_to_remove]).map{|i|i.id}
+    ConditionGrouping.delete(records_to_remove)
+    render :text => "ok"
+  end
+  
   
   def get_all_conditions
     conds = Condition.find :all, :order => 'id'

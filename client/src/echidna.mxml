@@ -76,7 +76,7 @@
 				<mx:VBox>
 					<mx:HDividedBox x="0" y="0" width="725" height="100%">
 						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}" itemClick="groupClick(event)"
-							allowMultipleSelection="true">
+							allowMultipleSelection="false">
 							<mx:columns>
 								<mx:DataGridColumn headerText="Name" dataField="name"/>
 								<mx:DataGridColumn headerText="# Results" dataField="num_results"/>
@@ -84,7 +84,7 @@
 						</mx:DataGrid>
 						<mx:VDividedBox height="100%" width="295">
 							<mx:HBox id="hbox1">
-								<mx:Button label="Remove" enabled="false"/>
+								<mx:Button id="removeConditionsButton" label="Remove" click="removeSelectedConditions()" enabled="false"/>
 								<mx:Button label="..." enabled="false" id="button1"/>
 							</mx:HBox>
 							<mx:VBox id="vbox1">
@@ -92,7 +92,9 @@
 								<mx:DataGrid height="337" id="smallConditionGrid" dataProvider="{smallConditionsAC}" 
 									dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragStart="smallConditionsGridStatus.text=''"
 									itemRollOver="createSCGTooltip(event)" itemRollOut="deleteSCGTooltip(event)"
-									dragComplete="conditionDropped(event)"  itemClick="smallConditionGridClicked(event)">
+									dragComplete="conditionDropped(event)"  itemClick="smallConditionGridClicked(event)" 
+									change="smallConditionGridChangeListener()"
+									allowMultipleSelection="true">
 									<mx:columns>
 										<mx:DataGridColumn headerText="Name" dataField="name" />
 										<mx:DataGridColumn headerText="ID" dataField="description"/>
@@ -387,16 +389,13 @@
 		}
 		
 		protected function relateTwoGroups():void {
-			//todo --figure out a better way to refer to parent app
-			var savedThis:Application = this;
-			
 			Util.ajax('main/get_relationship_types',null,function(event:ResultEvent):void{
 				var obj:Object = JSON.decode(event.result.toString());
 				var relAC:ArrayCollection = objectToArrayCollection(obj,'relationship_type');
 				var other:Object = new Object();
 				other = {"name": "Other", "inverse": "Other"};
 				relAC.addItem(other);
-				var createRelationshipDialog:CreateRelationshipDialog = CreateRelationshipDialog(PopUpManager.createPopUp(savedThis, CreateRelationshipDialog, true));
+				var createRelationshipDialog:CreateRelationshipDialog = CreateRelationshipDialog(PopUpManager.createPopUp(root, CreateRelationshipDialog, true));
 				PopUpManager.centerPopUp(createRelationshipDialog);
 				createRelationshipDialog.relationshipAC = relAC;
 				createRelationshipDialog.setInverse(relAC.getItemAt(0)['inverse']);
@@ -470,6 +469,43 @@
 			}
 		}
 		
+		
+		protected function removeSelectedConditions():void {
+			Alert.show("Are you sure?", "Confirm Delete", Alert.YES|Alert.NO,this,function(event:CloseEvent):void{
+				if (event.detail == Alert.YES) {
+					var itemsToRemove:Object = new Object();
+					var idsToRemove:Array = new Array();
+					for (var i:int = 0; i < smallConditionGrid.selectedItems.length; i++) {
+						itemsToRemove[smallConditionGrid.selectedItems[i]['name']] = 1;
+						idsToRemove.push(smallConditionGrid.selectedItems[i]['id']);
+					}
+					
+					Util.ajax('main/remove_conditions_from_group', 
+						{'group_id': groupsGrid.selectedItem['id'],
+						'ids_to_remove': JSON.encode(idsToRemove)},
+						function(event:ResultEvent):void{
+						}, Util.ajaxFault);
+					
+					for (var s:String in itemsToRemove) {
+						removeConditionFromSmallGrid(s);
+					}
+				}
+			},null,Alert.NO);
+			
+			
+			
+		}
+		
+		
+		private function removeConditionFromSmallGrid(conditionName:String):void {
+			for (var i:int = 0; i < smallConditionsAC.length; i++) {
+				if (smallConditionsAC.getItemAt(i).name == conditionName) {
+					smallConditionsAC.removeItemAt(i);
+					return;
+				}
+			}
+		}
+		
 		protected function switchToGroupsView():void {
 			viewStack.selectedChild = groupView;
 			menuBar.dataProvider = menuItems_groupsView;
@@ -488,6 +524,7 @@
 		}
 		
 		protected function groupClick(event:ListEvent):void {
+			removeConditionsButton.enabled = false;
 			onGroupRowSelected(event.rowIndex);
 		}
 		
@@ -660,7 +697,11 @@
 		}
 		
 		
-		
+		protected function smallConditionGridChangeListener():void {
+			var exp:Boolean = (smallConditionGrid.selectedItems.length > 0);
+			trace("set Remove button enabled to: " + exp);
+			removeConditionsButton.enabled=exp;
+		}
 		
 		]]>
 	</mx:Script>
