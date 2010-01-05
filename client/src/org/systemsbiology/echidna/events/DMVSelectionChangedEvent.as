@@ -10,6 +10,7 @@ package org.systemsbiology.echidna.events
 		public var selectedNames:Array;
 		public var species:String;
 		public var matrix:Array;
+		public var matrixType:String;
 		
 		public function DMVSelectionChangedEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{

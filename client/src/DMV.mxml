@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV"
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV - ratios"
 	applicationComplete="init()" xmlns:bridge="bridge.*">
-	<mx:DataGrid id="dmvGrid" x="90" y="184" width="670" height="211" dataProvider="{dmvData}" allowMultipleSelection="true" sortableColumns="false"
-		itemClick="gridClick(event)" change="dmvSelectionChanged(event)">
-	</mx:DataGrid>
 	<bridge:FABridge bridgeName="flex"/>
+	<mx:Label x="115" y="797" id="gaggleStatus" width="332"/>
+	<!-- IMPORTANT! Note that creationPolicy for TabNavigator is set to null by default (it's supposed to be set to auto). 
+		 So we need to set it to "all" here or we will have issues that will be hard to figure out. -->
+	<mx:TabNavigator id="tabNavigator" x="119" y="99" width="948" height="649" change="onTabChanged()" creationPolicy="all">
+		<mx:Canvas id="ratiosCanvas" label="ratios" width="100%" height="100%">
+			<mx:DataGrid id="ratiosGrid" x="10" y="10" width="917" height="585" dataProvider="{ratiosData}" allowMultipleSelection="true"
+				itemClick="gridClick(event)" change="dmvSelectionChanged(event)">
+			</mx:DataGrid>
+		</mx:Canvas>
+		<mx:Canvas id="lambdasCanvas" label="lambdas" width="100%" height="100%">
+			<mx:DataGrid id="lambdasGrid" x="10" y="10" width="917" height="585" dataProvider="{lambdasData}" allowMultipleSelection="true"
+				itemClick="gridClick(event)" change="dmvSelectionChanged(event)">
+			</mx:DataGrid>
+		</mx:Canvas>
+	</mx:TabNavigator>
+	<mx:Label x="115" y="757" text="Number of selected rows:" width="149"/>
+	<mx:Text x="272" y="757" width="39" id="numSelectedRowsText" text="0"/>
+	<mx:Button x="319" y="755" label="Clear Selections" id="clearSelectionsButton" click="clearSelections()"/>
+	<mx:Label x="443" y="757" width="131" id="loadingLabel"/>
+	<mx:Button x="596" y="755" label="Plot" id="plotButton" click="showPlot()"/>
+
+
 	<mx:Script>
 	
 		
 		<![CDATA[
+			import mx.utils.URLUtil;
+			import mx.managers.BrowserManager;
+			import mx.managers.IBrowserManager;
 			import flash.utils.getTimer;
 			import mx.managers.PopUpManager;
 			import org.systemsbiology.echidna.dialog.PlotDialog;
@@ -25,17 +47,89 @@
 			import mx.controls.dataGridClasses.DataGridColumn;
 			import mx.collections.ArrayCollection;
 
-			[Bindable]
-			protected var dmvData:ArrayCollection = new ArrayCollection();
 
+			[Bindable]
+			protected var ratiosData:ArrayCollection = new ArrayCollection();
+
+			[Bindable]
+			protected var lambdasData:ArrayCollection = new ArrayCollection();
+
+
+
+			protected var tabs:Array = new Array();
+			private var bm:IBrowserManager;
+			
+			private var groupId:int = -1;
 
 
 			protected function init():void {
-				trace("DMV init."); 
-				loadingLabel.text = "Loading data...";
 				
-				Util.ajax('main/get_data',{'group_id' : 7, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
+				bm = BrowserManager.getInstance();
+				bm.init("","DMV - ratios");
+				
+				trace("policy: " + tabNavigator.creationPolicy);
+				
+				groupId = getGroupId();
+				trace("group id = " + groupId);
+				
+				trace("DMV init.");
+				setupTabs();
+				
+				if (groupId != -1) {
+					loadingLabel.text = "Loading data...";
+					Util.ajax('main/get_data',{'group_id' : groupId, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
+				} else {
+					loadingLabel.text = "No data selected.";
+				}
 			}
+			
+			protected function getGroupId():int {
+				var segs:Array = bm.base.split("?");
+				if (segs.length < 2) {
+					return -1;
+				}
+				var temp:String = segs[1];
+				segs  = temp.split("#");
+				var queryString:String = segs[0];
+				trace("query string = " + queryString);
+				var params:Object = URLUtil.stringToObject(queryString, "&");
+				return(params['groupId']);
+			}	
+			
+			protected function setupTabs():void {
+				var ratiosTab:Object = new Object();
+				ratiosTab['name'] = 'ratios';
+				ratiosTab['data'] = ratiosData;
+				ratiosTab['grid'] = ratiosGrid;
+				
+				tabs.push(ratiosTab);
+				
+				var lambdasTab:Object = new Object();
+				lambdasTab['name'] = 'lambdas';
+				lambdasTab['data'] = lambdasData;
+				lambdasTab['grid'] = lambdasGrid;
+				
+				tabs.push(lambdasTab);
+				
+				trace("diag0: " + tabs[0]['grid']);
+				trace("diag1: " + tabs[1]['grid']);
+				trace("lambdasGrid = " + lambdasGrid);
+				
+			}
+			
+			protected function getDataForCurrentTab():ArrayCollection {
+				return tabs[tabNavigator.selectedIndex]['data'];
+			}
+
+			protected function getGridForCurrentTab():DataGrid {
+				return tabs[tabNavigator.selectedIndex]['grid'];
+			}
+			
+			protected function getNameForCurrentTab():String {
+				return tabs[tabNavigator.selectedIndex]['name'];
+			}
+
+			
 			
 			//todo modify this to work with canonical and locus tag names, no matter what is displayed
 			public function receiveGaggleNamelist(species:String, namelist:Array):void {
@@ -59,8 +153,8 @@
 					trace("value = " + namesHash[namelist[i]]);
 				}
 				
-				for (var j:int = 0; j < dmvData.length ; j++) {
-					var name:String = dmvData[j]['gene'];
+				for (var j:int = 0; j < getDataForCurrentTab().length ; j++) {
+					var name:String = getDataForCurrentTab()[j]['gene'];
 					//trace("name = " + name);
 					if (namesHash[name] == 1) {
 						trace("we have a match");
@@ -68,15 +162,13 @@
 							clearSelections();
 							match = true;
 						}
-						//dmvGrid.selectedItems.push(dmvData[j]);
 						indicesToSelect.push(j);
 					}
 				}
-				//validateNow();
 				
-				dmvGrid.selectedIndices = indicesToSelect;
-				
-				trace("# of selected items: " + dmvGrid.selectedIndices.length);
+				getGridForCurrentTab().selectedIndices = indicesToSelect;
+				//todo - make the same selection in congruent matrix
+				trace("# of selected items: " + getGridForCurrentTab().selectedIndices.length);
 				
 				var timer:Timer = new Timer(500,1);
 				timer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent):void {
@@ -87,37 +179,36 @@
 			}
 			
 			protected function gridClick(event:ListEvent):void {
-				/*
-				var obj:Object = dmvGrid.selectedItem;
-				for (var s:String in obj) {
-					trace(s + ": " + obj[s]);
-				}
-				trace("");
-				*/
 			}
 			
 			// todo also fire event if column order is changed
 			protected function dmvSelectionChanged(event:ListEvent):void {
+				numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
 				var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
-				evt.numRowsSelected = dmvGrid.selectedItems.length;
-				evt.numColumns = dmvGrid.columnCount -1; //todo be aware of disabled columns, also handle it if there are no columns for some reason
+				evt.numRowsSelected = getGridForCurrentTab().selectedItems.length;
+				evt.numColumns = getGridForCurrentTab().columnCount -1; //todo be aware of disabled columns, also handle it if there are no columns for some reason
 				//(otherwise this will return -1)
 				evt.species = "Halobacterium sp. NRC-1"; //todo unhardcode
+				if (tabNavigator.selectedIndex == 0) {
+					evt.matrixType  = "ratios";
+				} else if (tabNavigator.selectedIndex == 1) {
+					evt.matrixType = "lambdas";
+				}
 				var namelist:Array = new Array();
 				var matrix:Array = new Array();
 				var headers:Array = new Array();
 				
-				for (var h:int = 0; h < dmvGrid.columnCount; h++) {
-					headers.push(dmvGrid.columns[h].headerText);
+				for (var h:int = 0; h < getGridForCurrentTab().columnCount; h++) {
+					headers.push(getGridForCurrentTab().columns[h].headerText);
 				}
 				matrix.push(headers);
 				
-				for (var i:int = 0; i < dmvGrid.selectedItems.length; i++) {
+				for (var i:int = 0; i < getGridForCurrentTab().selectedItems.length; i++) {
 					var row:Array = new Array();
-					namelist.push(dmvGrid.selectedItems[i]['gene']);
-					for (var j:int = 0; j < dmvGrid.columnCount; j++) {
-						var columnField:String = dmvGrid.columns[j].dataField;
-						row.push(dmvGrid.selectedItems[i][columnField]);
+					namelist.push(getGridForCurrentTab().selectedItems[i]['gene']);
+					for (var j:int = 0; j < getGridForCurrentTab().columnCount; j++) {
+						var columnField:String = getGridForCurrentTab().columns[j].dataField;
+						row.push(getGridForCurrentTab().selectedItems[i][columnField]);
 					}
 					matrix.push(row);
 				}
@@ -127,12 +218,24 @@
 			}
 			
 			protected function clearSelections():void {
-				dmvGrid.selectedItems = new Array();
+				getGridForCurrentTab().selectedItems = new Array();
 				dmvSelectionChanged(null);
 			}
 			
+			
+			protected function setDataForCurrentTab(ac:ArrayCollection):void {
+				tabs[tabNavigator.selectedIndex]['data'] = ac;
+				if (tabNavigator.selectedIndex == 0) {
+					ratiosData = ac;
+				} else if (tabNavigator.selectedIndex == 1) {
+					lambdasData = ac;
+				}
+				ac = null;
+			}
+			
 			protected function onGotData(event:ResultEvent):void {
-				dmvData = new ArrayCollection();
+				setDataForCurrentTab(new ArrayCollection());
+				var tmpAC:ArrayCollection = new ArrayCollection();
 				
 				var rawObj:Object = JSON.decode(event.result.toString());
 				var columns:Array = rawObj['columns'];
@@ -153,19 +256,15 @@
 					
 					for (var j:int = 0; j < curRow.length; j++) {
 						var item:Object = curRow[j];
-						//tableItem['value'] = item['v'];
 						tableItem['gene'] = item['g'];
 						tableItem[colHash[item['c']]] = item['v'];
-						/* 
-						for (var x:int = 0; x < columns.length; x++) {
-							tableItem[columns[x]] = item['v'];
-						}
-						*/
 					}
-					dmvData.addItem(tableItem);
+					tmpAC.addItem(tableItem);
 				}
 				loadingLabel.text = "";
-				trace("dmvData size = " + dmvData.length);
+				setDataForCurrentTab(tmpAC);
+				tmpAC = null;
+				trace("current tab data size = " + getDataForCurrentTab().length);
 			}
 			
 			
@@ -178,41 +277,47 @@
                 //dgc.headerRenderer = new ClassFactory(CheckBoxHeaderRenderer);
                 //dgc.headerText = dataField;
                 //dgc.dataField = dataField;
-                var cols:Array = dmvGrid.columns;
+                var cols:Array = getGridForCurrentTab().columns;
                 cols.push(dgc);
-                dmvGrid.columns = cols;
+                getGridForCurrentTab().columns = cols;
             }
             
             private function onShow():void {
-            	for (var i:int = 0; i < dmvGrid.columnCount; i++) {
-            		trace("column " + i + ": " + dmvGrid.columns[i].dataField);
+            	for (var i:int = 0; i < getGridForCurrentTab().columnCount; i++) {
+            		trace("column " + i + ": " + getGridForCurrentTab().columns[i].dataField);
             	}
             }
             
             protected function showPlot():void {
-            	if (dmvGrid.selectedItems.length == 0) {
+            	if (getGridForCurrentTab().selectedItems.length == 0) {
             		Alert.show("No Rows Selected");
             		return;
             	}
             	//				var addGroupDialog:NewGroupDialog = NewGroupDialog(PopUpManager.createPopUp(this, NewGroupDialog, true));
             	var plotDialog:PlotDialog = PlotDialog(PopUpManager.createPopUp(this, PlotDialog, true));
             	var columns:Array = new Array();
-            	for (var i:int = 0; i < dmvGrid.columnCount; i++) {
-            		columns.push(dmvGrid.columns[i].dataField);
+            	for (var i:int = 0; i < getGridForCurrentTab().columnCount; i++) {
+            		columns.push(getGridForCurrentTab().columns[i].dataField);
             	}
             	plotDialog.columns = columns;
-            	plotDialog.plotData = dmvGrid.selectedItems;
+            	plotDialog.plotData = getGridForCurrentTab().selectedItems;
             	PopUpManager.centerPopUp(plotDialog);
+            }
+            
+            protected function onTabChanged():void {
+            	trace("tab changed, new index = " + tabNavigator.selectedIndex);
+            	dmvSelectionChanged(null);
+            	bm.setTitle("DMV - " + getNameForCurrentTab());
+            	numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
+            	
+            	if (tabNavigator.selectedIndex == 1 && groupId != -1 && lambdasData.length == 0) {
+            		loadingLabel.text = "Loading data...";
+					Util.ajax('main/get_data',{'group_id' : groupId, 'data_type' : 'lambda'}, onGotData, Util.ajaxFault);
+            	}
             }
             
 
 		]]>
 	</mx:Script>
-	<mx:Label x="90" y="403" text="Number of selected rows:" width="149"/>
-	<mx:Text x="247" y="403" width="39" id="numSelectedRowsText" text="{dmvGrid.selectedItems.length}"/>
-	<mx:Label x="430" y="403" width="131" id="loadingLabel"/>
-	<mx:Button x="306" y="401" label="Clear Selections" id="clearSelectionsButton" click="clearSelections()"/>
-	<mx:Button x="593" y="401" label="Plot" id="plotButton" click="showPlot()"/>
-	<mx:Label x="90" y="442" id="gaggleStatus" width="332"/>
 	
 </mx:Application>

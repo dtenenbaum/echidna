@@ -67,6 +67,7 @@ var DMV_SELECTION_CHANGED_EVENT = "dmvSelectionChangedEvent";
 
 var gaggleActivated = false;
   
+// flex calls this function when it has everything ready on its side
 var initCallback = function() {  
    log("Flex called us back!");
    flexApp = FABridge.flex.root();  
@@ -78,7 +79,7 @@ var initCallback = function() {
 
 // todo, check here to make sure we are running firegoose before creating the callback
 // find out how to know if we are running FG or not.
-
+// currently we just check to see if we are running firefox.
 
 var dmvSelectionChangedCallback = function(event) {
     if (gaggleActivated && event.getNumRowsSelected() == 0) {
@@ -98,6 +99,16 @@ var updateGaggleDivs = function(event) {
     jQuery("#namelist_namelist").html(event.getSelectedNames().join("\t"));
     
     jQuery("#matrix_size").html(event.getNumRowsSelected()  + "x" + event.getNumColumns());
+    
+    
+    if (event.getMatrixType() != null) {
+        jQuery("#matrix_name").html("WebDMV Matrix Selection ("+ event.getMatrixType() +")");
+        jQuery("#namelist_name").html("WebDMV Namelist Selection ("+ event.getMatrixType() +")");
+    } else {
+        jQuery("#matrix_name").html("WebDMV Matrix Selection");
+        jQuery("#namelist_name").html("WebDMV Namelist Selection");
+    }
+    
     //todo - is it better to construct the string on the flex side and just send it over?
     var matrix = "";
     for (var i = 0; i < event.getMatrix().length; i++) {
@@ -147,8 +158,6 @@ jQuery(document).ready(function(){
 
 var gotNamelistFromGaggle = function() {
     log("received event from FG"); 
-    //log("species: " + jQuery("#gaggle_namelist_species_from_firegoose").html())
-    //log("namelist: \n" + jQuery("#gaggle_namelist_names_from_firegoose").html())
     var species = jQuery("#gaggle_namelist_species_from_firegoose").html();
     var namelist = jQuery("#gaggle_namelist_names_from_firegoose").text().split("\n");
     
