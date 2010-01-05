@@ -134,9 +134,25 @@ jQuery(document).ready(function(){
     if (moz) {
         // register the callback to load reference to the Flex app
         FABridge.addInitializationCallback( "flex", initCallback );
+        
+        log("setting up event listener for events from FG");
+		document.addEventListener("webDmvHandleNamelistEvent",
+			function(aEvent) {
+			     gotNamelistFromGaggle();
+		    }, false, true);
     } else {
         log("Not using Firefox, disabling Gaggle.");
     }
 });
+
+var gotNamelistFromGaggle = function() {
+    log("received event from FG"); 
+    //log("species: " + jQuery("#gaggle_namelist_species_from_firegoose").html())
+    //log("namelist: \n" + jQuery("#gaggle_namelist_names_from_firegoose").html())
+    var species = jQuery("#gaggle_namelist_species_from_firegoose").html();
+    var namelist = jQuery("#gaggle_namelist_names_from_firegoose").text().split("\n");
+    
+    flexApp.receiveGaggleNamelist(species, namelist);
+}
 
 

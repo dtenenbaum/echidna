@@ -9,6 +9,7 @@
 	
 		
 		<![CDATA[
+			import flash.utils.getTimer;
 			import mx.managers.PopUpManager;
 			import org.systemsbiology.echidna.dialog.PlotDialog;
 			import mx.controls.Alert;
@@ -33,7 +34,56 @@
 				trace("DMV init."); 
 				loadingLabel.text = "Loading data...";
 				
-				Util.ajax('main/get_data',{'group_id' : 1, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
+				Util.ajax('main/get_data',{'group_id' : 7, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
+			}
+			
+			//todo modify this to work with canonical and locus tag names, no matter what is displayed
+			public function receiveGaggleNamelist(species:String, namelist:Array):void {
+				gaggleStatus.text = "Receiving Gaggle Broadcast...";
+				trace("received Gaggle namelist!");
+				/*
+				trace("species = " + species);
+				trace("names = ");
+				for (var i:int = 0; i < namelist.length; i++) {
+					trace("\t" + namelist[i]); 
+				}
+				*/
+				
+				var match:Boolean = false;
+				var indicesToSelect:Array = new Array();
+				
+				var namesHash:Object = new Object();
+				for (var i:int = 0; i < namelist.length; i++) {
+					trace("item = " + namelist[i]);
+					namesHash[namelist[i]] = 1; 
+					trace("value = " + namesHash[namelist[i]]);
+				}
+				
+				for (var j:int = 0; j < dmvData.length ; j++) {
+					var name:String = dmvData[j]['gene'];
+					//trace("name = " + name);
+					if (namesHash[name] == 1) {
+						trace("we have a match");
+						if (match == false) {
+							clearSelections();
+							match = true;
+						}
+						//dmvGrid.selectedItems.push(dmvData[j]);
+						indicesToSelect.push(j);
+					}
+				}
+				//validateNow();
+				
+				dmvGrid.selectedIndices = indicesToSelect;
+				
+				trace("# of selected items: " + dmvGrid.selectedIndices.length);
+				
+				var timer:Timer = new Timer(500,1);
+				timer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent):void {
+					gaggleStatus.text = "";
+				});
+				timer.start();
+												
 			}
 			
 			protected function gridClick(event:ListEvent):void {
@@ -163,5 +213,6 @@
 	<mx:Label x="430" y="403" width="131" id="loadingLabel"/>
 	<mx:Button x="306" y="401" label="Clear Selections" id="clearSelectionsButton" click="clearSelections()"/>
 	<mx:Button x="593" y="401" label="Plot" id="plotButton" click="showPlot()"/>
+	<mx:Label x="90" y="442" id="gaggleStatus" width="332"/>
 	
 </mx:Application>
