@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV - ratios"
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV -- ratios"
 	applicationComplete="init()" xmlns:bridge="bridge.*">
 	<bridge:FABridge bridgeName="flex"/>
 	<mx:Label x="115" y="797" id="gaggleStatus" width="332"/>
@@ -84,6 +84,9 @@
 			}
 			
 			protected function getGroupId():int {
+				trace("bm: " + bm);
+				trace("bm.base = " + bm.base);
+				trace("bm.url = " + bm.url);
 				var segs:Array = bm.base.split("?");
 				if (segs.length < 2) {
 					return -1;
