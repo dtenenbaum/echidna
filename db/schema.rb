@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091217181757) do
+ActiveRecord::Schema.define(:version => 20100105234929) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(:version => 20091217181757) do
     t.datetime "updated_at"
   end
 
+  add_index "conditions", ["id"], :name => "index_conditions_on_id"
+
   create_table "data_types", :force => true do |t|
     t.string "name"
   end
@@ -61,6 +63,8 @@ ActiveRecord::Schema.define(:version => 20091217181757) do
     t.string "name"
     t.string "alias"
   end
+
+  add_index "genes", ["id"], :name => "index_genes_on_id"
 
   create_table "relationship_types", :force => true do |t|
     t.string   "name"

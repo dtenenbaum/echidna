@@ -77,7 +77,7 @@
 				
 				if (groupId != -1) {
 					loadingLabel.text = "Loading data...";
-					Util.ajax('main/get_data',{'group_id' : groupId, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
+					Util.ajax('main/get_data_for_group',{'group_id' : groupId, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
 				} else {
 					loadingLabel.text = "No data selected.";
 				}
@@ -234,6 +234,7 @@
 			}
 			
 			protected function onGotData(event:ResultEvent):void {
+				trace("server returned DMV data");
 				setDataForCurrentTab(new ArrayCollection());
 				var tmpAC:ArrayCollection = new ArrayCollection();
 				
@@ -271,6 +272,8 @@
 			 private function addDataGridColumn(dataField:String, headerText:String):void {
 			 	var dgc:DataGridColumn = new DataGridColumn(dataField);
 			 	dgc.headerText = headerText;
+			 	dgc.dataTipField = headerText;
+			 	dgc.showDataTips = true;
 			 	
                 //var dgc:CheckBoxHeaderColumn = new CheckBoxHeaderColumn(dataField);
                 //dgc.itemRenderer=  new ClassFactory(CheckBoxItemRenderer);
@@ -312,7 +315,7 @@
             	
             	if (tabNavigator.selectedIndex == 1 && groupId != -1 && lambdasData.length == 0) {
             		loadingLabel.text = "Loading data...";
-					Util.ajax('main/get_data',{'group_id' : groupId, 'data_type' : 'lambda'}, onGotData, Util.ajaxFault);
+					Util.ajax('main/get_data_for_group',{'group_id' : groupId, 'data_type' : 'lambda'}, onGotData, Util.ajaxFault);
             	}
             }
             

@@ -85,6 +85,7 @@
 						<mx:VDividedBox height="100%" width="295">
 							<mx:HBox id="hbox1">
 								<mx:Button id="removeConditionsButton" label="Remove" click="removeSelectedConditions()" enabled="false"/>
+								<mx:Button id="dmvButton" label="DMV" enabled="false" toolTip="View selected group in Data Matrix Viewer (DMV)" click="launchDmv()"/>
 								<mx:Button label="..." enabled="false" id="button1"/>
 							</mx:HBox>
 							<mx:VBox id="vbox1">
@@ -225,6 +226,9 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.utils.URLUtil;
+			import mx.managers.IBrowserManager;
+			import mx.managers.BrowserManager;
 			import org.systemsbiology.echidna.dialog.CreateRelationshipDialog;
 			import mx.events.StateChangeEvent;
 			import mx.states.State;
@@ -269,9 +273,13 @@
 		protected var groupedInAC:ArrayCollection = new ArrayCollection();
 		
 		private var newGroupName:String;
+		
+		protected var bm:IBrowserManager;
+		
 			
 		public function init():void {
 			//currentState = '';
+			bm = BrowserManager.getInstance();
 			setCurrentState('');
 			trace("app init, current state is " + currentState);
 			resultsChoicesGrid.selectedItem = resultCategories[0];
@@ -634,12 +642,14 @@
 			}
 			
 			if (groupsGrid.selectedItems.length == 1) {
+				dmvButton.enabled = true;
 				Util.ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
 					var obj:Object = JSON.decode(event.result.toString());
 					
 					smallConditionsAC = objectToArrayCollection(obj,'condition');
 				}, Util.ajaxFault);
 			} else {
+				dmvButton.enabled = false;
 				smallConditionsAC = new ArrayCollection();
 			}
 			
@@ -701,6 +711,19 @@
 			var exp:Boolean = (smallConditionGrid.selectedItems.length > 0);
 			trace("set Remove button enabled to: " + exp);
 			removeConditionsButton.enabled=exp;
+		}
+		
+		protected function launchDmv():void {
+			var originalUrl:String = bm.url;
+			var url:String = URLUtil.getFullURL(originalUrl, "/DMV.html"); // this could break on some configs (non-virtualname)
+			url += "?groupId=" + groupsGrid.selectedItem['id'];
+			url += "&groupName=" + groupsGrid.selectedItem['name'];
+			newWin(url); 			
+		}
+		
+		private function newWin(url:String):void {
+		    var urlRequest:URLRequest = new URLRequest(url);
+		    navigateToURL(urlRequest, "_blank");
 		}
 		
 		]]>

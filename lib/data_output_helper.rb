@@ -20,6 +20,29 @@ EOF
       sort_by_condition_group_sequence(Feature.find_by_sql([query,cond_ids,data_type]),cond_ids)
   end
   
+  def get_matrix_data_for_group(group_id, data_type_str)
+    data_types = DataType.find :all
+
+    data_type = data_types.detect{|i|i.name.downcase =~ /#{data_type_str}/}.id
+
+    cond_ids = Condition.find_by_sql(["select condition_id from condition_groupings where condition_group_id = ? order by sequence",
+      group_id]).map{|i|i.condition_id}
+
+
+    query = <<"EOF" # for now this query hardcodes some of the options above
+    select f.*, g.name as gene_name, c.name as condition_name from features f, genes g, conditions c, condition_groupings gr
+     where g.id = f.gene_id 
+     and gr.condition_group_id = ?
+     and gr.condition_id = c.id
+     and c.id = f.condition_id
+     and f.data_type = ?
+     order by g.name, f.condition_id
+EOF
+    #unsorted_data = Feature.find_by_sql([query,cond_ids,data_type])
+    sort_by_condition_group_sequence(Feature.find_by_sql([query,group_id,data_type]),cond_ids)
+    
+  end
+  
   def as_json(data)
     columns = data.map{|i|i.condition_name}.uniq
     col_ids = {}
@@ -56,7 +79,7 @@ EOF
       
       i.gene_name
     end
-    rows << cur_row
+    rows << cur_row 
     
     h['rows'] = rows
     puts "NUMBER OF ROWS!!!!!! #{rows.size}"

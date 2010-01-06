@@ -196,6 +196,12 @@ EOF
   
   end
   
+  def get_data_for_group
+    data = get_matrix_data_for_group(params[:group_id],params[:data_type])
+    headers['Content-type'] = 'text/plain'
+    render :text => as_json(data)
+  end
+  
   
 
 end
