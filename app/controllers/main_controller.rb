@@ -21,7 +21,11 @@ class MainController < ApplicationController
       render :text => 'not logged in' and return false
     end
     if session[:user].nil?
-      session[:user] = cookies[:echidna_cookie][:value]
+      begin
+        session[:user] = cookies[:echidna_cookie][:value]
+      rescue Exception => ex
+        render :text => "not logged in" and return false
+      end
     end
     render :text => session[:user]
   end
