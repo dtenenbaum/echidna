@@ -280,6 +280,7 @@
 		public function init():void {
 			//currentState = '';
 			bm = BrowserManager.getInstance();
+			bm.init('', "Echidna");
 			setCurrentState('');
 			trace("app init, current state is " + currentState);
 			resultsChoicesGrid.selectedItem = resultCategories[0];
@@ -393,7 +394,10 @@
 				} else {
 					
 				}
-			} // todo handle 'Tags' tab
+			} else if (accordion.selectedIndex == 2) { // tags
+				Alert.show("Not supported yet.");
+				return;
+			}
 		}
 		
 		protected function relateTwoGroups():void {

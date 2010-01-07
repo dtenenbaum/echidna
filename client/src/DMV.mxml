@@ -163,6 +163,8 @@
 						trace("we have a match");
 						if (match == false) {
 							clearSelections();
+							trace("cleared selections prior to turning on namelist selections, firing event to browser");
+							dmvSelectionChanged(null);
 							match = true;
 						}
 						indicesToSelect.push(j);
@@ -178,7 +180,7 @@
 					gaggleStatus.text = "";
 				});
 				timer.start();
-												
+				numSelectedRowsText.text = "" + getGridForCurrentTab().selectedIndices.length;								
 			}
 			
 			protected function gridClick(event:ListEvent):void {
@@ -186,6 +188,7 @@
 			
 			// todo also fire event if column order is changed
 			protected function dmvSelectionChanged(event:ListEvent):void {
+				trace("in dmvSelectionChanged, # rows selected is " + getGridForCurrentTab().selectedIndices.length);
 				numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
 				var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
 				evt.numRowsSelected = getGridForCurrentTab().selectedItems.length;
@@ -288,25 +291,57 @@
                 getGridForCurrentTab().columns = cols;
             }
             
-            private function onShow():void {
-            	for (var i:int = 0; i < getGridForCurrentTab().columnCount; i++) {
-            		trace("column " + i + ": " + getGridForCurrentTab().columns[i].dataField);
-            	}
-            }
             
             protected function showPlot():void {
             	if (getGridForCurrentTab().selectedItems.length == 0) {
             		Alert.show("No Rows Selected");
             		return;
             	}
-            	//				var addGroupDialog:NewGroupDialog = NewGroupDialog(PopUpManager.createPopUp(this, NewGroupDialog, true));
-            	var plotDialog:PlotDialog = PlotDialog(PopUpManager.createPopUp(this, PlotDialog, true));
-            	var columns:Array = new Array();
-            	for (var i:int = 0; i < getGridForCurrentTab().columnCount; i++) {
-            		columns.push(getGridForCurrentTab().columns[i].dataField);
+
+
+            	var geneOrder:Array = new Array();
+            	
+            	var stuffToPlot:Array = new Array();
+            	
+            	var conditionHash:Object = new Object();
+            	
+            	for(var x:int = 0; x < getGridForCurrentTab().selectedItems.length; x++) {
+            		var item:Object = getGridForCurrentTab().selectedItems[x];
+            		geneOrder.push(item['gene']);
+            		for (var s:String in item) {
+            			if (s != "gene" && s != "mx_internal_uid") {
+            				if (conditionHash[s] == null) {
+            					conditionHash[s] = new Array();
+            				}
+            				var tmp:Array = conditionHash[s] as Array;
+            				tmp.push(item[s]);
+            				conditionHash[s] = tmp;
+            			}
+            		}
             	}
-            	plotDialog.columns = columns;
-            	plotDialog.plotData = getGridForCurrentTab().selectedItems;
+            	
+            	
+            	trace("yo");
+            	
+				for (var key:String in conditionHash) {
+					var row:Object = new Object();
+					row['condition'] = key;
+					var ary:Array = conditionHash[key] as Array;
+					for (var j:int = 0; j < geneOrder.length; j++) {
+						row[geneOrder[j]] = ary[j];
+					}
+					var json:String = JSON.encode(row);
+					trace("row:\n" + json);
+					stuffToPlot.push(row);
+				}            	
+            	
+            	
+            	var plotDialog:PlotDialog = PlotDialog(PopUpManager.createPopUp(this, PlotDialog, true));
+            	
+            	
+            	plotDialog.geneOrder = geneOrder;
+            	plotDialog.plotData = stuffToPlot;
+            	
             	PopUpManager.centerPopUp(plotDialog);
             }
             
