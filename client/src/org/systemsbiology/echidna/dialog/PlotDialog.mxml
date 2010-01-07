@@ -30,6 +30,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.charts.renderers.CircleItemRenderer;
 			import com.adobe.serialization.json.JSON;
 			import mx.charts.series.LineSeries;
 			import mx.charts.chartClasses.Series;
@@ -43,30 +44,6 @@
 			public var geneOrder:Array;
 			
 			public function init():void {
-				/*
-			 _plotData = new ArrayCollection([
-		        {"condition":"c1", "gene1":1500, "gene2": 3000},
-		        {"condition":"c2", "gene1":200, "gene2":400},
-		        {"condition":"c3", "gene1":500, "gene2":1000},
-		        {"condition":"c4", "gene1":700, "gene2":1400}
-		     ]);
-		     var geneOrder:Array = new Array();
-		     geneOrder.push("gene1");
-		     geneOrder.push("gene2");
-		     
-		     var arrayOfSeries:Array = new Array();
-		     
-		     for (var i:int = 0; i < geneOrder.length; i++) {
-		     	trace("i = " + i);
-		     	var series:LineSeries = new LineSeries();
-		     	series.yField = geneOrder[i];
-		     	series.displayName = geneOrder[i];
-		     	arrayOfSeries.push(series);
-		     }
-		     linechart.series = arrayOfSeries;
-		     
-				trace("init0");
-				*/
 			}
 			
 			
@@ -75,8 +52,8 @@
 		     var tmpAC:ArrayCollection = new ArrayCollection();
 		     
 		     for (var i:int = 0; i < geneOrder.length; i++) {
-		     	trace("i = " + i);
 		     	var series:LineSeries = new LineSeries();
+		     	series.setStyle("itemRenderer", new ClassFactory(mx.charts.renderers.CircleItemRenderer));
 		     	series.yField = geneOrder[i];
 		     	series.displayName = geneOrder[i];
 		     	arrayOfSeries.push(series);
@@ -87,55 +64,6 @@
 		     	tmpAC.addItem(value[x]);
 		     }
 		     _plotData = tmpAC;
-		     
-				
-				
-				
-				
-				/*
-				//REMOVE
-				if (true) return;
-				trace("in set plotData");
-				gridData = value;//?
-				var json:String = JSON.encode(gridData);
-				var columnsAsJson:String = JSON.encode(columns);
-				trace("grid data:\n" + json);
-				trace("grid data length = " + gridData.length);
-				trace("columns: " + columnsAsJson);
-				var arrayOfSeries:Array = new Array();
-				var rows:ArrayCollection = new ArrayCollection();
-				for (var i:int = 0; i < gridData.length; i++) {
-					var row:Array = new Array();
-					for(var j:int = 1; j < columns.length; j++) {
-						var o:Object = new Object();
-						o['gene'] = gridData[i]['gene'];
-						trace("gene: " + o['gene']);
-						var condition:String = columns[j];
-						o['condition'] = condition;
-						trace("condition = " + condition);
-						o['value'] = gridData[i][condition];
-						trace("value = " + o['value']);
-						trace();
-						row.push(o);
-					}
-					rows.addItem(row);
-					var series:LineSeries = new LineSeries();
-					//trace("gene  = " + gridData[i]['gene']);
-					//series.yField = gridData[i]['gene'];
-					series.yField = 'value';
-					series.displayName = gridData[i]['gene'];
-					//series.yField = 'gene';
-					series.xField = 'value';
-					//linechart.series.push(series);
-					arrayOfSeries.push(series);
-					//_plotData.addItem(gridData[i]);
-				}
-				_plotData = rows;
-				linechart.series = arrayOfSeries.reverse(); // will this match?
-				validateNow();
-				validateDisplayList();
-				trace("# of series is " + linechart.series.length + " + rows  = " + _plotData.length);
-				*/
 			}
 			
 			
