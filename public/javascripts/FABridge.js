@@ -106,7 +106,8 @@ FABridge.addInitializationCallback = function(bridgeName, callback)
 
 // updated for changes to SWFObject2
 function FABridge__bridgeInitialized(bridgeName) { 
-    console.log("in FABridge__bridgeInitialized ...");   
+    //console.log("in FABridge__bridgeInitialized ...");   
+    //log("in FABridge__bridgeInitialized ...");   
     var objects = document.getElementsByTagName("object");
     var ol = objects.length;
     var activeObjects = [];

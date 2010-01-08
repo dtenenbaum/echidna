@@ -1,6 +1,9 @@
 jQuery.noConflict();  
 
 
+
+
+
 var fb_lite = false;
 try {
 	if (firebug) {
@@ -35,6 +38,9 @@ function log(message) {
 		if (window.console) {
 			console.log(message);
 		} 
+	}
+	if (window.dump) {
+	    dump(message + "\n");
 	}
 }                          
  
@@ -135,6 +141,7 @@ var toggleGaggle = function() {
 
 jQuery(document).ready(function(){       
     log("hello from js");
+    log("fb_lite = " + fb_lite);
     var moz = false;
     
     jQuery.each(jQuery.browser, function(i, val) {
@@ -143,8 +150,16 @@ jQuery(document).ready(function(){
       }
     });
     if (moz) {
+        log("this seems to be firefox.");
+
         // register the callback to load reference to the Flex app
-        FABridge.addInitializationCallback( "flex", initCallback );
+        try {
+            FABridge.addInitializationCallback( "flex", initCallback );
+            log("FABridge callback registered.");
+        } catch (err) {
+            log("FABridge init failed, err = " + err.description);
+        }
+
         
         log("setting up event listener for events from FG");
 		document.addEventListener("webDmvHandleNamelistEvent",
@@ -156,11 +171,14 @@ jQuery(document).ready(function(){
     }
 });
 
+
+
+
 var gotNamelistFromGaggle = function() {
     log("received event from FG"); 
     var species = jQuery("#gaggle_namelist_species_from_firegoose").html();
     var namelist = jQuery("#gaggle_namelist_names_from_firegoose").text().split("\n");
-    
+    log ("flexapp = " + flexApp);
     flexApp.receiveGaggleNamelist(species, namelist);
 }
 

@@ -320,9 +320,6 @@
             		}
             	}
             	
-            	
-            	trace("yo");
-            	
 				for (var key:String in conditionHash) {
 					var row:Object = new Object();
 					row['condition'] = key;
@@ -330,14 +327,12 @@
 					for (var j:int = 0; j < geneOrder.length; j++) {
 						row[geneOrder[j]] = ary[j];
 					}
-					var json:String = JSON.encode(row);
-					trace("row:\n" + json);
+					//var json:String = JSON.encode(row);
+					//trace("row:\n" + json);
 					stuffToPlot.push(row);
 				}            	
             	
-            	
             	var plotDialog:PlotDialog = PlotDialog(PopUpManager.createPopUp(this, PlotDialog, true));
-            	
             	
             	plotDialog.geneOrder = geneOrder;
             	plotDialog.plotData = stuffToPlot;
