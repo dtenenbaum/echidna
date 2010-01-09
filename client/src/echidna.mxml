@@ -405,22 +405,20 @@
 		
 		protected function relateTwoGroups():void {
 			var dispObj:DisplayObject = root;
-			var createRelationshipDialog:CreateRelationshipDialog = CreateRelationshipDialog(PopUpManager.createPopUp(root, CreateRelationshipDialog, true));
-			/*
+			var thisApp:echidna = this;
 			Util.ajax('main/get_relationship_types',null,function(event:ResultEvent):void{
 				var obj:Object = JSON.decode(event.result.toString());
 				var relAC:ArrayCollection = objectToArrayCollection(obj,'relationship_type');
 				var other:Object = new Object();
 				other = {"name": "Other", "inverse": "Other"};
 				relAC.addItem(other);
-				var createRelationshipDialog:CreateRelationshipDialog = CreateRelationshipDialog(PopUpManager.createPopUp(dispObj, CreateRelationshipDialog, true));
+				var createRelationshipDialog:CreateRelationshipDialog = CreateRelationshipDialog(PopUpManager.createPopUp(thisApp, CreateRelationshipDialog, true));
 				PopUpManager.centerPopUp(createRelationshipDialog);
 				createRelationshipDialog.relationshipAC = relAC;
 				createRelationshipDialog.setInverse(relAC.getItemAt(0)['inverse']);
 				createRelationshipDialog.condition1 = groupsGrid.selectedItems[0]['name'];
 				createRelationshipDialog.condition2 = groupsGrid.selectedItems[1]['name'];
 			}, Util.ajaxFault);
-			*/			
 		}
 		
 		public function menuClick(event:MenuEvent):void {
