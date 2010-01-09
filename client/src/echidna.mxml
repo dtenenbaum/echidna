@@ -75,8 +75,8 @@
 			<mx:Canvas id="groupView">
 				<mx:VBox>
 					<mx:HDividedBox x="0" y="0" width="725" height="100%">
-						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}" itemClick="groupClick(event)"
-							allowMultipleSelection="false">
+						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  itemClick="groupClick(event)"
+							allowMultipleSelection="true">
 							<mx:columns>
 								<mx:DataGridColumn headerText="Name" dataField="name"/>
 								<mx:DataGridColumn headerText="# Results" dataField="num_results"/>
@@ -258,6 +258,8 @@
 		import com.adobe.serialization.json.JSON;
 		
 		
+		protected var app:DisplayObject;;
+		
 		protected var loggedInUser:String;
 		protected var conditionData:Object;
 		[Bindable]
@@ -279,6 +281,7 @@
 			
 		public function init():void {
 			//currentState = '';
+			app = root;
 			bm = BrowserManager.getInstance();
 			bm.init('', "Echidna");
 			setCurrentState('');
@@ -401,20 +404,23 @@
 		}
 		
 		protected function relateTwoGroups():void {
+			var dispObj:DisplayObject = root;
+			var createRelationshipDialog:CreateRelationshipDialog = CreateRelationshipDialog(PopUpManager.createPopUp(root, CreateRelationshipDialog, true));
+			/*
 			Util.ajax('main/get_relationship_types',null,function(event:ResultEvent):void{
 				var obj:Object = JSON.decode(event.result.toString());
 				var relAC:ArrayCollection = objectToArrayCollection(obj,'relationship_type');
 				var other:Object = new Object();
 				other = {"name": "Other", "inverse": "Other"};
 				relAC.addItem(other);
-				var createRelationshipDialog:CreateRelationshipDialog = CreateRelationshipDialog(PopUpManager.createPopUp(root, CreateRelationshipDialog, true));
+				var createRelationshipDialog:CreateRelationshipDialog = CreateRelationshipDialog(PopUpManager.createPopUp(dispObj, CreateRelationshipDialog, true));
 				PopUpManager.centerPopUp(createRelationshipDialog);
 				createRelationshipDialog.relationshipAC = relAC;
 				createRelationshipDialog.setInverse(relAC.getItemAt(0)['inverse']);
 				createRelationshipDialog.condition1 = groupsGrid.selectedItems[0]['name'];
 				createRelationshipDialog.condition2 = groupsGrid.selectedItems[1]['name'];
 			}, Util.ajaxFault);
-			
+			*/			
 		}
 		
 		public function menuClick(event:MenuEvent):void {
@@ -536,8 +542,23 @@
 		}
 		
 		protected function groupClick(event:ListEvent):void {
+			trace("in groupClick()");
+			removeConditionsButton.enabled = false;
+			if (groupsGrid.selectedIndices.length == 1) {
+				onGroupRowSelected(event.rowIndex);
+				dmvButton.enabled = true;
+				relateButton.enabled = false;
+			} else if (groupsGrid.selectedIndices.length == 2) {
+				relateButton.enabled = true;
+				dmvButton.enabled = false;
+			} else {
+				relateButton.enabled = false;
+				dmvButton.enabled = false;
+			}
+			/*
 			removeConditionsButton.enabled = false;
 			onGroupRowSelected(event.rowIndex);
+			*/
 		}
 		
 		protected function createSCGTooltip(event:ListEvent):void {

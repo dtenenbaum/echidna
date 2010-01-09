@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100105234929) do
+ActiveRecord::Schema.define(:version => 20100109000515) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -71,6 +71,13 @@ ActiveRecord::Schema.define(:version => 20100105234929) do
     t.string   "inverse"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "relationships", :force => true do |t|
+    t.integer "relationship_type_id", :limit => 11
+    t.integer "group1",               :limit => 11
+    t.integer "group2",               :limit => 11
+    t.string  "note"
   end
 
 end
