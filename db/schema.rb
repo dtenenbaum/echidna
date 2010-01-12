@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100109000515) do
+ActiveRecord::Schema.define(:version => 20100112230858) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -34,6 +34,9 @@ ActiveRecord::Schema.define(:version => 20100109000515) do
     t.integer  "reverse_slide_number", :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "original_name"
+    t.integer  "sbeams_project_id",    :limit => 11
+    t.string   "sbeams_timestamp"
   end
 
   add_index "conditions", ["id"], :name => "index_conditions_on_id"

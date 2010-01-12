@@ -54,6 +54,7 @@ String.prototype.rtrim = function() {
 	return this.replace(/\s+$/,"");
 }                                                       
 
+// i don't think this is called. TODO - verify and delete
 function logAjaxEvent(element, event, request, settings, status) {
     if (status == "error") {
         jQuery(element).html("<font color='red'>Error receiving data from remote server.</font>");
@@ -141,7 +142,6 @@ var toggleGaggle = function() {
 
 jQuery(document).ready(function(){       
     log("hello from js");
-    log("fb_lite = " + fb_lite);
     var moz = false;
     
     jQuery.each(jQuery.browser, function(i, val) {
