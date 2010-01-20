@@ -1,5 +1,6 @@
 package org.systemsbiology.echidna.common
 {
+	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
@@ -32,6 +33,16 @@ package org.systemsbiology.echidna.common
 			service.send(params);
 		}
 		
+		
+		public static function objectToArrayCollection(obj:Object, type:String):ArrayCollection {
+			var ac:ArrayCollection = new ArrayCollection();
+			for (var i:Object in obj) {
+				var item:Object = obj[i][type];
+				ac.addItem(item);
+			}
+			return ac;
+		}
+
 
 	}
 }

@@ -104,11 +104,15 @@
 								<mx:Label id="smallConditionsGridStatus"></mx:Label>
 							</mx:VBox>
 							<mx:Canvas width="296" height="177">
-												<local:TagCloud id="LocalTagCloudInGroupView" 
-													MaxFontSize="16" MinFontSize="8" 
-													width="100%" height="80%"  
-													XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
-													BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
+								<mx:VBox width="100%" height="100%">
+										<mx:Label text="Related Groups:"/>
+										<mx:DataGrid id="relatedGroupsGrid" dataProvider="{relatedGroupsAC}" click="onRelatedGroupsGridClick()">
+											<mx:columns>
+												<mx:DataGridColumn headerText="Name" dataField="name" showDataTips="true" dataTipField="name"/>
+												<mx:DataGridColumn headerText="Relationship" dataField="relationship" showDataTips="true" dataTipField="relationship"/>
+											</mx:columns>
+										</mx:DataGrid>
+								</mx:VBox>
 							</mx:Canvas>
 						</mx:VDividedBox>
 					</mx:HDividedBox>
@@ -135,7 +139,7 @@
 										<ui:DataGridToolTipColumn headerText="#"
 										 headerToolTip="Number of groups this condition appears in"  dataField="num_groups" width="20"/>
 										<mx:DataGridColumn headerText="Name" dataField="name" dataTipField="name" showDataTips="true" width="200"/>
-										<mx:DataGridColumn headerText="SBEAMS ID" dataField="col2"/>
+										<mx:DataGridColumn headerText="SBEAMS ID" dataField="sbeams_project_id"/>
 										<mx:DataGridColumn headerText="Forward Slide ID" dataField="forward_slide_number"/>
 										<mx:DataGridColumn headerText="Reverse Slide ID" dataField="reverse_slide_number"/>
 										<mx:DataGridColumn headerText="Owner" dataField="col5"/>
@@ -155,12 +159,14 @@
 										</mx:DataGrid>
 									</mx:Canvas>
 									<mx:Canvas width="100%" height="171" borderStyle="solid" id="b">
-										<mx:Text x="10" y="10" text="Tags:"/>
-											<local:TagCloud id="LocalTagCloud" 
-												MaxFontSize="16" MinFontSize="8" 
-												width="100%" height="80%"  
-												XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
-												BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
+
+
+
+												<local:TagCloud id="LocalTagCloudIResultsView" 
+													MaxFontSize="16" MinFontSize="8" 
+													width="100%" height="80%"  
+													XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
+													BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
 			
 									</mx:Canvas>
 								</mx:VDividedBox>
@@ -226,6 +232,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.CreatedRelationshipEvent;
 			import mx.utils.URLUtil;
 			import mx.managers.IBrowserManager;
 			import mx.managers.BrowserManager;
@@ -273,6 +280,10 @@
 		
 		[Bindable]
 		protected var groupedInAC:ArrayCollection = new ArrayCollection();
+		
+		[Bindable]
+		protected var relatedGroupsAC:ArrayCollection = new ArrayCollection();
+		
 		
 		private var newGroupName:String;
 		
@@ -374,7 +385,7 @@
 			} else {
 				Util.ajax('main/get_groups_for_condition',{"condition_id": conditionGrid.selectedItem['id']},
 				function(event:ResultEvent):void {
-					groupedInAC =  objectToArrayCollection(JSON.decode(event.result.toString()), 'condition_group');
+					groupedInAC =  Util.objectToArrayCollection(JSON.decode(event.result.toString()), 'condition_group');
 				}, Util.ajaxFault);
 			}
 		}
@@ -408,7 +419,7 @@
 			var thisApp:echidna = this;
 			Util.ajax('main/get_relationship_types',null,function(event:ResultEvent):void{
 				var obj:Object = JSON.decode(event.result.toString());
-				var relAC:ArrayCollection = objectToArrayCollection(obj,'relationship_type');
+				var relAC:ArrayCollection = Util.objectToArrayCollection(obj,'relationship_type');
 				var other:Object = new Object();
 				other = {"name": "Other", "inverse": "Other"};
 				relAC.addItem(other);
@@ -417,7 +428,9 @@
 				createRelationshipDialog.relationshipAC = relAC;
 				createRelationshipDialog.setInverse(relAC.getItemAt(0)['inverse']);
 				createRelationshipDialog.condition1 = groupsGrid.selectedItems[0]['name'];
+				createRelationshipDialog.condition1Id = groupsGrid.selectedItems[0]['id'];
 				createRelationshipDialog.condition2 = groupsGrid.selectedItems[1]['name'];
+				createRelationshipDialog.condition2Id = groupsGrid.selectedItems[1]['id'];
 			}, Util.ajaxFault);
 		}
 		
@@ -600,6 +613,13 @@
 			createNewGroup();
 		}
 		
+		protected function updateRelatedGroupsGrid():void {
+			Util.ajax("main/get_related_groups", {"group_id": groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
+				var results:Object = JSON.decode(event.result.toString());
+				relatedGroupsAC = Util.objectToArrayCollection(results, "relationship");
+			}, Util.ajaxFault);
+		}
+		
 		protected function conditionDropped(event:DragEvent):void {
 			trace("in conditionDropped");
 			var ids:Array = new Array();
@@ -629,7 +649,7 @@
 		protected function populateGroupGrid(initialRow:String):void {
 				Util.ajax('main/get_all_groups', null, function(event:ResultEvent):void {
 					var groupsObj:Object = JSON.decode(event.result.toString());
-					groupsAC = objectToArrayCollection(groupsObj,"condition_group");
+					groupsAC = Util.objectToArrayCollection(groupsObj,"condition_group");
 					if (initialRow == null) {
 						return;
 					} else {
@@ -658,6 +678,7 @@
 		
 		protected function onGroupRowSelected(rowIndex:int):void {
 			trace("# of selected items: " + groupsGrid.selectedItems.length);
+			relatedGroupsAC = new ArrayCollection();
 			if (groupsGrid.selectedItems.length == 2) {
 				relateButton.enabled = true;
 			} else {
@@ -665,11 +686,12 @@
 			}
 			
 			if (groupsGrid.selectedItems.length == 1) {
+				updateRelatedGroupsGrid();
 				dmvButton.enabled = true;
 				Util.ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
 					var obj:Object = JSON.decode(event.result.toString());
 					
-					smallConditionsAC = objectToArrayCollection(obj,'condition');
+					smallConditionsAC = Util.objectToArrayCollection(obj,'condition');
 				}, Util.ajaxFault);
 			} else {
 				dmvButton.enabled = false;
@@ -702,17 +724,9 @@
 				
 		public function gotConditions(event:ResultEvent):void {
 			conditionData = JSON.decode(event.result.toString());
-			conditionsAC = objectToArrayCollection(conditionData, 'condition');
+			conditionsAC = Util.objectToArrayCollection(conditionData, 'condition');
 		}
 		
-		public function objectToArrayCollection(obj:Object, type:String):ArrayCollection {
-			var ac:ArrayCollection = new ArrayCollection();
-			for (var i:Object in obj) {
-				var item:Object = obj[i][type];
-				ac.addItem(item);
-			}
-			return ac;
-		}
 		
 		public function populateEmailAddress(event:ResultEvent):void {
 			var email:String = event.result as String;
@@ -748,6 +762,20 @@
 		    var urlRequest:URLRequest = new URLRequest(url);
 		    navigateToURL(urlRequest, "_blank");
 		}
+		
+		protected function onRelatedGroupsGridClick():void {
+			var groupId:int = relatedGroupsGrid.selectedItem['id'];
+			trace("clicked on group id: " + groupId);
+			for (var i:int = 0; i < groupsAC.length; i++ ) {
+				if (groupsAC[i]['id'] == groupId) {
+					groupsGrid.selectedItem = groupsAC[i];
+					onGroupRowSelected(i);
+					break;
+				}
+			}
+			//onGroupRowSelected(groupId);
+		}
+		
 		
 		]]>
 	</mx:Script>

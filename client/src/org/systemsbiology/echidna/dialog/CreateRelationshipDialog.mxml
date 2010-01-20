@@ -3,6 +3,12 @@
 	creationComplete="init()" showCloseButton="true" close="PopUpManager.removePopUp(this)">
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.CreatedRelationshipEvent;
+			import mx.core.IFlexDisplayObject;
+			import com.adobe.serialization.json.JSON;
+			import mx.rpc.events.ResultEvent;
+			import org.systemsbiology.echidna.common.Util;
+			import mx.controls.Alert;
 			import mx.events.ListEvent;
 			import mx.collections.ArrayCollection;
 			import mx.managers.PopUpManager;
@@ -11,12 +17,18 @@
 			[Bindable]
 			public var relationshipAC:ArrayCollection = new ArrayCollection();
 			
+			//todo - rename condition1, etc., to group1, etc
 			[Bindable]
 			public var condition1:String;
 			
 			[Bindable]
 			public var condition2:String;
 			
+			[Bindable]
+			public var condition1Id:int;
+			
+			[Bindable]
+			public var condition2Id:int;
 			
 			
 			
@@ -31,12 +43,28 @@
 			}
 			
 			protected function onOk():void {
+				var savedThis:IFlexDisplayObject = this;
+				Util.ajax("main/create_new_relationship", 
+				{"relationship_type_id": relationshipComboBox.selectedItem['id'],
+				 "group1": condition1Id,
+				 "group2": condition2Id}, function(event:ResultEvent):void {
+				 	if (event.result.toString() == "duplicate") {
+				 		Alert.show("This relationship already exists!");
+				 		return;
+				 	}
+				 	PopUpManager.removePopUp(savedThis);
+				 }, Util.ajaxFault); 
 			}
 			
 			protected function swap():void {
 				var temp:String = condition1;
+				
 				condition1 = condition2;
 				condition2 = temp;
+				
+				var tempId:int = condition1Id;
+				condition1Id = condition2Id;
+				condition2Id = tempId;
 			}
 			
 			protected function comboBoxListener(event:ListEvent):void {
@@ -57,6 +85,21 @@
 				}
 			}
 			
+			protected function addNewRelationship():void {
+				if (newRelationshipText.text == "" || inverseNameText.text == "") {
+					Alert.show("You must fill in both fields.");
+					return;
+				}
+				Util.ajax("main/add_new_relationship_type",{"name": newRelationshipText.text, "inverse": inverseNameText.text},function(event:ResultEvent):void {
+						var obj:Object = JSON.decode(event.result.toString());
+						relationshipAC = Util.objectToArrayCollection(obj,'relationship_type');
+						newRelationshipText.text = "";
+						inverseNameText.text = "";
+						addNewRelationshipCanvas.visible = false;
+
+				}, Util.ajaxFault);
+			}
+			
 		]]>
 	</mx:Script>
 
@@ -64,7 +107,7 @@
 		<mx:Label x="10" y="10" text="Add a new type of relationship:" width="211"/>
 		<mx:TextInput x="10" y="66" id="newRelationshipText"/>
 		<mx:TextInput x="178" y="66" id="inverseNameText"/>
-		<mx:Button x="10" y="96" label="Add" id="addNewRelationshipButton"/>
+		<mx:Button x="10" y="96" label="Add" id="addNewRelationshipButton" click="addNewRelationship()"/>
 		<mx:Label x="10" y="36" text="Name:"/>
 		<mx:Label x="178" y="36" text="Inverse:"/>
 	</mx:Canvas>

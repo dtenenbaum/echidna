@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100112230858) do
+ActiveRecord::Schema.define(:version => 20100113192258) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20100112230858) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_time_series"
   end
 
   create_table "conditions", :force => true do |t|

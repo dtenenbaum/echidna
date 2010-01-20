@@ -206,6 +206,59 @@ EOF
     render :text => as_json(data)
   end
   
+  def add_new_relationship_type
+    r = RelationshipType.new(:name => params[:name], :inverse => params[:inverse])
+    r.save
+    render :text => RelationshipType.find(:all, :order => 'name').to_json
+  end
+
+  def create_new_relationship
+    r = Relationship.new(:relationship_type_id => params[:relationship_type_id], :group1 => params[:group1], :group2 => params[:group2])
+    existing = Relationship.find(:first, :conditions => ["relationship_type_id = ? and group1 = ? and group2 = ?", r.relationship_type_id, r.group1, r.group2])
+    if (existing.nil?)
+      r.save
+      render :text => "ok" and return false
+    else
+      render :text => "duplicate"
+    end
+  end
   
+  def get_related_groups
+    group_id = params[:group_id].to_i
+    sql = "select r.*, t.name, t.inverse from relationships r, relationship_types t where t.id = r.relationship_type_id and  (r.group1 = ? or r.group2 = ?)"
+    related_groups = Relationship.find_by_sql([sql, group_id, group_id])
+    
+    id_map= {}
+    
+    related_groups.each do |g|
+      id_map[g.group1] = 1
+      id_map[g.group2] = 1
+    end
+    
+    
+    names = ConditionGroup.find_by_sql(["select id, name from condition_groups where id in (?)", id_map.keys])
+    names.each do |n|
+      id_map[n.id] = n.name
+    end
+
+    #pp id_map
+
+    
+    related_groups.each do |g|
+      if (g.group1 == group_id) 
+        g.id = g.group2
+        g.relationship = g.inverse
+        g.name = id_map[g.group2]
+      else
+        g.id = g.group1
+        g.relationship = g.name
+        g.name = id_map[g.group1]
+      end
+    end
+    related_groups.sort! do |a,b|
+      a.name <=> b.name
+    end
+    render :text => related_groups.to_json(:methods => :relationship)
+  end
 
 end
