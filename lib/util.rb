@@ -1,5 +1,43 @@
 module Util
   
+
+  def find_related_groups(group_id)
+    sql = "select r.*, t.name, t.inverse from relationships r, relationship_types t where t.id = r.relationship_type_id and  (r.group1 = ? or r.group2 = ?)"
+    related_groups = Relationship.find_by_sql([sql, group_id, group_id])
+    
+    id_map= {}
+    
+    related_groups.each do |g|
+      id_map[g.group1] = 1
+      id_map[g.group2] = 1
+    end
+    
+    
+    names = ConditionGroup.find_by_sql(["select id, name from condition_groups where id in (?)", id_map.keys])
+    names.each do |n|
+      id_map[n.id] = n.name
+    end
+
+    #pp id_map
+
+    
+    related_groups.each do |g|
+      g.relationship_id = g.id
+      if (g.group1 == group_id) 
+        g.id = g.group2
+        g.relationship = g.inverse
+        g.name = id_map[g.group2]
+      else
+        g.id = g.group1
+        g.relationship = g.name
+        g.name = id_map[g.group1]
+      end
+    end
+    related_groups.sort! do |a,b|
+      a.name <=> b.name
+    end
+    related_groups
+  end
   
   def sort_conditions_for_time_series(conds)
     regex = /_t([+-][0-9]*)/

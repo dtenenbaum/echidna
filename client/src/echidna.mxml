@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" color="#000000" backgroundColor="#FFFFFF" pageTitle="Echidna" xmlns:local="*"
-	xmlns:ui="flex.utils.ui.*"
+	xmlns:ui="flex.utils.ui.*" 	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
+
 	applicationComplete="init()" height="100%" width="100%" creationComplete="creationComplete()">
 	
 	<mx:states>
@@ -41,6 +43,11 @@
 			borderColor="#FFFFFF" id="menuBar">
 			
 		</mx:MenuBar>
+		
+		<hc:AutoComplete id="autoComplete" y="-1" x="352" width="200" label="Search" dataProvider="{autoCompletionItemsAC}" 
+			matchType="anyPart" labelField="name" allowMultipleSelection="true">
+			
+		</hc:AutoComplete>
 
 		<mx:Text id="emailAddressTextBox" x="604" y="0" text="Not logged in" width="318" height="21" visible="true"/>
 
@@ -105,7 +112,12 @@
 							</mx:VBox>
 							<mx:Canvas width="296" height="177">
 								<mx:VBox width="100%" height="100%">
+									<mx:HBox>
+										
 										<mx:Label text="Related Groups:"/>
+										<mx:Button id="deleteRelationshipButton" label="Delete" toolTip="Remove this relationship" enabled="false" click="deleteRelationship()"/>
+										<mx:Button id="goToGroupButton" label="Go To" enabled="false" click="goToGroup()"/>
+									</mx:HBox>
 										<mx:DataGrid id="relatedGroupsGrid" dataProvider="{relatedGroupsAC}" click="onRelatedGroupsGridClick()">
 											<mx:columns>
 												<mx:DataGridColumn headerText="Name" dataField="name" showDataTips="true" dataTipField="name"/>
@@ -220,6 +232,7 @@
 		</menuItem>
 		<menuItem label="Edit"/>
 		<menuItem label="Groups">
+			<menuItem label="Rename Selected Group..." eventName="group.renameSelectedGroup"/>
     	    <menuItem label="Go To Results View" eventName="group.goToResultsView"/>
 		</menuItem>
 		<menuItem label="Visualization">
@@ -232,6 +245,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.RenamedGroupEvent;
+			import org.systemsbiology.echidna.dialog.RenameGroupDialog;
 			import org.systemsbiology.echidna.events.CreatedRelationshipEvent;
 			import mx.utils.URLUtil;
 			import mx.managers.IBrowserManager;
@@ -284,6 +299,8 @@
 		[Bindable]
 		protected var relatedGroupsAC:ArrayCollection = new ArrayCollection();
 		
+		[Bindable]
+		protected var autoCompletionItemsAC:ArrayCollection = new ArrayCollection();
 		
 		private var newGroupName:String;
 		
@@ -314,6 +331,18 @@
 			
 			switchToResultsView();
 			Util.ajax('main/get_logged_in_user', null, populateEmailAddress, Util.ajaxFault);
+			
+			Util.ajax("main/get_auto_completion_items", null, function(event:ResultEvent):void {
+				var ary:Array = JSON.decode(event.result.toString());
+				var tmp:ArrayCollection = new ArrayCollection();
+				for (var i:int = 0; i < ary.length; i++) {
+					var obj:Object = new Object();
+					obj['name'] = ary[i];
+					tmp.addItem(obj);
+				}
+				autoCompletionItemsAC = tmp;
+			}, Util.ajaxFault);
+			
 		}
 		
 		public function creationComplete():void {
@@ -455,6 +484,22 @@
 				//switchToResultsView();
 				getConditions();
 				currentState = '';
+		    } else if (event.item.@eventName == "group.renameSelectedGroup") {
+		    	 if (groupsGrid.selectedIndices.length != 1) {
+		    	 	Alert.show("Select one item to rename.");
+		    	 	return;
+		    	 }
+		    	 var renameGroupDialog:RenameGroupDialog = RenameGroupDialog(PopUpManager.createPopUp(this, RenameGroupDialog, true));
+   	 			 renameGroupDialog.addEventListener(RenamedGroupEvent.RENAMED_GROUP_EVENT, function(event:RenamedGroupEvent):void {
+					 trace("got renamed group event!");
+					 var selectedId:int = groupsGrid.selectedItem['id'];
+					 populateGroupGrid("" + selectedId);
+				 });
+
+		    	 renameGroupDialog.groupName = groupsGrid.selectedItem['name'];
+		    	 renameGroupDialog.groupId = groupsGrid.selectedItem['id'];
+		    	 PopUpManager.centerPopUp(renameGroupDialog);
+		    	 
 			} else if (event.item.@eventName == "group.addToExisting") {
 				//todo - handle it if there are no groups!
 				if (conditionGrid.selectedItems.length == 0) {
@@ -679,6 +724,8 @@
 		protected function onGroupRowSelected(rowIndex:int):void {
 			trace("# of selected items: " + groupsGrid.selectedItems.length);
 			relatedGroupsAC = new ArrayCollection();
+			deleteRelationshipButton.enabled = false;
+			goToGroupButton.enabled = false;
 			if (groupsGrid.selectedItems.length == 2) {
 				relateButton.enabled = true;
 			} else {
@@ -764,8 +811,34 @@
 		}
 		
 		protected function onRelatedGroupsGridClick():void {
+			if (relatedGroupsGrid.selectedIndices.length == 0) {
+				deleteRelationshipButton.enabled = false;
+				goToGroupButton.enabled = false;
+			} else {
+				deleteRelationshipButton.enabled = true;
+				goToGroupButton.enabled = true;
+			}
+		}
+		
+		protected function deleteRelationship():void {
+			
+			Alert.show("Are you sure?", "Confirm Delete", Alert.YES|Alert.NO,this,function(event:CloseEvent):void{
+				if (event.detail == Alert.YES) {
+					var relationshipId:int = relatedGroupsGrid.selectedItem['relationship_id'];
+					var groupId:int = relatedGroupsGrid.selectedItem['id'];
+					Util.ajax("main/delete_relationship",{"relationship_id": relationshipId, "group_id": groupId}, 
+					function(event:ResultEvent):void {
+						var results:Object = JSON.decode(event.result.toString());
+						relatedGroupsAC = Util.objectToArrayCollection(results, "relationship");
+					}, Util.ajaxFault);			
+				}
+			}, null, Alert.NO);
+			
+		}
+		
+		
+		protected function goToGroup():void {
 			var groupId:int = relatedGroupsGrid.selectedItem['id'];
-			trace("clicked on group id: " + groupId);
 			for (var i:int = 0; i < groupsAC.length; i++ ) {
 				if (groupsAC[i]['id'] == groupId) {
 					groupsGrid.selectedItem = groupsAC[i];
@@ -773,9 +846,7 @@
 					break;
 				}
 			}
-			//onGroupRowSelected(groupId);
 		}
-		
 		
 		]]>
 	</mx:Script>

@@ -225,40 +225,26 @@ EOF
   
   def get_related_groups
     group_id = params[:group_id].to_i
-    sql = "select r.*, t.name, t.inverse from relationships r, relationship_types t where t.id = r.relationship_type_id and  (r.group1 = ? or r.group2 = ?)"
-    related_groups = Relationship.find_by_sql([sql, group_id, group_id])
-    
-    id_map= {}
-    
-    related_groups.each do |g|
-      id_map[g.group1] = 1
-      id_map[g.group2] = 1
-    end
-    
-    
-    names = ConditionGroup.find_by_sql(["select id, name from condition_groups where id in (?)", id_map.keys])
-    names.each do |n|
-      id_map[n.id] = n.name
-    end
-
-    #pp id_map
-
-    
-    related_groups.each do |g|
-      if (g.group1 == group_id) 
-        g.id = g.group2
-        g.relationship = g.inverse
-        g.name = id_map[g.group2]
-      else
-        g.id = g.group1
-        g.relationship = g.name
-        g.name = id_map[g.group1]
-      end
-    end
-    related_groups.sort! do |a,b|
-      a.name <=> b.name
-    end
-    render :text => related_groups.to_json(:methods => :relationship)
+    render :text => find_related_groups(group_id).to_json(:methods => [:relationship,:relationship_id])
+  end
+  
+  def get_auto_completion_items
+    res = Condition.find(:all).map{|i|i.name}
+    res += ConditionGroup.find(:all).map{|i|i.name}
+    res.sort!
+    render :text => res.to_json
+  end
+  
+  def delete_relationship
+    Relationship.delete(params[:relationship_id])
+    render :text => find_related_groups(params[:group_id].to_i).to_json
+  end
+  
+  def rename_group
+    group = ConditionGroup.find(params[:group_id])
+    group.name = params[:new_name]
+    group.save
+    render :text => "ok"
   end
 
 end

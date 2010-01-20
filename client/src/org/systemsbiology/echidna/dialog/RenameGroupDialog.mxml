@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="350" height="184"
+	creationComplete="init()" showCloseButton="true" close="PopUpManager.removePopUp(this)">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.IFlexDisplayObject;
+			import org.systemsbiology.echidna.events.RenamedGroupEvent;
+			import mx.rpc.events.ResultEvent;
+			import org.systemsbiology.echidna.common.Util;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var groupName:String;
+			
+			public var groupId:int;
+			
+			public function init():void {
+				
+			}
+			
+			public function onOk():void {
+				var savedThis:IFlexDisplayObject = this;
+				trace("calling rename function...");
+				Util.ajax("main/rename_group", {"group_id": groupId, "new_name": groupNameText.text}, function(event:ResultEvent):void {
+					trace("in rename callback");
+					var evt:RenamedGroupEvent = new RenamedGroupEvent(RenamedGroupEvent.RENAMED_GROUP_EVENT);
+					dispatchEvent(evt);
+					PopUpManager.removePopUp(savedThis);
+				}, Util.ajaxFault);
+			}
+			
+				
+		]]>
+	</mx:Script>
+	<mx:Label x="31" y="25" text="Rename Group:" width="291"/>
+	<mx:TextInput x="31" y="51" width="277" id="groupNameText" text="{groupName}" enter="onOk()"/>
+	<mx:Button x="31" y="101" label="OK" id="okButton" click="onOk()"/>
+	<mx:Button x="82" y="101" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
+</mx:TitleWindow>
