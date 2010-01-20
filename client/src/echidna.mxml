@@ -233,6 +233,7 @@
 		<menuItem label="Edit"/>
 		<menuItem label="Groups">
 			<menuItem label="Rename Selected Group..." eventName="group.renameSelectedGroup"/>
+			<menuItem label="Delete Selected Group..." eventName="group.deleteSelectedGroup"/>
     	    <menuItem label="Go To Results View" eventName="group.goToResultsView"/>
 		</menuItem>
 		<menuItem label="Visualization">
@@ -499,7 +500,19 @@
 		    	 renameGroupDialog.groupName = groupsGrid.selectedItem['name'];
 		    	 renameGroupDialog.groupId = groupsGrid.selectedItem['id'];
 		    	 PopUpManager.centerPopUp(renameGroupDialog);
-		    	 
+		    } else if (event.item.@eventName == "group.deleteSelectedGroup") {
+		    	 if (groupsGrid.selectedIndices.length != 1) {
+		    	 	Alert.show("Select one item to delete.");
+		    	 	return;
+		    	 }
+		    	 Alert.show("Are you sure?", "Confirm Delete", Alert.YES|Alert.NO,this,function(event:CloseEvent):void{
+		    	 	if (event.detail === Alert.YES) {
+			    	 	Util.ajax("main/delete_group", {"group_id": groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
+			    	 		populateGroupGrid(null);
+			    	 	},Util.ajaxFault);
+		    	 	}
+		    	 },null,Alert.NO);
+		    	
 			} else if (event.item.@eventName == "group.addToExisting") {
 				//todo - handle it if there are no groups!
 				if (conditionGrid.selectedItems.length == 0) {

@@ -246,5 +246,20 @@ EOF
     group.save
     render :text => "ok"
   end
+  
+  def delete_group
+    begin
+      ConditionGroup.transaction do
+        relationships_to_delete = Relationship.find_by_sql(["select id from relationships where group1 = ? or group2 = ?",
+          params[:group_id],params[:group_id]]).map{|i|i.id}
+        Relationship.delete(relationships_to_delete)
+        ConditionGroup.delete(params[:group_id])
+      end
+      render :text => "ok"
+    rescue Exception => ex
+      puts ex.message
+      puts ex.backtrace
+    end
+  end
 
 end
