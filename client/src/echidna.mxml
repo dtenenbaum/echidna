@@ -246,6 +246,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.hasseg.externalMouseWheel.ExternalMouseWheelSupport;
 			import org.systemsbiology.echidna.events.RenamedGroupEvent;
 			import org.systemsbiology.echidna.dialog.RenameGroupDialog;
 			import org.systemsbiology.echidna.events.CreatedRelationshipEvent;
@@ -310,6 +311,7 @@
 			
 		public function init():void {
 			//currentState = '';
+			var _mwSupport:ExternalMouseWheelSupport = ExternalMouseWheelSupport.getInstance(stage);
 			app = root;
 			bm = BrowserManager.getInstance();
 			bm.init('', "Echidna");

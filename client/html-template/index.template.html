@@ -21,7 +21,7 @@ Learn more about Flex at http://flex.org
 <title>${title}</title>
 <script src="AC_OETags.js" language="javascript"></script>
 <script src="javascripts/jquery-1.3.2.min.js"></script>
-
+<script src="javascripts/extMouseWheel.js"></script>
 
 
 <!--  BEGIN Browser History required section -->
@@ -104,8 +104,9 @@ if ( hasProductInstall && !hasRequestedVersion ) {
     document.write(alternateContent);  // insert non-flash content
   }
 // -->
-</script>
+</script>	
 <noscript>
+   <div>
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="${application}" width="${width}" height="${height}"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
@@ -123,6 +124,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 				pluginspage="http://www.adobe.com/go/getflashplayer">
 			</embed>
 	</object>
+   </div>
 </noscript>
 
 <script src="javascripts/FABridge.js"></script>
