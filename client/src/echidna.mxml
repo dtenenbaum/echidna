@@ -151,9 +151,9 @@
 										<ui:DataGridToolTipColumn headerText="#"
 										 headerToolTip="Number of groups this condition appears in"  dataField="num_groups" width="20"/>
 										<mx:DataGridColumn headerText="Name" dataField="name" dataTipField="name" showDataTips="true" width="200"/>
-										<mx:DataGridColumn headerText="SBEAMS ID" dataField="sbeams_project_id"/>
-										<mx:DataGridColumn headerText="Forward Slide ID" dataField="forward_slide_number"/>
-										<mx:DataGridColumn headerText="Reverse Slide ID" dataField="reverse_slide_number"/>
+										<ui:DataGridToolTipColumn headerText="SBEAMS ID" headerToolTip="SBEAMS ID" dataField="sbeams_project_id"/>
+										<ui:DataGridToolTipColumn headerText="Forward Slide ID" headerToolTip="Forward Slide ID" dataField="forward_slide_number"/>
+										<ui:DataGridToolTipColumn headerText="Reverse Slide ID" headerToolTip="Reverse Slide ID" dataField="reverse_slide_number"/>
 										<mx:DataGridColumn headerText="Owner" dataField="col5"/>
 										<mx:DataGridColumn headerText="Access" dataField="col6"/>
 									</mx:columns>
@@ -423,6 +423,7 @@
 		}
 		
 		protected function accordionClick(event:MouseEvent):void {
+			groupedInAC = new ArrayCollection();
 			trace("accordion clicked, current state is " + currentState);
 			if (accordion.selectedIndex == 0) { // Results/conditions
 				if (currentState == '' || currentState == null) { // condition state

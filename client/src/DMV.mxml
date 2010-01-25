@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV -- ratios"
-	applicationComplete="init()" xmlns:bridge="bridge.*">
+	applicationComplete="init()" xmlns:bridge="bridge.*" xmlns:ui="flex.utils.ui.*" >
 	<bridge:FABridge bridgeName="flex"/>
 	<mx:Label x="115" y="797" id="gaggleStatus" width="332"/>
 	<!-- IMPORTANT! Note that creationPolicy for TabNavigator is set to null by default (it's supposed to be set to auto). 
@@ -28,6 +28,8 @@
 	
 		
 		<![CDATA[
+			import org.hasseg.externalMouseWheel.ExternalMouseWheelSupport;
+			import flex.utils.ui.DataGridToolTipColumn;
 			import mx.utils.URLUtil;
 			import mx.managers.BrowserManager;
 			import mx.managers.IBrowserManager;
@@ -63,7 +65,7 @@
 
 
 			protected function init():void {
-				
+				var _mwSupport:ExternalMouseWheelSupport = ExternalMouseWheelSupport.getInstance(stage); 
 				bm = BrowserManager.getInstance();
 				bm.init("","DMV - ratios");
 				
@@ -276,8 +278,10 @@
 			
 			
 			 private function addDataGridColumn(dataField:String, headerText:String):void {
-			 	var dgc:DataGridColumn = new DataGridColumn(dataField);
+			 	//var dgc:DataGridColumn = new DataGridColumn(dataField);
+			 	var dgc:DataGridToolTipColumn = new DataGridToolTipColumn(dataField);
 			 	dgc.headerText = headerText;
+			 	dgc.headerToolTip = headerText;
 			 	dgc.dataTipField = headerText;
 			 	dgc.showDataTips = true;
 			 	
