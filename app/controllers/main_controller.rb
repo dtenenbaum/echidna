@@ -263,7 +263,7 @@ EOF
   end
   
   def testmail
-    u = User.new(:email => "dandante@dandante.com")
+    u = User.new(:email => "dtenenbaum@systemsbiology.org")
     UserMailer.deliver_register(u)
     render :text => "ok"
   end
