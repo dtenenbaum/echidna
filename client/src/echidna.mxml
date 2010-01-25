@@ -89,7 +89,7 @@
 								<mx:DataGridColumn headerText="# Results" dataField="num_results"/>
 							</mx:columns>
 						</mx:DataGrid>
-						<mx:VDividedBox height="100%" width="295">
+						<mx:VDividedBox height="100%" width="295" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 							<mx:HBox id="hbox1">
 								<mx:Button id="removeConditionsButton" label="Remove" click="removeSelectedConditions()" enabled="false"/>
 								<mx:Button id="dmvButton" label="DMV" enabled="false" toolTip="View selected group in Data Matrix Viewer (DMV)" click="launchDmv()"/>
@@ -110,15 +110,15 @@
 								</mx:DataGrid>
 								<mx:Label id="smallConditionsGridStatus"></mx:Label>
 							</mx:VBox>
-							<mx:Canvas width="296" height="177">
-								<mx:VBox width="100%" height="100%">
-									<mx:HBox>
+							<mx:Canvas width="296" height="177" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+								<mx:VBox width="237" height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+									<mx:HBox horizontalScrollPolicy="off" verticalScrollPolicy="off">
 										
 										<mx:Label text="Related Groups:"/>
 										<mx:Button id="deleteRelationshipButton" label="Delete" toolTip="Remove this relationship" enabled="false" click="deleteRelationship()"/>
 										<mx:Button id="goToGroupButton" label="Go To" enabled="false" click="goToGroup()"/>
 									</mx:HBox>
-										<mx:DataGrid id="relatedGroupsGrid" dataProvider="{relatedGroupsAC}" click="onRelatedGroupsGridClick()">
+										<mx:DataGrid id="relatedGroupsGrid" dataProvider="{relatedGroupsAC}" click="onRelatedGroupsGridClick()" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 											<mx:columns>
 												<mx:DataGridColumn headerText="Name" dataField="name" showDataTips="true" dataTipField="name"/>
 												<mx:DataGridColumn headerText="Relationship" dataField="relationship" showDataTips="true" dataTipField="relationship"/>
