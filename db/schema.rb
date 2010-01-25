@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100113192258) do
+ActiveRecord::Schema.define(:version => 20100125212725) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -82,6 +82,14 @@ ActiveRecord::Schema.define(:version => 20100113192258) do
     t.integer "group1",               :limit => 11
     t.integer "group2",               :limit => 11
     t.string  "note"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "email"
+    t.string   "password"
+    t.date     "last_login_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

@@ -261,5 +261,11 @@ EOF
       puts ex.backtrace
     end
   end
+  
+  def testmail
+    u = User.new(:email => "dandante@dandante.com")
+    UserMailer.deliver_register(u)
+    render :text => "ok"
+  end
 
 end
