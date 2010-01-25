@@ -13,7 +13,7 @@ class UserMailer < ActionMailer::Base
   def register(user, sent_on = Time.now)
     subject    'UserMailer#register'
     @recipients = user.email
-    from       "dtenenbaum@systemsbiology.org"#'echidna-noreply@bragi.systemsbiology.org'
+    from       'echidna-noreply@bragi.systemsbiology.org'
     sent_on    sent_on
     
     body       :greeting => 'Hi,'
