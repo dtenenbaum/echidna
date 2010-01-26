@@ -301,7 +301,7 @@ EOF
   
   def register
     u = User.new(:first_name => params[:first_name], :last_name => params[:last_name], :email => params[:email],
-     :last_login_date => Time.now, :validated => false)
+     :password => params[:password], :last_login_date => Time.now, :validated => false)
     u.save
     
     
