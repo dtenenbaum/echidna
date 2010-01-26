@@ -81,6 +81,8 @@ var initCallback = function() {
    
    flexApp.addEventListener(DMV_SELECTION_CHANGED_EVENT, dmvSelectionChangedCallback)
    
+//   document.getElementById("echidna").focus();
+   
    return;  
 }  
 
@@ -143,6 +145,8 @@ var toggleGaggle = function() {
 jQuery(document).ready(function(){       
     log("hello from js");
     var moz = false;
+    
+    document.getElementById("echidna").focus();
     
     jQuery.each(jQuery.browser, function(i, val) {
       if(i=="mozilla" && val==true) {

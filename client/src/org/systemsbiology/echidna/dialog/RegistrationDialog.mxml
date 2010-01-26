@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="440" height="386" creationComplete="init()">
+	<mx:Label x="10" y="10" text="New User Registration"/>
+	<mx:Label x="10" y="36" text="First Name:"/>
+	<mx:Label x="10" y="62" text="Last Name:"/>
+	<mx:Label x="10" y="88" text="Email address:"/>
+	<mx:Label x="10" y="114" text="Confirm email:"/>
+	<mx:Label x="10" y="140" text="Password:"/>
+	<mx:Label x="10" y="166" text="Confirm Password:"/>
+	<mx:Button x="6" y="192" label="Register" id="registerButton" click="register()"/>
+	<mx:TextArea x="10" y="234" width="322" height="46">
+		<mx:text>Note: Echidna will send you an email with a link that will allow you to log in.</mx:text>
+	</mx:TextArea>
+	<mx:TextInput x="192" y="34" id="firstNameText" enter="register()"/>
+	<mx:TextInput x="192" y="60" id="lastNameText" enter="register()"/>
+	<mx:TextInput x="192" y="86" id="emailText" enter="register()"/>
+	<mx:TextInput x="192" y="112" id="confirmEmailText" enter="register()"/>
+	<mx:TextInput x="192" y="138" id="passwordText" displayAsPassword="true" enter="register()"/>
+	<mx:TextInput x="192" y="164" id="confirmPasswordText" displayAsPassword="true" enter="register()"/>
+	
+	<mx:StringValidator id="val_firstname" source="{firstNameText}" minLength="1" property="text"/>
+	<mx:StringValidator id="val_lastname" source="{lastNameText}" minLength="1" property="text"/>
+	<mx:StringValidator id="val_email" source="{emailText}" minLength="1" property="text"/>
+	<mx:StringValidator id="val_email_confirm" source="{confirmEmailText}" minLength="1" property="text"/>
+	<mx:StringValidator id="val_password" source="{passwordText}" minLength="1" property="text"/>
+	<mx:StringValidator id="val_password_confirm" source="{confirmPasswordText}" minLength="1" property="text"/>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import org.systemsbiology.echidna.common.Util;
+			import mx.controls.Text;
+			import mx.controls.Alert;
+			import mx.validators.Validator;
+			
+			private var validators:Array = new Array();
+			
+			protected function init():void {
+				firstNameText.setFocus();
+				
+				validators.push(val_firstname);
+				validators.push(val_lastname);
+				validators.push(val_email);
+				validators.push(val_email_confirm);
+				validators.push(val_password);
+				validators.push(val_password_confirm);
+				
+			}
+			
+			protected function register():void {
+				var validatorErrorArray:Array = Validator.validateAll(validators);
+				var isValidForm:Boolean = validatorErrorArray.length == 0;
+				if (!isValidForm) {
+					Alert.show("Please fill out all fields.");
+					return;
+				}
+				if (passwordText.text != confirmPasswordText.text) {
+					Alert.show("Passwords don't match!");
+					return;
+				}
+				if (emailText.text != confirmEmailText.text) {
+					Alert.show("Email addresses don't match!");
+					return;					
+				}
+				
+				Util.ajax("main/is_duplicate_email", {"email": emailText.text}, function(event:ResultEvent):void {
+					var result:String = event.result.toString();
+					if (result == "yes") {
+						Alert.show("This email address is already in use.");
+						return;
+					}
+					Util.ajax("main/register", 
+						{"first_name" : firstNameText.text,
+						 "last_name" : lastNameText.text,
+						 "email" : emailText.text,
+						 "password" : passwordText.text},
+						 function(event:ResultEvent):void {
+						 	Alert.show("Registration email has been sent.");
+						 }, Util.ajaxFault, "POST");
+				}, Util.ajaxFault);
+			}
+			
+			
+			
+		]]>
+	</mx:Script>
+</mx:TitleWindow>

@@ -1,3 +1,8 @@
-UserMailer#register
+Hello <%= @user.first_name %> <%= @user.last_name %>,
 
-Find me in app/views/user_mailer/register.erb
+Thank you for registering on Echidna. To complete your registration, please click on the following link and then 
+log in with your email address and password. 
+
+<%= @url %>
+
+Thank you!

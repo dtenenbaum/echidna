@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100125212725) do
+ActiveRecord::Schema.define(:version => 20100125235445) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -90,6 +90,9 @@ ActiveRecord::Schema.define(:version => 20100125212725) do
     t.date     "last_login_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "validated"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
 end

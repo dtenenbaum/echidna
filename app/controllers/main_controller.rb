@@ -1,8 +1,11 @@
 class MainController < ApplicationController
   
-
+  require 'base64'
   include Util
   include DataOutputHelper
+  
+  filter_parameter_logging :password
+  protect_from_forgery :only => [:create, :update, :destroy] 
   
   def index
     url = request.url
@@ -30,11 +33,33 @@ class MainController < ApplicationController
     render :text => session[:user]
   end
   
+  # todo make more secure
   def login
-    cookies[:echidna_cookie] = {:value => params[:email],
-      :expires => 1000.days.from_now }
-    session[:user] = params['email']
-    render :text => params[:email]
+    if (params[:token])
+      user = User.authenticate(params[:email], params[:password], false)
+      render :text => "invalid login" and return false unless user
+      if (Password::check("#{params[:email]}~~~#{SECRET_SALT}",params[:token]))
+        user.validated = true
+        user.save
+      end
+    else
+      user = User.authenticate(params[:email], params[:password])
+    end
+
+
+    if (user)
+      user.last_login_date = Time.now
+      user.save
+      cookies[:echidna_cookie] = {:value => params[:email],
+        :expires => 1000.days.from_now }
+      session[:user] = params['email']
+      session[:user_id] = user.id
+      render :text => params[:email] and return false
+    else
+      #todo change result code
+      #response.code = 403
+      render :text => "invalid login"
+    end
   end
   
   def logout
@@ -264,8 +289,37 @@ EOF
   
   def testmail
     u = User.new(:email => "dtenenbaum@systemsbiology.org")
-    UserMailer.deliver_register(u)
+    UserMailer.deliver_register(u, {:secret_word => "zizzy"})
     render :text => "ok"
+  end
+  
+  def is_duplicate_email
+    exists = User.find_by_email(params[:email])
+    result = (exists.nil?) ? "no" : "yes"
+    render :text => result
+  end
+  
+  def register
+    attrs = params.dup
+    attrs.delete('action')
+    attrs.delete('controller')
+    u = User.new(attrs)
+    u.validated = false
+    u.save
+    
+    
+    # send the email
+    token = "#{u.email}~~~#{SECRET_SALT}"
+    secure = Password::update(token)
+    url = url_for(:action => nil, :email => u.email, :token => secure)
+    UserMailer.deliver_register(u, {:url => url, :user => u})
+    
+    puts "url = #{url}"
+    render :text => "ok"
+  end
+
+  def test
+    render :text => request.port
   end
 
 end

@@ -1,22 +1,24 @@
 class UserMailer < ActionMailer::Base
   
 
-  def confirm_password(user)
-    subject    'UserMailer#confirm_password'
+  def confirm_password(user, bodyhash)
+    subject    'Echidna Password Confirmation'
     @recipients = user.email
-    from       'echidna-noreply@bragi.systemsbiology.org'
+    hostname = `hostname`.chomp.downcase
+    from       "echidna-noreply@#{hostname}"
     sent_on    Time.now
     
-    body       :greeting => 'Hi,'
+    body       bodyhash
   end
 
-  def register(user, sent_on = Time.now)
-    subject    'UserMailer#register'
+  def register(user, bodyhash)
+    subject    'Echidna Registration Confirmation'
     @recipients = user.email
-    from       'echidna-noreply@bragi.systemsbiology.org'
-    sent_on    sent_on
+    hostname = `hostname`.chomp.downcase
+    from       "echidna-noreply@#{hostname}"
+    sent_on    Time.now
     
-    body       :greeting => 'Hi,'
+    body       bodyhash
   end
 
 end

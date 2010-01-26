@@ -1,29 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="282" height="170" creationComplete="init()"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="488" height="336" creationComplete="init()"
 	showCloseButton="true" close="PopUpManager.removePopUp(this)">
-	<mx:Label x="26" y="10" text="Please enter your email address:" width="234"/>
-	<mx:TextInput id="emailTxt" x="39" y="45" enter="onOk()"/>
-	<mx:Button x="39" y="92" label="OK" id="okButton" click="onOk()"/>
-	<mx:Button x="106" y="92" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
+	<mx:Label x="26" y="10" text="Log in:" width="234"/>
 	<mx:Metadata>
 		[Event(name="gotLoginInfoEvent", type="org.systemsbiology.echidna.events.GetLoginInfoEvent")]
 	</mx:Metadata>
+	<mx:Label x="39" y="174" text="Not registered? Click here:"/>
+	<mx:Label x="39" y="47" text="Email:"/>
+	<mx:Label x="39" y="77" text="Password"/>
+	<mx:TextInput id="emailTxt" x="120" y="45" enter="onOk()"/>
+	<mx:TextInput x="120" y="75" displayAsPassword="true" id="passwordText" enter="onOk()"/>
+	<mx:Button x="39" y="132" label="Log In" id="okButton" click="onOk()"/>
+	<mx:Button x="120" y="132" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
+	<mx:Button x="39" y="200" label="Register" id="registerButton" click="register()"/>
+
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.RegistrationEvent;
+			import mx.core.IFlexDisplayObject;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			import org.systemsbiology.echidna.common.Util;
 			import org.systemsbiology.echidna.events.GotLoginInfoEvent;
 			import mx.managers.PopUpManager;
 			
+			public function set email(value:String):void {
+				emailTxt.text = value;
+				passwordText.setFocus();
+			}
+			public var token:String;
 			
-			public function init():void {
+			protected function init():void {
 				emailTxt.setFocus();
 			}
 			
-			public function onOk():void {
-				var evt:GotLoginInfoEvent = new GotLoginInfoEvent(GotLoginInfoEvent.GOT_LOGIN_INFO_EVENT);
-				evt.email = emailTxt.text;
+			protected function onOk():void {
+				trace("token = " + token);
+				
+				var savedThis:IFlexDisplayObject = this;
+				
+				var params:Object = new Object();
+				params['email'] = emailTxt.text;
+				params['password'] = passwordText.text;
+				if (token != null) {
+					params['token'] = token;
+				}
+				
+				Util.ajax("main/login",params,
+				function(event:ResultEvent):void {
+					var result:String = event.result.toString();
+					if (result == "invalid login") {
+						Alert.show("Invalid login! ");
+						return;
+					} else {
+						var evt:GotLoginInfoEvent = new GotLoginInfoEvent(GotLoginInfoEvent.GOT_LOGIN_INFO_EVENT);
+						evt.email = emailTxt.text;
+						dispatchEvent(evt);
+						PopUpManager.removePopUp(savedThis);
+					}				
+				}, Util.ajaxFault, "POST");
+			}
+			
+			protected function register():void {
+				var evt:RegistrationEvent = new RegistrationEvent(RegistrationEvent.REGISTRATION_EVENT);
 				dispatchEvent(evt);
 				PopUpManager.removePopUp(this);
 			}
 		]]>
 	</mx:Script>
+
+
 </mx:TitleWindow>

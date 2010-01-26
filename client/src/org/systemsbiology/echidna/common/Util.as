@@ -24,9 +24,10 @@ package org.systemsbiology.echidna.common
 		}
 		
 		
-		public static function ajax(url:String, params:Object, result:Function, fault:Function): void {
+		public static function ajax(url:String, params:Object, result:Function, fault:Function, method:String = "GET"): void {
 			var service:HTTPService = new HTTPService();
 			service.url = url;
+			service.method = method;
 			service.resultFormat = "text";
 			service.addEventListener(ResultEvent.RESULT, result);
 			service.addEventListener(FaultEvent.FAULT, fault);
