@@ -300,11 +300,8 @@ EOF
   end
   
   def register
-    attrs = params.dup
-    attrs.delete('action')
-    attrs.delete('controller')
-    u = User.new(attrs)
-    u.validated = false
+    u = User.new(:first_name = params[:first_name], :last_name => params[:last_name], :email => params[:email],
+     :last_login_date => Time.now, :validated => false)
     u.save
     
     
