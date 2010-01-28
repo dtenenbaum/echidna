@@ -247,6 +247,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.ReloginEvent;
 			import org.systemsbiology.echidna.events.ResetPasswordEvent;
 			import org.systemsbiology.echidna.dialog.ResetPasswordDialog;
 			import org.systemsbiology.echidna.dialog.RegistrationDialog;
@@ -846,6 +847,7 @@
 						resetPasswordDialog.token = fragObj['token'];
 					}
 					resetPasswordDialog.addEventListener(ResetPasswordEvent.RESET_PASSWORD_EVENT, handleResetPasswordEvent);
+					resetPasswordDialog.addEventListener(ReloginEvent.RELOGIN_EVENT, handleReloginEvent);
 				} else {
 					var loginDialog:LoginDialog;
 					loginDialog = LoginDialog(PopUpManager.createPopUp(this, LoginDialog, true));
@@ -946,6 +948,10 @@
 			emailAddressTextBox.text = loggedInUser;
 			mainPanel.enabled = true;
 			getConditions();
+		}
+		
+		protected function handleReloginEvent(event:ReloginEvent):void {
+			populateEmailAddress(null);
 		}
 		
 		]]>
