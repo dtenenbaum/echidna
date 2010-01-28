@@ -1,8 +1,10 @@
 class UserMailer < ActionMailer::Base
   
 
-  def confirm_password(user, bodyhash)
-    subject    'Echidna Password Confirmation'
+
+
+  def password_refresh(user, bodyhash)
+    subject    'Echidna Password Reset Link'
     @recipients = user.email
     hostname = `hostname`.chomp.downcase
     from       "echidna-noreply@#{hostname}"
@@ -10,6 +12,7 @@ class UserMailer < ActionMailer::Base
     
     body       bodyhash
   end
+  
 
   def register(user, bodyhash)
     subject    'Echidna Registration Confirmation'

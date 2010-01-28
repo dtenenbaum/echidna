@@ -247,6 +247,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.ResetPasswordEvent;
+			import org.systemsbiology.echidna.dialog.ResetPasswordDialog;
 			import org.systemsbiology.echidna.dialog.RegistrationDialog;
 			import org.systemsbiology.echidna.events.RegistrationEvent;
 			import org.hasseg.externalMouseWheel.ExternalMouseWheelSupport;
@@ -310,6 +312,8 @@
 		private var newGroupName:String;
 		
 		protected var bm:IBrowserManager;
+		
+		protected var alreadyResetPassword:Boolean = false;
 		
 			
 		public function init():void {
@@ -789,6 +793,9 @@
 			loginService.send({email: loggedInUser});
 			loginService.resultFormat = "text";
 			*/
+			
+			// TODO fix: this will break because no password is supplied:
+			
 			Util.ajax('main/login', {"email": loggedInUser}, loggedIn, Util.ajaxFault); 
 			emailAddressTextBox.text = loggedInUser;
 			mainPanel.enabled = true;
@@ -811,29 +818,50 @@
 		public function populateEmailAddress(event:ResultEvent):void {
 			
 			var email:String;
+			var resetPassword:Boolean = false;
+			var fragObj:Object = new Object();
 			if (event != null) {
 				email = event.result as String;
 			} 
 			if (event == null || email == 'not logged in' || email == '') {
-				var loginDialog:LoginDialog;
-				loginDialog = LoginDialog(PopUpManager.createPopUp(this, LoginDialog, true));
 				var url:String = bm.url;
 				if (url.indexOf("?") > -1) {
 					var tmp:Array = url.split("?");
 					var tmp2:Array = tmp[tmp.length-1].split("#");
 					var fragment:String = tmp2[0];
-					var fragObj:Object = URLUtil.stringToObject(fragment,"&");
+					fragObj = URLUtil.stringToObject(fragment,"&");
+					if (fragObj['change_password'] != null) {
+						resetPassword = true;
+					}
+				}
+				
+				if (resetPassword && !alreadyResetPassword) {
+					var resetPasswordDialog:ResetPasswordDialog;
+					resetPasswordDialog = ResetPasswordDialog(PopUpManager.createPopUp(this, ResetPasswordDialog, true));
+					PopUpManager.centerPopUp(resetPasswordDialog);
+					if (fragObj['email'] != null) {
+						resetPasswordDialog.email = fragObj['email'];
+					}
+					if (fragObj['token'] != null) {
+						resetPasswordDialog.token = fragObj['token'];
+					}
+					resetPasswordDialog.addEventListener(ResetPasswordEvent.RESET_PASSWORD_EVENT, handleResetPasswordEvent);
+				} else {
+					var loginDialog:LoginDialog;
+					loginDialog = LoginDialog(PopUpManager.createPopUp(this, LoginDialog, true));
 					if (fragObj['email'] != null) {
 						loginDialog.email = fragObj['email'];
 					}
 					if (fragObj['token'] != null) {
 						loginDialog.token = fragObj['token'];
 					}
+					
+					loginDialog.addEventListener(GotLoginInfoEvent.GOT_LOGIN_INFO_EVENT, gotEmailAddressFromUser);
+					loginDialog.addEventListener(RegistrationEvent.REGISTRATION_EVENT, popupRegistrationDialog);
+					loginDialog.title = 'Login';
+					PopUpManager.centerPopUp(loginDialog);
 				}
-				loginDialog.addEventListener(GotLoginInfoEvent.GOT_LOGIN_INFO_EVENT, gotEmailAddressFromUser);
-				loginDialog.addEventListener(RegistrationEvent.REGISTRATION_EVENT, popupRegistrationDialog);
-				loginDialog.title = 'Login';
-				PopUpManager.centerPopUp(loginDialog);
+				
 			} else {
 				mainPanel.enabled = true;
 				emailAddressTextBox.text = email;
@@ -910,6 +938,14 @@
 				mainPanel.enabled = false;
 				populateEmailAddress(null);
 			}, Util.ajaxFault);
+		}
+		
+		protected function handleResetPasswordEvent(event:ResetPasswordEvent):void {
+			alreadyResetPassword = true;
+			loggedInUser = event.email;
+			emailAddressTextBox.text = loggedInUser;
+			mainPanel.enabled = true;
+			getConditions();
 		}
 		
 		]]>

@@ -23,7 +23,11 @@ class User < ActiveRecord::Base
 
   # Hash the password before saving the record
   def update_password
-    self.password = Password::update(self.password)
+    #puts "ID ===== #{self.id}"
+    existing = User.find(self.id)
+    if (existing.password.nil? or (self.password.length < 192 and existing.password.length == 192))
+      self.password = Password::update(self.password)
+    end
   end
   
   

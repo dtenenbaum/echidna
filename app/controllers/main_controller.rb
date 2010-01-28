@@ -1,6 +1,5 @@
 class MainController < ApplicationController
   
-  require 'base64'
   include Util
   include DataOutputHelper
   
@@ -34,37 +33,55 @@ class MainController < ApplicationController
   end
   
   # todo make more secure
+  
+  
+  def do_login(user)
+    return "invalid user" unless user
+    user.last_login_date = Time.now
+    user.save
+    cookies[:echidna_cookie] = {:value => params[:email],
+      :expires => 1000.days.from_now }
+    session[:user] = params['email']
+    session[:user_id] = user.id
+    user.email
+  end
+  
   def login
-    if (params[:token])
+    if (params[:token] and params[:reset_password]) #user is changing password
+      user = User.find_by_email(params[:email])
+      #user = User.find_by_sql(["select * from users where email = ?", params[:email]]).first
+      if (Password::check("#{params[:email]}~~~#{SECRET_SALT}",params[:token]))
+        user.password = params[:password]
+        user.save
+        
+        render :text => do_login(user) and return false
+      else
+        user = nil
+      end
+    elsif params[:token] # user is validating account
       user = User.authenticate(params[:email], params[:password], false)
       render :text => "invalid login" and return false unless user
       if (Password::check("#{params[:email]}~~~#{SECRET_SALT}",params[:token]))
         user.validated = true
         user.save
+        render :text => do_login(user) and return false
+      else
+        render :text => "invalid login" and return false
       end
-    else
-      user = User.authenticate(params[:email], params[:password])
+    else # it's just a regular login
+      user = User.authenticate(params[:email], params[:password]) 
     end
 
 
-    if (user)
-      user.last_login_date = Time.now
-      user.save
-      cookies[:echidna_cookie] = {:value => params[:email],
-        :expires => 1000.days.from_now }
-      session[:user] = params['email']
-      session[:user_id] = user.id
-      render :text => params[:email] and return false
-    else
-      #todo change result code
-      #response.code = 403
-      render :text => "invalid login"
-    end
+
+    render :text => do_login(user)
+    
   end
   
   def logout
     cookies.delete(:echidna_cookie)
     session[:user] = nil  
+    session[:user_id] = nil
     render :text => 'logged out'
   end
   
@@ -115,9 +132,16 @@ class MainController < ApplicationController
   def create_new_group
     ids = ActiveSupport::JSON.decode params[:ids]
     group = ConditionGroup.new(:name => params[:name])
-    group.save
-    ids.each_with_index {|i,index|ConditionGrouping.new(:condition_id => i, :condition_group_id => group.id, :sequence => index +1).save}
-    render :text => group.id
+    begin
+      ConditionGroup.transaction do
+        group.save
+        ids.each_with_index {|i,index|ConditionGrouping.new(:condition_id => i, :condition_group_id => group.id, :sequence => index +1).save}
+        render :text => group.id
+      end
+    rescue Exception => ex
+      puts ex.message
+      puts ex.backtrace
+    end
   end
   
   def get_all_groups
@@ -315,8 +339,19 @@ EOF
     render :text => "ok"
   end
 
-  def test
-    render :text => request.port
+  def request_password_refresh
+    u = User.find_by_email(params[:email])
+    render :text => "no such account" and return false if u.nil?
+    token = "#{u.email}~~~#{SECRET_SALT}"
+    secure = Password::update(token)
+    url = url_for(:action => nil, :email => u.email, :token => secure, :change_password => "true")
+    
+    UserMailer.deliver_password_refresh(u, {:url => url, :user => u})
+    render :text => "ok"
   end
-
+  
+  def test
+    render :text => "ok"
+  end
+  
 end

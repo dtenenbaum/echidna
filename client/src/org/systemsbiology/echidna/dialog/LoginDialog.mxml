@@ -13,6 +13,7 @@
 	<mx:Button x="39" y="132" label="Log In" id="okButton" click="onOk()"/>
 	<mx:Button x="120" y="132" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
 	<mx:Button x="39" y="200" label="Register" id="registerButton" click="register()"/>
+	<mx:Button x="39" y="256" label="Forgot Password" id="forgotPasswordButton" click="forgotPassword()"/>
 
 	<mx:Script>
 		<![CDATA[
@@ -35,8 +36,6 @@
 			}
 			
 			protected function onOk():void {
-				trace("token = " + token);
-				
 				var savedThis:IFlexDisplayObject = this;
 				
 				var params:Object = new Object();
@@ -66,8 +65,27 @@
 				dispatchEvent(evt);
 				PopUpManager.removePopUp(this);
 			}
+			
+			protected function forgotPassword():void {
+				if (emailTxt.text == "" || emailTxt.text == null) {
+					Alert.show("Please fill in your email address.");
+					return;
+				} 
+				var savedThis:IFlexDisplayObject = this;
+				
+				Util.ajax("main/request_password_refresh", {"email": emailTxt.text}, function(event:ResultEvent):void {
+					if (event.result.toString() == "no such account") {
+						Alert.show("Unknown email address.");
+						return;
+					}
+					Alert.show("An email has been sent to you with a link that will allow you to change your password and log in.");
+					PopUpManager.removePopUp(savedThis);
+				}, Util.ajaxFault);
+				
+			}
 		]]>
 	</mx:Script>
+	<mx:Label x="39" y="230" text="If you forgot your password, enter your email above and click here:"/>
 
 
 </mx:TitleWindow>
