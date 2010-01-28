@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100125235445) do
+ActiveRecord::Schema.define(:version => 20100128185410) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20100125235445) do
     t.string   "original_name"
     t.integer  "sbeams_project_id",    :limit => 11
     t.string   "sbeams_timestamp"
+    t.integer  "species_id",           :limit => 11
   end
 
   add_index "conditions", ["id"], :name => "index_conditions_on_id"
@@ -82,6 +83,11 @@ ActiveRecord::Schema.define(:version => 20100125235445) do
     t.integer "group1",               :limit => 11
     t.integer "group2",               :limit => 11
     t.string  "note"
+  end
+
+  create_table "species", :force => true do |t|
+    t.string "name"
+    t.string "alternate_name"
   end
 
   create_table "users", :force => true do |t|

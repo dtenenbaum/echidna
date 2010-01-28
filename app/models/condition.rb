@@ -1,5 +1,6 @@
 class Condition < ActiveRecord::Base
   belongs_to :condition_groupings
+  belongs_to :species
   
   def num_groups
     Condition.find_by_sql(["select count(id) as result from condition_groupings where condition_id = ?",id]).first.result.to_i
