@@ -272,14 +272,18 @@
 			
 			protected function onGotData(event:ResultEvent):void {
 				trace("server returned DMV data");
-				if (event.result.toString() == null || event.result.toString().length == 0) {
-					Alert.show("No data matches your query.");
-					return;
-				}
 				setDataForCurrentTab(new ArrayCollection());
 				var tmpAC:ArrayCollection = new ArrayCollection();
 				
 				var rawObj:Object = JSON.decode(event.result.toString());
+				trace("length of rows: " + rawObj['rows'].length);
+				trace("length of columns: " + rawObj['columns'].length);
+				if (/*rawObj['rows'].length == 0 &&*/ rawObj['columns'].length == 0) {
+					Alert.show("No data matches your query.");
+					return;
+				}
+
+
 				var columns:Array = rawObj['columns'];
 				addDataGridColumn('gene','Gene');
 				var colHash:Dictionary = new Dictionary();
