@@ -1,6 +1,7 @@
 class Condition < ActiveRecord::Base
   belongs_to :condition_groupings
   belongs_to :species
+  has_many :observations
   
   def num_groups
     Condition.find_by_sql(["select count(id) as result from condition_groupings where condition_id = ?",id]).first.result.to_i
@@ -26,6 +27,13 @@ class Condition < ActiveRecord::Base
     res
   end
   
-  
+  def get_obs
+    raw = Observation.find_by_sql(["select c.name, o.string_value from observations o, controlled_vocab_items c where o.name_id = c.id and o.condition_id = ? order by name", self.id])
+    res = {}
+    for item in raw
+      res[item.name] = item.string_value
+    end
+    res
+  end 
   
 end

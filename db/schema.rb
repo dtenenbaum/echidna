@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100128185410) do
+ActiveRecord::Schema.define(:version => 20100128194214) do
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -43,6 +43,14 @@ ActiveRecord::Schema.define(:version => 20100128185410) do
 
   add_index "conditions", ["id"], :name => "index_conditions_on_id"
 
+  create_table "controlled_vocab_items", :force => true do |t|
+    t.string   "name"
+    t.boolean  "approved"
+    t.integer  "parent_id",  :limit => 11
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "data_types", :force => true do |t|
     t.string "name"
   end
@@ -70,6 +78,20 @@ ActiveRecord::Schema.define(:version => 20100128185410) do
   end
 
   add_index "genes", ["id"], :name => "index_genes_on_id"
+
+  create_table "observations", :force => true do |t|
+    t.integer  "condition_id",        :limit => 11
+    t.integer  "name_id",             :limit => 11
+    t.string   "string_value"
+    t.integer  "int_value",           :limit => 11
+    t.float    "float_value"
+    t.integer  "units_id",            :limit => 11
+    t.boolean  "is_measurement"
+    t.boolean  "is_time_measurement"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "boolean_value"
+  end
 
   create_table "relationship_types", :force => true do |t|
     t.string   "name"

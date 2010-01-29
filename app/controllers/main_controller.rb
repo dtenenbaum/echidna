@@ -224,8 +224,18 @@ EOF
     render :text => groups.to_json
   end
   
-  def get_condition_detail
-    render :text => Condition.find(params[:condition_id]).parse_name.to_json
+  def get_condition_detail # seems like species should be an observation, not a column in conditions
+    cond = Condition.find(params[:condition_id])
+    resilt = {}
+    if (cond.name_parseable?)
+      result = cond.parse_name
+    else
+      result = cond.get_obs();
+    end
+    result['Species'] = cond.species.name
+    render :text => result.to_json
+    
+    
   end
   
   def get_relationship_types
@@ -247,6 +257,15 @@ EOF
     render :text => as_json(data)
   
   
+  end
+  
+  def get_data_for_conditions
+    cond_ids = params[:condition_ids].split(",")
+    data = get_matrix_data(cond_ids,params[:data_type])
+
+    headers['Content-type'] = 'text/plain'
+    render :text => as_json(data)
+    
   end
   
   def get_data_for_group

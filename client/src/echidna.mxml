@@ -146,7 +146,7 @@
 						<mx:HDividedBox width="100%" height="80%">
 							<mx:Canvas width="547" height="439" borderStyle="solid">
 								<mx:DataGrid x="10" y="10" id="conditionGrid"  width="535" height="427" dataProvider="{conditionsAC}"
-									allowMultipleSelection="true" itemClick="conditionGridItemClick(event)">
+									allowMultipleSelection="true" itemClick="conditionGridItemClick(event)" change="conditionGridChange(event)">
 									<mx:columns>
 										<ui:DataGridToolTipColumn headerText="#"
 										 headerToolTip="Number of groups this condition appears in"  dataField="num_groups" width="20"/>
@@ -162,13 +162,14 @@
 			
 								<mx:VDividedBox x="10" y="10" height="455" id="coams" width="116">
 									<mx:Canvas width="100%" height="239" borderStyle="solid" id="t">
-										<mx:Text x="10" y="10" text="Grouped In:"/>
-										<mx:DataGrid x="10" y="36" width="94" id="groupedInGrid" dataProvider="{groupedInAC}">
+										<mx:Text x="10" y="38" text="Grouped In:"/>
+										<mx:DataGrid x="11.5" y="74" width="94" id="groupedInGrid" dataProvider="{groupedInAC}">
 											<mx:columns>
 												<mx:DataGridColumn headerText="ID" dataField="id"/>
 												<mx:DataGridColumn dataTipField="name"  showDataTips="true" headerText="Name" dataField="name"/>
 											</mx:columns>
 										</mx:DataGrid>
+										<mx:Button x="10" y="8" label="DMV" id="conditionDmvButton" enabled="false" click="showConditionsInDmv()"/>
 									</mx:Canvas>
 									<mx:Canvas width="100%" height="171" borderStyle="solid" id="b">
 
@@ -183,9 +184,9 @@
 									</mx:Canvas>
 								</mx:VDividedBox>
 						</mx:HDividedBox>
-						<mx:Canvas width="676" height="133" borderStyle="solid">
+						<mx:Canvas width="676" height="133" borderStyle="solid" verticalScrollPolicy="auto">
 							<mx:Text x="10" y="10" text="Description of condition:&#xd;" width="412"/>
-							<mx:Text x="34" y="25" width="461" height="86" id="descriptionText"/>
+							<mx:Text x="34" y="25" id="descriptionText"/>
 						</mx:Canvas>
 						
 					</mx:VDividedBox>
@@ -247,6 +248,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.effects.IAbstractEffect;
 			import org.systemsbiology.echidna.events.ReloginEvent;
 			import org.systemsbiology.echidna.events.ResetPasswordEvent;
 			import org.systemsbiology.echidna.dialog.ResetPasswordDialog;
@@ -430,7 +432,8 @@
 					obj[keys[i]] + 
 					"\n";
 			    }
-				
+			    descriptionText.validateNow();
+				//Alert.show(descriptionText.text);
 			}, Util.ajaxFault);
 			
 			if (conditionGrid.selectedItem['num_groups'] == 0) {
@@ -952,6 +955,21 @@
 		
 		protected function handleReloginEvent(event:ReloginEvent):void {
 			populateEmailAddress(null);
+		}
+		
+		protected function conditionGridChange(event:ListEvent):void {
+			conditionDmvButton.enabled = (conditionGrid.selectedIndices.length > 0);
+		}
+		
+		protected function showConditionsInDmv():void {
+			var originalUrl:String = bm.url;
+			var url:String = URLUtil.getFullURL(originalUrl, "/DMV.html");
+			var ids:Array = new Array();
+			for (var i:int = 0; i < conditionGrid.selectedItems.length; i++) {
+				ids.push(conditionGrid.selectedItems[i]['id']);
+			}
+			url += "?conditionIds=" + ids.join(",");
+			newWin(url); 			
 		}
 		
 		]]>

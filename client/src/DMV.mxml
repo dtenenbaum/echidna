@@ -61,7 +61,9 @@
 			protected var tabs:Array = new Array();
 			private var bm:IBrowserManager;
 			
-			private var groupId:int = -1;
+			private var groupId:String;
+			private var conditionIds:String;
+			private var dataProvided:Boolean = false;
 
 
 			protected function init():void {
@@ -71,20 +73,46 @@
 				
 				trace("policy: " + tabNavigator.creationPolicy);
 				
-				groupId = getGroupId();
+				groupId = Util.getQueryStringItem(bm, "groupId");
+				conditionIds = Util.getQueryStringItem(bm, "conditionIds");
+				
 				trace("group id = " + groupId);
 				
 				trace("DMV init.");
 				setupTabs();
 				
-				if (groupId != -1) {
+				if (groupId != null || conditionIds != null) {
+					dataProvided = true;
+				}
+				
+				if (dataProvided) {
 					loadingLabel.text = "Loading data...";
-					Util.ajax('main/get_data_for_group',{'group_id' : groupId, 'data_type' : 'ratio'}, onGotData, Util.ajaxFault);
+					var params:Object = getParamsObject();
+					Util.ajax(params['url'],params, onGotData, Util.ajaxFault);
+				
 				} else {
 					loadingLabel.text = "No data selected.";
 				}
 			}
 			
+			private function getParamsObject(ratios:Boolean = true):Object {
+				var ret:Object = new Object();
+				if (ratios) {
+					ret['data_type'] = 'ratio';
+				} else {
+					ret['data_type'] = 'lambda';
+				}
+				if (groupId != null) {
+					ret['url'] = "main/get_data_for_group";
+					ret['group_id'] = groupId;
+				} else if (conditionIds != null) {
+					ret['url'] = "main/get_data_for_conditions";
+					ret['condition_ids'] = conditionIds;
+				}
+				return ret;	
+			}
+			
+			/*
 			protected function getGroupId():int {
 				trace("bm: " + bm);
 				trace("bm.base = " + bm.base);
@@ -99,7 +127,8 @@
 				trace("query string = " + queryString);
 				var params:Object = URLUtil.stringToObject(queryString, "&");
 				return(params['groupId']);
-			}	
+			}
+			*/	
 			
 			protected function setupTabs():void {
 				var ratiosTab:Object = new Object();
@@ -243,6 +272,10 @@
 			
 			protected function onGotData(event:ResultEvent):void {
 				trace("server returned DMV data");
+				if (event.result.toString() == null || event.result.toString().length == 0) {
+					Alert.show("No data matches your query.");
+					return;
+				}
 				setDataForCurrentTab(new ArrayCollection());
 				var tmpAC:ArrayCollection = new ArrayCollection();
 				
@@ -350,11 +383,13 @@
             	bm.setTitle("DMV - " + getNameForCurrentTab());
             	numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
             	
-            	if (tabNavigator.selectedIndex == 1 && groupId != -1 && lambdasData.length == 0) {
+            	if (tabNavigator.selectedIndex == 1 && groupId != null && lambdasData.length == 0) {
             		loadingLabel.text = "Loading data...";
-					Util.ajax('main/get_data_for_group',{'group_id' : groupId, 'data_type' : 'lambda'}, onGotData, Util.ajaxFault);
+            		var params:Object = getParamsObject(false);
+					Util.ajax(params['url'],params, onGotData, Util.ajaxFault);
             	}
             }
+            
             
 
 		]]>

@@ -2,9 +2,11 @@ package org.systemsbiology.echidna.common
 {
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
+	import mx.managers.IBrowserManager;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.http.HTTPService;
+	import mx.utils.URLUtil;
 	
 	public class Util
 	{
@@ -43,6 +45,22 @@ package org.systemsbiology.echidna.common
 			}
 			return ac;
 		}
+		
+		public static function getQueryStringItem(bm:IBrowserManager, key:String):String {
+			trace("bm.base = " + bm.base);
+			trace("bm.url = " + bm.url);
+			var segs:Array = bm.base.split("?");
+			if (segs.length < 2) {
+				return null;
+			}
+			var temp:String = segs[1];
+			segs  = temp.split("#");
+			var queryString:String = segs[0];
+			trace("query string = " + queryString);
+			var params:Object = URLUtil.stringToObject(queryString, "&");
+			return(params[key]);
+		}
+		
 
 
 	}
