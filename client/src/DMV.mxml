@@ -280,6 +280,7 @@
 				trace("length of columns: " + rawObj['columns'].length);
 				if (/*rawObj['rows'].length == 0 &&*/ rawObj['columns'].length == 0) {
 					Alert.show("No data matches your query.");
+					loadingLabel.text = "";
 					return;
 				}
 
@@ -387,7 +388,7 @@
             	bm.setTitle("DMV - " + getNameForCurrentTab());
             	numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
             	
-            	if (tabNavigator.selectedIndex == 1 && groupId != null && lambdasData.length == 0) {
+            	if (tabNavigator.selectedIndex == 1 && dataProvided && lambdasData.length == 0) {
             		loadingLabel.text = "Loading data...";
             		var params:Object = getParamsObject(false);
 					Util.ajax(params['url'],params, onGotData, Util.ajaxFault);
