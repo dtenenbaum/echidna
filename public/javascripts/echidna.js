@@ -146,7 +146,7 @@ jQuery(document).ready(function(){
     log("hello from js");
     var moz = false;
     
-    document.getElementById("echidna").focus();
+    //document.getElementById("echidna").focus();
     
     jQuery.each(jQuery.browser, function(i, val) {
       if(i=="mozilla" && val==true) {
