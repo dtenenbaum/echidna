@@ -8,19 +8,19 @@
 	<mx:TabNavigator id="tabNavigator" x="119" y="99" width="948" height="649" change="onTabChanged()" creationPolicy="all">
 		<mx:Canvas id="ratiosCanvas" label="ratios" width="100%" height="100%">
 			<mx:DataGrid id="ratiosGrid" x="10" y="10" width="917" height="585" dataProvider="{ratiosData}" allowMultipleSelection="true"
-				itemClick="gridClick(event)" change="dmvSelectionChanged(event)">
+				itemClick="gridClick(event)" change="dmvSelectionChanged(event)" headerRelease="dmvSelectionChanged(event)" headerShift="dmvSelectionChanged(event)">
 			</mx:DataGrid>
 		</mx:Canvas>
 		<mx:Canvas id="lambdasCanvas" label="lambdas" width="100%" height="100%">
 			<mx:DataGrid id="lambdasGrid" x="10" y="10" width="917" height="585" dataProvider="{lambdasData}" allowMultipleSelection="true"
-				itemClick="gridClick(event)" change="dmvSelectionChanged(event)">
+				itemClick="gridClick(event)" change="dmvSelectionChanged(event)"  headerRelease="dmvSelectionChanged(event)" headerShift="dmvSelectionChanged(event)">
 			</mx:DataGrid>
 		</mx:Canvas>
 	</mx:TabNavigator>
 	<mx:Label x="115" y="757" text="Number of selected rows:" width="149"/>
 	<mx:Text x="272" y="757" width="39" id="numSelectedRowsText" text="0"/>
 	<mx:Button x="319" y="755" label="Clear Selections" id="clearSelectionsButton" click="clearSelections()"/>
-	<mx:Label x="443" y="757" width="131" id="loadingLabel"/>
+	<mx:Label x="443" y="757" width="131" id="loadingLabel"/> 
 	<mx:Button x="596" y="755" label="Plot" id="plotButton" click="showPlot()"/>
 
 
@@ -193,9 +193,9 @@
 					if (namesHash[name] == 1) {
 						trace("we have a match");
 						if (match == false) {
-							clearSelections();
-							trace("cleared selections prior to turning on namelist selections, firing event to browser");
-							dmvSelectionChanged(null);
+							//clearSelections();
+							//trace("cleared selections prior to turning on namelist selections, firing event to browser");
+							//dmvSelectionChanged(null);
 							match = true;
 						}
 						indicesToSelect.push(j);
@@ -211,14 +211,17 @@
 					gaggleStatus.text = "";
 				});
 				timer.start();
-				numSelectedRowsText.text = "" + getGridForCurrentTab().selectedIndices.length;								
+				numSelectedRowsText.text = "" + getGridForCurrentTab().selectedIndices.length;
+				if (match) {
+					dmvSelectionChanged(null);						
+				}			
 			}
 			
 			protected function gridClick(event:ListEvent):void {
 			}
 			
 			// todo also fire event if column order is changed
-			protected function dmvSelectionChanged(event:ListEvent):void {
+			protected function dmvSelectionChanged(event:Event):void {
 				trace("in dmvSelectionChanged, # rows selected is " + getGridForCurrentTab().selectedIndices.length);
 				numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
 				var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
@@ -251,6 +254,7 @@
 				}
 				evt.selectedNames = namelist;
 				evt.matrix = matrix;
+				trace("dispatching event to js...")
 				dispatchEvent(evt);
 			}
 			

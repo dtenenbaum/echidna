@@ -9,7 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100128194214) do
+ActiveRecord::Schema.define(:version => 20100226230620) do
+
+  create_table "citations", :force => true do |t|
+    t.integer "paper_id",     :limit => 11
+    t.integer "condition_id", :limit => 11
+  end
 
   create_table "condition_groupings", :force => true do |t|
     t.integer  "condition_id",       :limit => 11
@@ -24,6 +29,8 @@ ActiveRecord::Schema.define(:version => 20100128194214) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_time_series"
+    t.integer  "owner_id",       :limit => 11
+    t.integer  "importer_id",    :limit => 11
   end
 
   create_table "conditions", :force => true do |t|
@@ -39,6 +46,10 @@ ActiveRecord::Schema.define(:version => 20100128194214) do
     t.integer  "sbeams_project_id",    :limit => 11
     t.string   "sbeams_timestamp"
     t.integer  "species_id",           :limit => 11
+    t.integer  "gwap2_id",             :limit => 11
+    t.integer  "reference_sample_id",  :limit => 11
+    t.integer  "owner_id",             :limit => 11
+    t.integer  "importer_id",          :limit => 11
   end
 
   add_index "conditions", ["id"], :name => "index_conditions_on_id"
@@ -79,6 +90,26 @@ ActiveRecord::Schema.define(:version => 20100128194214) do
 
   add_index "genes", ["id"], :name => "index_genes_on_id"
 
+  create_table "group_attributes", :force => true do |t|
+    t.integer "group_id",     :limit => 11
+    t.string  "key"
+    t.string  "string_value"
+    t.integer "int_value",    :limit => 11
+    t.float   "float_value"
+  end
+
+  create_table "knockout_associations", :force => true do |t|
+    t.integer "knockout_id",  :limit => 11
+    t.integer "condition_id", :limit => 11
+  end
+
+  create_table "knockouts", :force => true do |t|
+    t.string  "gene"
+    t.integer "ranking",     :limit => 11
+    t.string  "control_for"
+    t.integer "parent_id",   :limit => 11
+  end
+
   create_table "observations", :force => true do |t|
     t.integer  "condition_id",        :limit => 11
     t.integer  "name_id",             :limit => 11
@@ -91,6 +122,18 @@ ActiveRecord::Schema.define(:version => 20100128194214) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "boolean_value"
+  end
+
+  create_table "papers", :force => true do |t|
+    t.string "title"
+    t.string "url"
+    t.string "authors"
+    t.text   "abstract"
+    t.string "short_name"
+  end
+
+  create_table "reference_samples", :force => true do |t|
+    t.string "name"
   end
 
   create_table "relationship_types", :force => true do |t|

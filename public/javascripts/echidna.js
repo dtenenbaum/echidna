@@ -91,6 +91,7 @@ var initCallback = function() {
 // currently we just check to see if we are running firefox.
 
 var dmvSelectionChangedCallback = function(event) {
+    log("in dmvSelectionChangedCallback, is gaggle activated? " + gaggleActivated + ", num rows: " + event.getNumRowsSelected());
     if (gaggleActivated && event.getNumRowsSelected() == 0) {
         toggleGaggle();
         FG_fireDataEvent();
