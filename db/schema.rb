@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100226230620) do
+ActiveRecord::Schema.define(:version => 20100226233511) do
 
   create_table "citations", :force => true do |t|
     t.integer "paper_id",     :limit => 11
@@ -34,22 +34,23 @@ ActiveRecord::Schema.define(:version => 20100226230620) do
   end
 
   create_table "conditions", :force => true do |t|
-    t.integer  "experiment_id",        :limit => 11
+    t.integer  "experiment_id",          :limit => 11
     t.string   "name"
-    t.integer  "sequence",             :limit => 11
+    t.integer  "sequence",               :limit => 11
     t.boolean  "has_data"
-    t.integer  "forward_slide_number", :limit => 11
-    t.integer  "reverse_slide_number", :limit => 11
+    t.integer  "forward_slide_number",   :limit => 11
+    t.integer  "reverse_slide_number",   :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "original_name"
-    t.integer  "sbeams_project_id",    :limit => 11
+    t.integer  "sbeams_project_id",      :limit => 11
     t.string   "sbeams_timestamp"
-    t.integer  "species_id",           :limit => 11
-    t.integer  "gwap2_id",             :limit => 11
-    t.integer  "reference_sample_id",  :limit => 11
-    t.integer  "owner_id",             :limit => 11
-    t.integer  "importer_id",          :limit => 11
+    t.integer  "species_id",             :limit => 11
+    t.integer  "gwap2_id",               :limit => 11
+    t.integer  "reference_sample_id",    :limit => 11
+    t.integer  "owner_id",               :limit => 11
+    t.integer  "importer_id",            :limit => 11
+    t.integer  "growth_media_recipe_id", :limit => 11
   end
 
   add_index "conditions", ["id"], :name => "index_conditions_on_id"
@@ -64,6 +65,15 @@ ActiveRecord::Schema.define(:version => 20100226230620) do
 
   create_table "data_types", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "environmental_perturbation_associations", :force => true do |t|
+    t.integer "environmental_perturbation_id", :limit => 11
+    t.integer "condition_id",                  :limit => 11
+  end
+
+  create_table "environmental_perturbations", :force => true do |t|
+    t.string "perturbation"
   end
 
   create_table "features", :force => true do |t|
@@ -96,6 +106,14 @@ ActiveRecord::Schema.define(:version => 20100226230620) do
     t.string  "string_value"
     t.integer "int_value",    :limit => 11
     t.float   "float_value"
+  end
+
+  create_table "growth_media_recipes", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "url"
   end
 
   create_table "knockout_associations", :force => true do |t|
