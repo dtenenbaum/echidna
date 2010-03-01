@@ -1,8 +1,11 @@
 package org.systemsbiology.echidna.common
 {
+	import flash.display.DisplayObject;
+	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 	import mx.managers.IBrowserManager;
+	import mx.managers.PopUpManager;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.http.HTTPService;
@@ -61,7 +64,6 @@ package org.systemsbiology.echidna.common
 			return(params[key]);
 		}
 		
-
 
 	}
 }

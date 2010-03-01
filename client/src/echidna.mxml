@@ -248,6 +248,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.dialog.ProgressBarDialog;
 			import mx.effects.IAbstractEffect;
 			import org.systemsbiology.echidna.events.ReloginEvent;
 			import org.systemsbiology.echidna.events.ResetPasswordEvent;
@@ -291,6 +292,7 @@
 		
 		
 		protected var app:DisplayObject;;
+		protected var progressDialog:ProgressBarDialog;
 		
 		protected var loggedInUser:String;
 		protected var conditionData:Object;
@@ -329,6 +331,11 @@
 			trace("fragment = " + bm.fragment);
 			setCurrentState('');
 			trace("app init, current state is " + currentState);
+			
+			// start progress bar
+			startProgressBar();
+
+			
 			resultsChoicesGrid.selectedItem = resultCategories[0];
 			accordion.selectedIndex = 0;
 			addEventListener(StateChangeEvent.CURRENT_STATE_CHANGE, function(event:StateChangeEvent):void {
@@ -345,9 +352,12 @@
 			
 			
 			switchToResultsView();
+			trace("about to ajax: get_logged_in_user");
 			Util.ajax('main/get_logged_in_user', null, populateEmailAddress, Util.ajaxFault);
 			
+			trace("about to ajax: get_auto_completion_items");
 			Util.ajax("main/get_auto_completion_items", null, function(event:ResultEvent):void {
+				trace("in get_auto_completion_items callback");
 				var ary:Array = JSON.decode(event.result.toString());
 				var tmp:ArrayCollection = new ArrayCollection();
 				for (var i:int = 0; i < ary.length; i++) {
@@ -356,9 +366,20 @@
 					tmp.addItem(obj);
 				}
 				autoCompletionItemsAC = tmp;
+				trace("done with get_auto_completion_items callback");
 			}, Util.ajaxFault);
 			
 		}
+		
+		protected function startProgressBar():void {
+			progressDialog = ProgressBarDialog(PopUpManager.createPopUp(app, ProgressBarDialog, true));
+			PopUpManager.centerPopUp(progressDialog);
+		}
+		
+		protected function stopProgressBar():void {
+			PopUpManager.removePopUp(progressDialog);
+		}
+		
 		
 		public function creationComplete():void {
 			trace("in creationComplete");
@@ -406,6 +427,7 @@
 				Alert.show("This is not supported yet");
 				return;
 			}
+			startProgressBar();
 			Util.ajax("main/get_filtered_conditions", {"result_type" : resultsChoicesGrid.selectedItem.shortname}, gotConditions, Util.ajaxFault);
 		}
 		
@@ -459,6 +481,7 @@
 				if (currentState == '' || currentState == null) { //Results/conditions
 					trace("changing state, i think(2)");
 					if (groupsAC.length == 0) {
+						startProgressBar();
 						populateGroupGrid(null);
 					}
 					currentState = 'groupState';
@@ -736,6 +759,7 @@
 					var groupsObj:Object = JSON.decode(event.result.toString());
 					groupsAC = Util.objectToArrayCollection(groupsObj,"condition_group");
 					if (initialRow == null) {
+						stopProgressBar();
 						return;
 					} else {
 						var data:Object = groupsGrid.dataProvider;
@@ -750,6 +774,7 @@
 						}
 				  	}
 				  	currentState = 'groupState';
+				  	stopProgressBar();
 			},Util.ajaxFault);
 		}
 		
@@ -810,17 +835,22 @@
 		}
 
 		public function getConditions():void {
+			trace("in getconditions");
 			Util.ajax('main/get_all_conditions',null,gotConditions,Util.ajaxFault);
 		}
 				
 		public function gotConditions(event:ResultEvent):void {
+			trace("in gotConditions()");
 			conditionData = JSON.decode(event.result.toString());
 			conditionsAC = Util.objectToArrayCollection(conditionData, 'condition');
+			trace("end of gotConditions()");
+			stopProgressBar();
+
 		}
 		
 		
 		public function populateEmailAddress(event:ResultEvent):void {
-			
+			trace("in populateEmailAddress()");
 			var email:String;
 			var resetPassword:Boolean = false;
 			var fragObj:Object = new Object();
@@ -872,7 +902,7 @@
 				emailAddressTextBox.text = email;
 				getConditions();
 			}
-			
+			trace("done with populateEmailAddress");
 		}
 		
 		protected function popupRegistrationDialog(event:RegistrationEvent):void {
