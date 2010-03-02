@@ -5,28 +5,40 @@ package org.systemsbiology.echidna.common
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 	import mx.managers.IBrowserManager;
-	import mx.managers.PopUpManager;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.http.HTTPService;
 	import mx.utils.URLUtil;
 	
+	import org.systemsbiology.echidna.events.StopProgressBarEvent;
+	
 	public class Util
 	{
-		public function Util()
+
+		private var dispObj:DisplayObject;
+
+
+		public function Util(dispObj:DisplayObject)
 		{
+			this.dispObj = dispObj;
 		}
+		
 		
 		public static function foo():void {
 			
 		}
 		
 		
+		//todo consolidate!
+		/*
 		public static function ajaxFault(event:FaultEvent):void {
 			trace("ajax fault!");
 			trace(event.message);
 			Alert.show("Server error!");
 		}
+		*/
+		
+		
 		
 		
 		public static function ajax(url:String, params:Object, result:Function, fault:Function, method:String = "GET"): void {

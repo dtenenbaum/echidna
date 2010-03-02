@@ -28,6 +28,7 @@
 	
 		
 		<![CDATA[
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			import org.hasseg.externalMouseWheel.ExternalMouseWheelSupport;
 			import flex.utils.ui.DataGridToolTipColumn;
 			import mx.utils.URLUtil;
@@ -65,8 +66,10 @@
 			private var conditionIds:String;
 			private var dataProvided:Boolean = false;
 
+			private var ajaxFault:EchidnaAjaxFault;
 
 			protected function init():void {
+				ajaxFault = EchidnaAjaxFault(this);
 				var _mwSupport:ExternalMouseWheelSupport = ExternalMouseWheelSupport.getInstance(stage); 
 				bm = BrowserManager.getInstance();
 				bm.init("","DMV - ratios");
@@ -88,7 +91,7 @@
 				if (dataProvided) {
 					loadingLabel.text = "Loading data...";
 					var params:Object = getParamsObject();
-					Util.ajax(params['url'],params, onGotData, Util.ajaxFault);
+					Util.ajax(params['url'],params, onGotData, ajaxFault.ajaxFault);
 				
 				} else {
 					loadingLabel.text = "No data selected.";
@@ -395,7 +398,7 @@
             	if (tabNavigator.selectedIndex == 1 && dataProvided && lambdasData.length == 0) {
             		loadingLabel.text = "Loading data...";
             		var params:Object = getParamsObject(false);
-					Util.ajax(params['url'],params, onGotData, Util.ajaxFault);
+					Util.ajax(params['url'],params, onGotData, ajaxFault.ajaxFault);
             	}
             }
             

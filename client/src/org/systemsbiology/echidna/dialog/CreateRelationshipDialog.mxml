@@ -3,6 +3,7 @@
 	creationComplete="init()" showCloseButton="true" close="PopUpManager.removePopUp(this)">
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			import org.systemsbiology.echidna.events.CreatedRelationshipEvent;
 			import mx.core.IFlexDisplayObject;
 			import com.adobe.serialization.json.JSON;
@@ -31,10 +32,11 @@
 			public var condition2Id:int;
 			
 			
-			
+			private var ajaxFault:EchidnaAjaxFault;
 			
 			// todo - think about using states to enable/disable custom relationship button
 			protected function init():void {
+				ajaxFault = new EchidnaAjaxFault(this);
 			}
 			
 			
@@ -53,7 +55,7 @@
 				 		return;
 				 	}
 				 	PopUpManager.removePopUp(savedThis);
-				 }, Util.ajaxFault); 
+				 }, ajaxFault.ajaxFault); 
 			}
 			
 			protected function swap():void {
@@ -97,7 +99,7 @@
 						inverseNameText.text = "";
 						addNewRelationshipCanvas.visible = false;
 
-				}, Util.ajaxFault);
+				}, ajaxFault.ajaxFault);
 			}
 			
 		]]>

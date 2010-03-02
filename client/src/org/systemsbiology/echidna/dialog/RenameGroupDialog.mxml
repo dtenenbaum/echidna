@@ -3,6 +3,7 @@
 	creationComplete="init()" showCloseButton="true" close="PopUpManager.removePopUp(this)">
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			import mx.core.IFlexDisplayObject;
 			import org.systemsbiology.echidna.events.RenamedGroupEvent;
 			import mx.rpc.events.ResultEvent;
@@ -14,8 +15,10 @@
 			
 			public var groupId:int;
 			
+			private var ajaxFault:EchidnaAjaxFault;
+			
 			public function init():void {
-				
+				ajaxFault = new EchidnaAjaxFault(this);
 			}
 			
 			public function onOk():void {
@@ -26,7 +29,7 @@
 					var evt:RenamedGroupEvent = new RenamedGroupEvent(RenamedGroupEvent.RENAMED_GROUP_EVENT);
 					dispatchEvent(evt);
 					PopUpManager.removePopUp(savedThis);
-				}, Util.ajaxFault);
+				}, ajaxFault.ajaxFault);
 			}
 			
 				

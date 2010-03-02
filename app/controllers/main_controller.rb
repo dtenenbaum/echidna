@@ -101,7 +101,9 @@ class MainController < ApplicationController
     sorted_conds = sort_conditions_for_time_series(conds)
     headers['Content-type'] = 'text/plain'
     
+    sorted_conds = Condition.populate_num_groups(sorted_conds)
     render :text => sorted_conds.to_json(:methods => :num_groups) 
+    #render :text => sorted_conds.to_json() 
 
 
   end
@@ -120,7 +122,9 @@ class MainController < ApplicationController
     conds = Condition.find :all, :order => 'id'
     sorted_conds = sort_conditions_for_time_series(conds)
     headers['Content-type'] = 'text/plain'
-    
+    sql = "select "
+    sorted_conds = Condition.populate_num_groups(sorted_conds)
+    #render :text => sorted_conds.to_json() 
     render :text => sorted_conds.to_json(:methods => :num_groups) 
   end
   

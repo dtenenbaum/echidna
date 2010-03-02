@@ -3,7 +3,10 @@ class Condition < ActiveRecord::Base
   belongs_to :species
   has_many :observations
   
-  def num_groups
+  
+  attr_accessor :num_groups
+  
+  def num_groups_old
     Condition.find_by_sql(["select count(id) as result from condition_groupings where condition_id = ?",id]).first.result.to_i
   end
   
@@ -13,6 +16,22 @@ class Condition < ActiveRecord::Base
     results = []
     %w{s p d}.each{|i|results << segs.detect{|j|j.downcase =~ /^#{i}/}}
     not results.include? nil
+  end
+  
+  def self.populate_num_groups(conds)
+    sql = "select condition_id, count(id) as result from condition_groupings where condition_id in (?) group by condition_id"
+    results = Condition.find_by_sql([sql,conds.map{|i|i.id}])
+    results_hash = {}
+    results.each do |result|
+      results_hash[result.condition_id.to_i] = result.result
+    end
+    conds.each do |cond|
+      if results_hash.has_key?(cond.id.to_i)
+        cond.num_groups = results_hash[cond.id.to_i]
+      else
+        cond.num_groups = 0
+      end
+    end
   end
   
   def parse_name

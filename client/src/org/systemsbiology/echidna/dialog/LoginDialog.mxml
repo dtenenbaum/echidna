@@ -17,6 +17,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			import org.systemsbiology.echidna.events.RegistrationEvent;
 			import mx.core.IFlexDisplayObject;
 			import mx.controls.Alert;
@@ -31,7 +32,10 @@
 			}
 			public var token:String;
 			
+			private var ajaxFault:EchidnaAjaxFault;
+			
 			protected function init():void {
+				ajaxFault = new EchidnaAjaxFault(this);
 				emailTxt.setFocus();
 			}
 			
@@ -57,7 +61,7 @@
 						dispatchEvent(evt);
 						PopUpManager.removePopUp(savedThis);
 					}				
-				}, Util.ajaxFault, "POST");
+				}, ajaxFault.ajaxFault, "POST");
 			}
 			
 			protected function register():void {
@@ -80,7 +84,7 @@
 					}
 					Alert.show("An email has been sent to you with a link that will allow you to change your password and log in.");
 					PopUpManager.removePopUp(savedThis);
-				}, Util.ajaxFault);
+				}, ajaxFault.ajaxFault);
 				
 			}
 		]]>

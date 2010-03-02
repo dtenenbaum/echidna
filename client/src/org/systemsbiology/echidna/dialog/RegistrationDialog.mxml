@@ -27,6 +27,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			import mx.rpc.events.ResultEvent;
 			import org.systemsbiology.echidna.common.Util;
 			import mx.controls.Text;
@@ -34,8 +35,10 @@
 			import mx.validators.Validator;
 			
 			private var validators:Array = new Array();
+			private var ajaxFault:EchidnaAjaxFault;
 			
 			protected function init():void {
+				ajaxFault = new EchidnaAjaxFault(this);
 				firstNameText.setFocus();
 				
 				validators.push(val_firstname);
@@ -76,8 +79,8 @@
 						 "password" : passwordText.text},
 						 function(event:ResultEvent):void {
 						 	Alert.show("Registration email has been sent.");
-						 }, Util.ajaxFault, "POST");
-				}, Util.ajaxFault);
+						 }, ajaxFault.ajaxFault, "POST");
+				}, ajaxFault.ajaxFault);
 			}
 			
 			

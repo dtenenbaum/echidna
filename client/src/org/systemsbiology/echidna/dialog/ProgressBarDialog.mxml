@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="186" height="116" creationComplete="init()"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	<mx:ProgressBar id="progress" indeterminate="true"  label="Loading..." width="180" height="110"/>
+	<mx:Script>
+		<![CDATA[
+			public function init():void {
+			}
+		]]>
+	</mx:Script>
+</mx:TitleWindow>
