@@ -1,20 +1,18 @@
 package org.systemsbiology.echidna.ui
 {
-	import flash.display.DisplayObject;
+	import flash.events.EventDispatcher;
 	
 	import mx.controls.Alert;
 	import mx.rpc.events.FaultEvent;
 	
 	import org.systemsbiology.echidna.events.StopProgressBarEvent;
 	
-	public class EchidnaAjaxFault
+	public class EchidnaAjaxFault extends EventDispatcher
 	{
 		
-		private var dispObj:DisplayObject;
 		
-		public function EchidnaAjaxFault(dispObj:DisplayObject)
+		public function EchidnaAjaxFault()
 		{
-			this.dispObj = dispObj;	
 		}
 
 
@@ -22,9 +20,7 @@ package org.systemsbiology.echidna.ui
 			trace("ajax fault!");
 			trace(event.message);
 			var spbe:StopProgressBarEvent = new StopProgressBarEvent(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT);
-			if (dispObj != null) {
-				dispObj.dispatchEvent(spbe);
-			}
+			dispatchEvent(spbe);
 			Alert.show("Server error!");
 		}
 

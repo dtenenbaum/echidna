@@ -35,7 +35,7 @@
 			private var ajaxFault:EchidnaAjaxFault;
 			
 			protected function init():void {
-				ajaxFault = new EchidnaAjaxFault(this);
+				ajaxFault = new EchidnaAjaxFault();
 				emailTxt.setFocus();
 			}
 			

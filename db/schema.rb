@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100226233511) do
+ActiveRecord::Schema.define(:version => 20100303190104) do
 
   create_table "citations", :force => true do |t|
     t.integer "paper_id",     :limit => 11
@@ -168,9 +168,28 @@ ActiveRecord::Schema.define(:version => 20100226233511) do
     t.string  "note"
   end
 
+  create_table "search_terms", :force => true do |t|
+    t.string  "word"
+    t.integer "group_id",     :limit => 11
+    t.integer "condition_id", :limit => 11
+  end
+
   create_table "species", :force => true do |t|
     t.string "name"
     t.string "alternate_name"
+  end
+
+  create_table "tag_categories", :force => true do |t|
+    t.string "category_name"
+  end
+
+  create_table "tags", :force => true do |t|
+    t.integer "condition_id",    :limit => 11
+    t.string  "tag"
+    t.boolean "auto"
+    t.boolean "is_alias"
+    t.string  "alias_for"
+    t.integer "tag_category_id", :limit => 11
   end
 
   create_table "users", :force => true do |t|

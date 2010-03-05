@@ -32,6 +32,10 @@
             <name>Shared By others</name>
             <shortname>sharedbyothers</shortname>
         </category>
+        <category>
+            <name>Search</name>
+            <shortname>search</shortname>
+        </category>
     </mx:XMLList>
 	
 	<mx:Panel x="5" y="0" width="100%" height="100%" layout="absolute" borderStyle="solid" id="mainPanel">
@@ -43,11 +47,6 @@
 			borderColor="#FFFFFF" id="menuBar">
 			
 		</mx:MenuBar>
-		
-		<hc:AutoComplete id="autoComplete" y="-1" x="352" width="200" label="Search" dataProvider="{autoCompletionItemsAC}" 
-			matchType="anyPart" labelField="name" allowMultipleSelection="true">
-			
-		</hc:AutoComplete>
 
 		<mx:Text id="emailAddressTextBox" x="572" y="0" text="Not logged in" width="201" height="21" visible="true" toolTip="{emailAddressTextBox.text}"/>
 
@@ -163,7 +162,7 @@
 								<mx:VDividedBox x="10" y="10" height="455" id="coams" width="116">
 									<mx:Canvas width="100%" height="239" borderStyle="solid" id="t">
 										<mx:Text x="10" y="38" text="Grouped In:"/>
-										<mx:DataGrid x="11.5" y="74" width="94" id="groupedInGrid" dataProvider="{groupedInAC}">
+										<mx:DataGrid x="11.5" y="74" width="94" id="groupedInGrid" dataProvider="{groupedInAC}" click="groupedInGridClick()">
 											<mx:columns>
 												<mx:DataGridColumn headerText="ID" dataField="id"/>
 												<mx:DataGridColumn dataTipField="name"  showDataTips="true" headerText="Name" dataField="name"/>
@@ -248,6 +247,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.StartProgressBarEvent;
+			import org.systemsbiology.echidna.dialog.SearchDialog;
 			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			import org.systemsbiology.echidna.events.StopProgressBarEvent;
 			import org.systemsbiology.echidna.dialog.ProgressBarDialog;
@@ -326,7 +327,7 @@
 		
 			
 		public function init():void {
-			ajaxFault = new EchidnaAjaxFault(this);
+			ajaxFault = new EchidnaAjaxFault();
 			focusThisSwf();
 			mainPanel.enabled = false;
 			var _mwSupport:ExternalMouseWheelSupport = ExternalMouseWheelSupport.getInstance(stage);
@@ -337,8 +338,6 @@
 			setCurrentState('');
 			trace("app init, current state is " + currentState);
 			
-			// start progress bar
-
 			
 			resultsChoicesGrid.selectedItem = resultCategories[0];
 			accordion.selectedIndex = 0;
@@ -355,7 +354,7 @@
 			});
 			
 			
-			addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
+			ajaxFault.addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
 				trace("got stop progress bar event");
 				stopProgressBar();
 			});
@@ -398,7 +397,6 @@
 			//currentState = '';
 		}
 		
-
 		protected function smallConditionGridClicked(event:ListEvent):void {
 			/*
 			trace("listing of items in small CG:");
@@ -439,6 +437,10 @@
 				Alert.show("This is not supported yet");
 				return;
 			}
+			if (resultsChoicesGrid.selectedItem.shortname == 'search') {
+				showSearchDialog();
+				return;
+			}
 			startProgressBar();
 			Util.ajax("main/get_filtered_conditions", {"result_type" : resultsChoicesGrid.selectedItem.shortname}, gotConditions, ajaxFault.ajaxFault);
 		}
@@ -449,6 +451,8 @@
 				groupedInAC = new ArrayCollection();
 				return;
 			}
+			
+			trace("you clikced on item with id " + conditionGrid.selectedItem['id']);
 			
 			Util.ajax('main/get_condition_detail',{"condition_id": conditionGrid.selectedItem['id']},
 			function(event:ResultEvent):void {
@@ -1013,6 +1017,27 @@
 			url += "?conditionIds=" + ids.join(",");
 			newWin(url); 			
 		}
+		
+		
+		protected function showSearchDialog():void {
+			var searchDialog:SearchDialog = SearchDialog(PopUpManager.createPopUp(app, SearchDialog, true));
+			searchDialog.searchItems = autoCompletionItemsAC;
+			PopUpManager.centerPopUp(searchDialog);
+			searchDialog.addEventListener(StartProgressBarEvent.START_PROGRESS_BAR_EVENT, function (event:StartProgressBarEvent):void {
+				startProgressBar();	
+			});
+			searchDialog.addEventListener(ResultEvent.RESULT, function(event:ResultEvent):void {
+				stopProgressBar();
+				gotConditions(event);
+			});
+		}
+		
+		protected function groupedInGridClick():void {
+			var id:String = groupedInGrid.selectedItem['id'];
+			//populateGroupGrid(id);
+			trace("like an idiot, you clicked on " + id + ".");
+		}
+		
 		
 		]]>
 	</mx:Script>

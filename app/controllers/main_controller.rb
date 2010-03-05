@@ -116,10 +116,21 @@ class MainController < ApplicationController
     ConditionGrouping.delete(records_to_remove)
     render :text => "ok"
   end
-  
+ 
+  def search_conditions
+    #render :text => "hi"
+    #return false if true
+    puts "in main/search_conditions"
+    search = ActiveSupport::JSON.decode(params[:search])
+    ids = Condition.find_by_sql(["select distinct condition_id from search_terms where word in (?)", search]).map{|i|i.condition_id}
+    results = Condition.find_by_sql(["select * from conditions where id in (?)",ids])
+    sorted_conds = sort_conditions_for_time_series(results)
+    sorted_conds = Condition.populate_num_groups(sorted_conds)
+    render :text => sorted_conds.to_json(:methods => :num_groups)
+  end
   
   def get_all_conditions
-    conds = Condition.find :all, :order => 'id'
+     conds = Condition.find :all, :order => 'id'
     sorted_conds = sort_conditions_for_time_series(conds)
     headers['Content-type'] = 'text/plain'
     sql = "select "
@@ -230,7 +241,7 @@ EOF
   
   def get_condition_detail # seems like species should be an observation, not a column in conditions
     cond = Condition.find(params[:condition_id])
-    resilt = {}
+    result = {}
     if (cond.name_parseable?)
       result = cond.parse_name
     else
@@ -301,9 +312,12 @@ EOF
   end
   
   def get_auto_completion_items
-    res = Condition.find(:all).map{|i|i.name}
-    res += ConditionGroup.find(:all).map{|i|i.name}
+#    res = Condition.find(:all).map{|i|i.name}
+#    res += ConditionGroup.find(:all).map{|i|i.name}
+    res = SearchTerm.find(:all).map{|i|i.word}
     res.sort!
+    res.uniq!
+  
     render :text => res.to_json
   end
   

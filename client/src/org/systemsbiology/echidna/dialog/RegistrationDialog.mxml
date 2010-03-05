@@ -38,7 +38,7 @@
 			private var ajaxFault:EchidnaAjaxFault;
 			
 			protected function init():void {
-				ajaxFault = new EchidnaAjaxFault(this);
+				ajaxFault = new EchidnaAjaxFault();
 				firstNameText.setFocus();
 				
 				validators.push(val_firstname);

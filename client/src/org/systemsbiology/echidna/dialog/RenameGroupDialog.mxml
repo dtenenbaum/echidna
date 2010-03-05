@@ -18,7 +18,7 @@
 			private var ajaxFault:EchidnaAjaxFault;
 			
 			public function init():void {
-				ajaxFault = new EchidnaAjaxFault(this);
+				ajaxFault = new EchidnaAjaxFault();
 			}
 			
 			public function onOk():void {

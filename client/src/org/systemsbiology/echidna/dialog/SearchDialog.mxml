@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="892" height="154"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
+	creationComplete="init()" title="Search">
+	
+		<hc:AutoComplete id="autoComplete" label="Search" dataProvider="{searchItems}" 
+			matchType="anyPart" labelField="name" allowMultipleSelection="true" prompt="Search"
+			change="autoCompleteChange(event)" searchChange="autoCompleteSearchChange(event)"
+			valueCommit="autoCompleteValueCommit(event)" height="24" y="0" width="836" x="0">
+			
+		</hc:AutoComplete>
+
+	<mx:Button x="10" y="74" label="Search" click="search()"/>
+	<mx:Button x="83" y="74" label="Cancel" click="PopUpManager.removePopUp(this)"/>
+	
+	<mx:Script>
+		<![CDATA[
+			import org.systemsbiology.echidna.events.StartProgressBarEvent;
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import com.adobe.serialization.json.JSON;
+			import org.systemsbiology.echidna.common.Util;
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import mx.collections.ArrayCollection;
+		
+			[Bindable]
+			public var searchItems:ArrayCollection;
+		
+			public function init():void {
+				autoComplete.setStyle("selectedItemStyleName", AutoComplete.STYLE_FACEBOOK);
+				autoComplete.showRemoveIcon = true;
+				autoComplete.setFocus();
+			}
+			
+			protected function autoCompleteChange(event:Event):void {
+				trace("autoCompleteChange()");
+			}
+			
+			protected function autoCompleteSearchChange(event:Event):void {
+				trace("autoCompleteSearchChange()");
+			}
+			
+			protected function autoCompleteValueCommit(event:Event):void {
+				trace("autoCompleteValueCommit()");
+			}
+
+			protected function search():void {
+				if (autoComplete.selectedItems.length == 0) {
+					Alert.show("Nothing to search for!");
+					return;
+				}
+				trace("num items selected:" +  autoComplete.selectedItems.length);
+				var searchArr:Array = new Array();
+				for(var i:int = 0; i < autoComplete.selectedItems.length; i++) {
+					searchArr.push(autoComplete.selectedItems[i]['name']);
+				}
+				var search:String = JSON.encode(searchArr);
+				//loadingLabel.text = "Loading...";
+				
+				PopUpManager.removePopUp(this);
+				
+				Util.ajax("main/search_conditions", {"search": search}, searchResult, searchFault);
+				var startProgressBarEvent:StartProgressBarEvent = new StartProgressBarEvent(StartProgressBarEvent.START_PROGRESS_BAR_EVENT);
+				dispatchEvent(startProgressBarEvent);
+			}				
+			
+			protected function searchResult(event:ResultEvent): void {
+				dispatchEvent(event);
+			}
+			
+			protected function searchFault(event:FaultEvent):void {
+				var eaf:EchidnaAjaxFault = new EchidnaAjaxFault();
+				eaf.ajaxFault(event);
+			}
+			
+			
+			
+		]]>
+	</mx:Script>
+	<mx:Text x="406" y="55" width="101" id="loadingLabel"/>
+	
+	
+	
+	
+</mx:TitleWindow>

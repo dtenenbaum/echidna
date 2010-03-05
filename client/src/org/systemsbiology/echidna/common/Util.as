@@ -29,17 +29,6 @@ package org.systemsbiology.echidna.common
 		}
 		
 		
-		//todo consolidate!
-		/*
-		public static function ajaxFault(event:FaultEvent):void {
-			trace("ajax fault!");
-			trace(event.message);
-			Alert.show("Server error!");
-		}
-		*/
-		
-		
-		
 		
 		public static function ajax(url:String, params:Object, result:Function, fault:Function, method:String = "GET"): void {
 			var service:HTTPService = new HTTPService();

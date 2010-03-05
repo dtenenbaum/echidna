@@ -36,7 +36,7 @@
 			
 			// todo - think about using states to enable/disable custom relationship button
 			protected function init():void {
-				ajaxFault = new EchidnaAjaxFault(this);
+				ajaxFault = new EchidnaAjaxFault();
 			}
 			
 			

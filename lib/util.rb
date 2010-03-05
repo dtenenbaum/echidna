@@ -1,5 +1,5 @@
 module Util
-  
+  require 'pp'
 
   def find_related_groups(group_id)
     sql = "select r.*, t.name, t.inverse from relationships r, relationship_types t where t.id = r.relationship_type_id and  (r.group1 = ? or r.group2 = ?)"
@@ -92,8 +92,37 @@ module Util
     end
   end
   
+  def update_search_terms
+    begin
+      Condition.transaction do
+        Condition.connection.execute "truncate table search_terms"
+        #add_search_term("Condition", "name")
+        add_search_term("Tag", "tag")
+        # todo populate environmental_perturbations
+        # todo - knockouts
+      end
+    rescue Exception => ex
+      puts ex.message
+      puts ex.backtrace
+    end
+    "done"
+  end
 
-
+  private
   
+  def add_search_term(table, fields)
+    items = []
+    line = "items = #{table}.find :all"
+    eval(line)
+    id_column = items.first.attributes.has_key?('condition_id') ? "condition_id" : "id"
+    f_arr = (fields.is_a?(Array)) ? fields : [fields]
+    for item in items
+      for thing in f_arr
+        s = SearchTerm.new(:condition_id => item.send(id_column), :word => item.send(thing))
+        #pp s
+        s.save
+      end
+    end
+  end
 
 end
