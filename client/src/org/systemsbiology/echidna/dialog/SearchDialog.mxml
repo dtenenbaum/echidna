@@ -16,6 +16,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.SearchResultsReturnedEvent;
 			import org.systemsbiology.echidna.events.StartProgressBarEvent;
 			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			import mx.rpc.events.FaultEvent;
@@ -28,6 +29,8 @@
 		
 			[Bindable]
 			public var searchItems:ArrayCollection;
+			
+			private var searchArr:Array;
 		
 			public function init():void {
 				autoComplete.setStyle("selectedItemStyleName", AutoComplete.STYLE_FACEBOOK);
@@ -53,7 +56,7 @@
 					return;
 				}
 				trace("num items selected:" +  autoComplete.selectedItems.length);
-				var searchArr:Array = new Array();
+				searchArr = new Array();
 				for(var i:int = 0; i < autoComplete.selectedItems.length; i++) {
 					searchArr.push(autoComplete.selectedItems[i]['name']);
 				}
@@ -68,6 +71,9 @@
 			}				
 			
 			protected function searchResult(event:ResultEvent): void {
+				var srre:SearchResultsReturnedEvent = new SearchResultsReturnedEvent(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT);
+				srre.searchTerms = searchArr;
+				dispatchEvent(srre);
 				dispatchEvent(event);
 			}
 			

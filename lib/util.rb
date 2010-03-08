@@ -97,8 +97,11 @@ module Util
       Condition.transaction do
         Condition.connection.execute "truncate table search_terms"
         #add_search_term("Condition", "name")
+        add_group_names()
+        add_controlled_vocab_items()
+        add_environmental_perturbations()
+        add_knockouts()
         add_search_term("Tag", "tag")
-        # todo populate environmental_perturbations
         # todo - knockouts
       end
     rescue Exception => ex
@@ -109,6 +112,44 @@ module Util
   end
 
   private
+  
+  def add_knockouts
+    puts "add_knockouts"
+    sql = "select k.gene as name, ka.condition_id from knockouts k, knockout_associations ka "
+      "where ka.knockout_id = k.id order by name, condition_id"
+    add_items sql
+  end
+  
+  def add_environmental_perturbations()
+    puts "add_environmental_perturbations"
+    sql = "select e.perturbation as name, a.condition_id from environmental_perturbations e, " +
+      "environmental_perturbation_associations a where a.environmental_perturbation_id = e.id " + 
+      "order by name, condition_id"
+      add_items sql
+  end
+  
+  def add_controlled_vocab_items()
+    puts "add_controlled_vocab_items"
+    sql = "select o.condition_id, n.name from observations o, controlled_vocab_items n " +
+      "where o.name_id = n.id order by o.condition_id, n.name"
+      add_items sql
+  end
+  
+  def add_group_names()
+    puts "add_group_names"
+    sql = "select g.name, c.condition_id from condition_groups g, condition_groupings c " + 
+      "where c.condition_group_id = g.id order by name, condition_id"
+    add_items sql
+  end
+  
+  def add_items(sql)
+    items = Condition.find_by_sql(sql)
+    #puts "# of items: #{items.size}, uniq size = #{items.uniq.size}"
+    for item in items
+      s = SearchTerm.new(:condition_id => item.condition_id, :word => item.name)
+      s.save
+    end
+  end
   
   def add_search_term(table, fields)
     items = []

@@ -38,7 +38,7 @@
         </category>
     </mx:XMLList>
 	
-	<mx:Panel x="5" y="0" width="100%" height="100%" layout="absolute" borderStyle="solid" id="mainPanel">
+	<mx:Panel x="5" y="-10" width="100%" height="100%" layout="absolute" borderStyle="solid" id="mainPanel">
 
 		<mx:Text x="10" y="0" text="Echidna" width="61" height="21"/>
 
@@ -142,7 +142,7 @@
 				<mx:Canvas id="resultsView" height="100%" width="100%">
 					<mx:VBox>
 					<mx:VDividedBox>
-						<mx:HDividedBox width="100%" height="80%">
+						<mx:HDividedBox width="100%" height="449">
 							<mx:Canvas width="547" height="439" borderStyle="solid">
 								<mx:DataGrid x="10" y="10" id="conditionGrid"  width="535" height="427" dataProvider="{conditionsAC}"
 									allowMultipleSelection="true" itemClick="conditionGridItemClick(event)" change="conditionGridChange(event)">
@@ -183,7 +183,7 @@
 									</mx:Canvas>
 								</mx:VDividedBox>
 						</mx:HDividedBox>
-						<mx:Canvas width="676" height="133" borderStyle="solid" verticalScrollPolicy="auto">
+						<mx:Canvas width="676" height="98" borderStyle="solid" verticalScrollPolicy="auto">
 							<mx:Text x="10" y="10" text="Description of condition:&#xd;" width="412"/>
 							<mx:Text x="34" y="25" id="descriptionText"/>
 						</mx:Canvas>
@@ -194,6 +194,10 @@
 						<mx:Text text="{conditionsAC.length}"></mx:Text>
 						<mx:Label text="Selected Rows"/>
 						<mx:Text text="{conditionGrid.selectedItems.length}"/>
+					</mx:HBox>
+					<mx:HBox id="searchTermsHbox" visible="false">
+						<mx:Label text="Search Terms:"/>
+						<mx:Text id="searchTermsText"/>
 					</mx:HBox>
 				</mx:VBox>
 
@@ -247,6 +251,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.SearchResultsReturnedEvent;
 			import org.systemsbiology.echidna.events.StartProgressBarEvent;
 			import org.systemsbiology.echidna.dialog.SearchDialog;
 			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
@@ -485,6 +490,7 @@
 		}
 		
 		protected function accordionClick(event:MouseEvent):void {
+			searchTermsHbox.visible = false;
 			groupedInAC = new ArrayCollection();
 			trace("accordion clicked, current state is " + currentState);
 			if (accordion.selectedIndex == 0) { // Results/conditions
@@ -1029,6 +1035,10 @@
 			searchDialog.addEventListener(ResultEvent.RESULT, function(event:ResultEvent):void {
 				stopProgressBar();
 				gotConditions(event);
+			});
+			searchDialog.addEventListener(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT, function(event:SearchResultsReturnedEvent):void {
+				searchTermsHbox.visible = true;
+				searchTermsText.text = event.searchTerms.join(", ");
 			});
 		}
 		
