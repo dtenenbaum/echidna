@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="964" height="622" title="Import Experiment" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import org.systemsbiology.echidna.events.GetConditionsEvent;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
+			import org.systemsbiology.echidna.common.Util;
+			[Bindable]
+			public var projectId:String;
+			[Bindable]
+			public var dateDir:String;
+		
+			private var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
+			
+			private var thisWindow:IFlexDisplayObject = IFlexDisplayObject(this);
+			
+			
+			private function init():void {
+				
+			}
+			
+			public function checkForPriorImport():void {
+				Util.ajax("main/has_been_imported_already",{"projectId":projectId,"dateDir":dateDir},function(event:ResultEvent):void {
+					if (event.result.toString() == "true") {
+						Alert.show("This experiment has already been imported into Echidna.", "Error", Alert.OK, null, function():void {
+							PopUpManager.removePopUp(thisWindow);
+							var gce:GetConditionsEvent = new GetConditionsEvent(GetConditionsEvent.GET_CONDITIONS_EVENT);
+							dispatchEvent(gce);
+						});
+						return;
+					}
+					// experiment has not been imported:
+					//Util.ajax("main/yadayadayada					
+				},ajaxFault.ajaxFault);
+			}
+			
+			
+		]]>
+	</mx:Script>
+	<mx:Label x="10" y="10" text="SBEAMS Project ID:"/>
+	<mx:Text x="163" y="10" id="sbeamsProjectIdText" width="107" text="{projectId}"/>
+	<mx:Label x="10" y="36" text="SBEAMS Timestamp:"/>
+	<mx:Text x="163" y="36" width="180" id="sbeamsDateDirText" text="{dateDir}"/>
+</mx:TitleWindow>

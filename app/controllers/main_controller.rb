@@ -88,6 +88,14 @@ class MainController < ApplicationController
   #cookies[:gwap2_cookie] = {:value => user.email,
   #  :expires => 1000.days.from_now }
   
+  
+  def has_been_imported_already
+    existing = Condition.find_by_sql(["select * from conditions where sbeams_project_id = ? and sbeams_timestamp = ?",
+      params[:projectId].to_i, params[:dateDir]])
+    render :text => (existing.empty?) ? "false" : "true"
+  end
+  
+  
   def get_filtered_conditions
     if params[:result_type] == 'all'
       conds = Condition.find :all, :order => 'id'
@@ -385,6 +393,63 @@ EOF
     
     UserMailer.deliver_password_refresh(u, {:url => url, :user => u})
     render :text => "ok"
+  end
+  
+  def get_knockout_names
+    sql = "select distinct gene from knockouts where gene != 'wild type' order by gene"
+    res = Knockout.find_by_sql([sql]).map{|i|i.gene}
+    render :text => res.to_json
+  end
+  
+  def get_env_pert_names
+    sql = "select distinct perturbation from environmental_perturbations order by perturbation"
+    res = EnvironmentalPerturbation.find_by_sql([sql]).map{|i|i.perturbation}
+    render :text => res.to_json
+  end
+  
+  def structured_search
+    puts "STRUCTURED SEARCH params:"
+    pp params
+    env_perts = params[:env_perts]
+    knockouts = params[:knockouts]
+    include_related_results = (params[:include_related_results] == "true") ? true : false
+    refine = params.has_key?(:currently_displayed_ids)
+    if (refine)
+      currently_displayed_ids = ActiveSupport::JSON.decode(params[:currently_displayed_ids])
+      id_map = {}
+      for id in currently_displayed_ids
+        id_map[id.to_i] = 1
+      end
+    end
+    conds = []
+    if (params.has_key?(:env_perts) and !params.has_key?(:knockouts))
+      conds =  Condition.find_by_sql(["select * from conditions where id in (select condition_id from environmental_perturbation_associations where environmental_perturbation_id in (select id from environmental_perturbations where perturbation = ?))",params[:env_perts]])
+    elsif (params.has_key?(:knockouts) and !params.has_key?(:env_perts))
+      conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from knockout_associations where knockout_id in (select id from knockouts where gene = ?))", params[:knockouts]])
+    elsif (params.has_key?(:knockouts) and params.has_key?(:env_perts))
+        conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from knockout_associations where knockout_id in (select id from knockouts where gene = ?))  and id in  (select condition_id from environmental_perturbation_associations where environmental_perturbation_id in (select id from environmental_perturbations where perturbation = ?))", params[:knockouts], params[:env_perts]])
+    end
+    
+    if refine
+      refined = []
+      for cond in conds
+        refined.push cond if id_map.has_key?(cond.id)
+      end
+      conds = refined
+    end
+    
+
+    sorted_conds = sort_conditions_for_time_series(conds)
+    
+    sorted_conds = Condition.populate_num_groups(sorted_conds)
+    
+    if (sorted_conds.empty?)
+      render :text => "none" and return false
+    else
+      render :text => sorted_conds.to_json(:methods => :num_groups) and return false
+    end
+    
+
   end
   
   def test

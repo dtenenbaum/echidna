@@ -111,6 +111,10 @@ module Util
     "done"
   end
 
+  #############################
+  # private functions
+  #############################
+
   private
   
   def add_knockouts

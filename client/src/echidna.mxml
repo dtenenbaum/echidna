@@ -251,6 +251,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.GetConditionsEvent;
+			import org.systemsbiology.echidna.dialog.ImportExperimentDialog;
 			import org.systemsbiology.echidna.events.SearchResultsReturnedEvent;
 			import org.systemsbiology.echidna.events.StartProgressBarEvent;
 			import org.systemsbiology.echidna.dialog.SearchDialog;
@@ -343,7 +345,6 @@
 			setCurrentState('');
 			trace("app init, current state is " + currentState);
 			
-			
 			resultsChoicesGrid.selectedItem = resultCategories[0];
 			accordion.selectedIndex = 0;
 			addEventListener(StateChangeEvent.CURRENT_STATE_CHANGE, function(event:StateChangeEvent):void {
@@ -371,6 +372,7 @@
 			trace("about to ajax: get_logged_in_user");
 			Util.ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault.ajaxFault);
 			
+			/* this is now done in the search dialog:
 			trace("about to ajax: get_auto_completion_items");
 			Util.ajax("main/get_auto_completion_items", null, function(event:ResultEvent):void {
 				trace("in get_auto_completion_items callback");
@@ -384,7 +386,7 @@
 				autoCompletionItemsAC = tmp;
 				trace("done with get_auto_completion_items callback");
 			}, ajaxFault.ajaxFault);
-			
+			*/
 		}
 		
 		protected function startProgressBar():void {
@@ -867,7 +869,6 @@
 			conditionsAC = Util.objectToArrayCollection(conditionData, 'condition');
 			trace("end of gotConditions()");
 			stopProgressBar();
-
 		}
 		
 		
@@ -918,7 +919,25 @@
 					loginDialog.title = 'Login';
 					PopUpManager.centerPopUp(loginDialog);
 				}
+			} else if (Util.getQueryStringItem(bm, "initialView") == "importExperiment") {
+				trace("We are importing from the pipeline");
+				stopProgressBar();
+				var sbeamsProjectId:String = Util.getQueryStringItem(bm, "projectId");
+				var sbeamsTimestamp:String = Util.getQueryStringItem(bm, "dateDir");
+				mainPanel.enabled = true;
+				emailAddressTextBox.text = email;
 				
+				var importExperimentDialog:ImportExperimentDialog = ImportExperimentDialog(PopUpManager.createPopUp(app, ImportExperimentDialog, true));
+				PopUpManager.centerPopUp(importExperimentDialog);
+				importExperimentDialog.projectId = sbeamsProjectId;
+			    importExperimentDialog.dateDir = sbeamsTimestamp;
+			    importExperimentDialog.addEventListener(GetConditionsEvent.GET_CONDITIONS_EVENT, function(event:GetConditionsEvent):void {
+			    	startProgressBar();
+			    	getConditions();
+			    });
+				importExperimentDialog.checkForPriorImport();
+								
+				//when done, run getConditions()
 			} else {
 				mainPanel.enabled = true;
 				emailAddressTextBox.text = email;
@@ -1027,10 +1046,19 @@
 		
 		protected function showSearchDialog():void {
 			var searchDialog:SearchDialog = SearchDialog(PopUpManager.createPopUp(app, SearchDialog, true));
-			searchDialog.searchItems = autoCompletionItemsAC;
+			//searchDialog.searchItems = autoCompletionItemsAC;
+			var currentlyDisplayedIds:Array = new Array();
+			for (var i:int = 0; i < conditionsAC.length; i++) {
+				currentlyDisplayedIds.push(conditionsAC[i]['id']);
+			}
+			trace("currently displayed ids:\n" + JSON.encode(currentlyDisplayedIds));
+			searchDialog.currentlyDisplayedIds = currentlyDisplayedIds;
 			PopUpManager.centerPopUp(searchDialog);
 			searchDialog.addEventListener(StartProgressBarEvent.START_PROGRESS_BAR_EVENT, function (event:StartProgressBarEvent):void {
 				startProgressBar();	
+			});
+			searchDialog.addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
+				stopProgressBar();
 			});
 			searchDialog.addEventListener(ResultEvent.RESULT, function(event:ResultEvent):void {
 				stopProgressBar();

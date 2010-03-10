@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="892" height="154"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="914" height="528"
 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
 	creationComplete="init()" title="Search">
-	
-		<hc:AutoComplete id="autoComplete" label="Search" dataProvider="{searchItems}" 
-			matchType="anyPart" labelField="name" allowMultipleSelection="true" prompt="Search"
-			change="autoCompleteChange(event)" searchChange="autoCompleteSearchChange(event)"
-			valueCommit="autoCompleteValueCommit(event)" height="24" y="0" width="836" x="0">
-			
-		</hc:AutoComplete>
+		
+		
+		<mx:VBox x="24" y="0">
+			<mx:Label text="Free text search:"/>
+			<hc:AutoComplete id="autoComplete" label="Search" dataProvider="{searchItems}" 
+				matchType="anyPart" labelField="name" allowMultipleSelection="true" prompt="Search"
+				change="autoCompleteChange(event)" searchChange="autoCompleteSearchChange(event)"
+				valueCommit="autoCompleteValueCommit(event)" height="24" width="136">
+				
+			</hc:AutoComplete>
+		</mx:VBox>
 
 	<mx:Button x="10" y="74" label="Search" click="search()"/>
 	<mx:Button x="83" y="74" label="Cancel" click="PopUpManager.removePopUp(this)"/>
+
+
+	<mx:Text x="406" y="55" width="101" id="loadingLabel"/>
+	<mx:Label x="24" y="132" text="Structured Search:"/>
+	<mx:Label x="40" y="169" text="Knockout:"/>
+	<hc:AutoComplete id="knockoutsAutoComplete" x="40" y="185" dataProvider="{knockouts}" allowMultipleSelection="false"
+		matchType="anyPart" prompt="None"/>
+	<mx:Label x="257" y="169" text="Environmental Perturbation:"/>
+	<hc:AutoComplete x="257" y="185" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="false"
+		matchType="anyPart" prompt="None"/>
+	<mx:CheckBox id="includeRelatedResultsCheckBox" x="40" y="233" label="Include related results (controls, etc)" enabled="false"/>
+	<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="40" y="263" label="Refine currently displayed results?"/>
+	<mx:Button x="40" y="335" label="Structured Search" click="structuredSearch()"/>
+	<mx:Button x="177" y="335" label="Cancel" click="PopUpManager.removePopUp(this)"/>
+	<mx:Button x="104" y="293" label="Remember This Search" click="rememberThisSearch()" enabled="false"/>
+	
+
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.core.IFlexDisplayObject;
+			import org.systemsbiology.echidna.events.StopProgressBarEvent;
 			import org.systemsbiology.echidna.events.SearchResultsReturnedEvent;
 			import org.systemsbiology.echidna.events.StartProgressBarEvent;
 			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
@@ -26,17 +49,116 @@
 			import mx.controls.Alert;
 			import mx.managers.PopUpManager;
 			import mx.collections.ArrayCollection;
+			
+			
+			public var currentlyDisplayedIds:Array;
 		
 			[Bindable]
-			public var searchItems:ArrayCollection;
+			private var searchItems:ArrayCollection;
+			
+			[Bindable]
+			private var knockouts:ArrayCollection;
+			
+			[Bindable]
+			private var envPerts:ArrayCollection;
 			
 			private var searchArr:Array;
+			
+			private var loadedSearchTerms:Boolean = false;
+			private var loadedKnockouts:Boolean = false;
+			private var loadedEnvPerts:Boolean = false;
+			
+			private var progressBar:ProgressBarDialog;
+			
+			private var thisWindow:IFlexDisplayObject;
+			
+			//loadedStrains?
+			
+			private var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
 		
-			public function init():void {
+			//todo - cache dropdown stuff so that rendering of dialog is faster
+			// need some sort of invalidation so we know whether to refresh cache
+					
+			private function init():void {
+				 thisWindow = this as IFlexDisplayObject;
+				
+				
 				autoComplete.setStyle("selectedItemStyleName", AutoComplete.STYLE_FACEBOOK);
 				autoComplete.showRemoveIcon = true;
 				autoComplete.setFocus();
+				
+				knockoutsAutoComplete.setStyle("selectedItemStyleName", AutoComplete.STYLE_FACEBOOK);
+				knockoutsAutoComplete.showRemoveIcon = true;
+				
+				envPertAutoComplete.setStyle("selectedItemStyleName", AutoComplete.STYLE_FACEBOOK);
+				envPertAutoComplete.showRemoveIcon = true;
+
+
+				
+				startProgressBar();
+				
+				loadSearchTerms();
+				loadKnockouts();
+				loadEnvPerts();
+				//load strains??
+				
+				addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
+					stopProgressBar();
+				});
 			}
+			
+			private function loadSearchTerms():void {
+				Util.ajax("main/get_auto_completion_items", null, function(event:ResultEvent):void {
+					trace("in get_auto_completion_items callback");
+					var ary:Array = JSON.decode(event.result.toString());
+					var tmp:ArrayCollection = new ArrayCollection();
+					for (var i:int = 0; i < ary.length; i++) {
+						var obj:Object = new Object();
+						obj['name'] = ary[i];
+						tmp.addItem(obj);
+					}
+					searchItems = tmp;
+					loadedSearchTerms = true;
+					tryToStopProgressBar();
+					trace("done with get_auto_completion_items callback");
+				}, ajaxFault.ajaxFault);
+			}
+			
+			private function loadKnockouts():void {
+				Util.ajax("main/get_knockout_names", null, function(event:ResultEvent):void {
+					var ary:Array = JSON.decode(event.result.toString());
+					var tmp:ArrayCollection = new ArrayCollection();
+					tmp.addItem("None");
+					for (var i:int = 0; i < ary.length; i++) {
+						tmp.addItem(ary[i]);
+					}
+					knockouts = tmp;
+					loadedKnockouts = true;
+					tryToStopProgressBar();
+				}, ajaxFault.ajaxFault);
+			}
+			
+			
+			private function loadEnvPerts():void {
+				Util.ajax("main/get_env_pert_names", null, function(event:ResultEvent):void {
+					var ary:Array = JSON.decode(event.result.toString());
+					var tmp:ArrayCollection = new ArrayCollection();
+					tmp.addItem("None");
+					for (var i:int = 0; i < ary.length; i++) {
+						tmp.addItem(ary[i]);
+					}
+					envPerts = tmp;
+					loadedEnvPerts = true;
+					tryToStopProgressBar();					
+				}, ajaxFault.ajaxFault);
+			}
+			
+			protected function tryToStopProgressBar():void {
+				if (loadedEnvPerts && loadedKnockouts && loadedSearchTerms) {
+					stopProgressBar();
+				}
+			}
+			
 			
 			protected function autoCompleteChange(event:Event):void {
 				trace("autoCompleteChange()");
@@ -82,12 +204,67 @@
 				eaf.ajaxFault(event);
 			}
 			
+			protected function startProgressBar():void {
+				trace("trying to start progress bar...");
+				progressBar = ProgressBarDialog(PopUpManager.createPopUp(this, ProgressBarDialog, true));
+				PopUpManager.centerPopUp(progressBar);
+			}
 			
+			protected function stopProgressBar():void {
+				PopUpManager.removePopUp(progressBar);
+			}
+			
+			protected function structuredSearch():void {
+				//todo show progress bar
+				if (knockoutsAutoComplete.selectedItems.length == 0 && envPertAutoComplete.selectedItems.length == 0) {
+					Alert.show("Empty Search!");
+					return;
+				}
+				startProgressBar();
+				var params:Object = new Object();
+				/*
+				var koList:Array = new Array();
+				for(var i:int = 0; i < knockoutsAutoComplete.selectedItems.length; i++) {
+					koList.push(knockoutsAutoComplete.selectedItems[i]);
+				}
+				*/
+				params['knockouts'] = knockoutsAutoComplete.selectedItem;
+				
+				/*
+				var epList:Array = new Array();
+				for(var j:int = 0; j < envPertAutoComplete.selectedItems.length; j++) {
+					epList.push(envPertAutoComplete.selectedItems[j]);
+				}
+				*/ 
+				params['env_perts'] = envPertAutoComplete.selectedItem;
+				if (refineCurrentlyDisplayedResultsCheckBox.selected) {
+					params['currently_displayed_ids'] = JSON.encode(currentlyDisplayedIds);
+				}
+				params['include_related_results'] = (includeRelatedResultsCheckBox.selected) ? "true" : "false";
+				
+				Util.ajax("main/structured_search", params, function(event:ResultEvent):void{
+					trace("in structured search callback");
+					stopProgressBar();
+					if (event.result.toString() == "none") {
+						Alert.show("Nothing matches your search.");
+						return;
+					}
+					//Alert.show("OK: " + event.result.toString());
+					//todo - populate search terms label
+					PopUpManager.removePopUp(thisWindow);
+					dispatchEvent(event);
+					
+				},ajaxFault.ajaxFault, "POST");
+				
+			}
+			
+			
+			protected function rememberThisSearch():void {
+				
+			}
 			
 		]]>
 	</mx:Script>
-	<mx:Text x="406" y="55" width="101" id="loadingLabel"/>
-	
 	
 	
 	

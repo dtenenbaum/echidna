@@ -22,8 +22,8 @@ class Condition < ActiveRecord::Base
     sql = "select condition_id, count(id) as result from condition_groupings where condition_id in (?) group by condition_id"
     results = Condition.find_by_sql([sql,conds.map{|i|i.id}])
     results_hash = {}
-    results.each do |result|
-      results_hash[result.condition_id.to_i] = result.result
+    results.each do |item|
+      results_hash[item.condition_id.to_i] = item.result
     end
     conds.each do |cond|
       if results_hash.has_key?(cond.id.to_i)
