@@ -27,7 +27,7 @@
 	<mx:Label x="257" y="169" text="Environmental Perturbation:"/>
 	<hc:AutoComplete x="257" y="185" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="false"
 		matchType="anyPart" prompt="None"/>
-	<mx:CheckBox id="includeRelatedResultsCheckBox" x="40" y="233" label="Include related results (controls, etc)" enabled="false"/>
+	<mx:CheckBox id="includeRelatedResultsCheckBox" x="40" y="233" label="Include related results (controls, etc)" enabled="true"/>
 	<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="40" y="263" label="Refine currently displayed results?"/>
 	<mx:Button x="40" y="335" label="Structured Search" click="structuredSearch()"/>
 	<mx:Button x="177" y="335" label="Cancel" click="PopUpManager.removePopUp(this)"/>

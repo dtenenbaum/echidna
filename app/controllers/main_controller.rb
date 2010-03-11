@@ -179,13 +179,7 @@ class MainController < ApplicationController
   end
   
   def get_conditions_for_group
-    sql=<<"EOF"
-    select c.id as id, c.name from conditions c, condition_groupings g
-    where g.condition_id = c.id
-    and g.condition_group_id = ?
-    order by g.sequence
-EOF
-    conds = Condition.find_by_sql([sql, params[:group_id]])
+    conds = find_conditions_for_group(params[:group_id])
       render :text => conds.to_json
   end
   
@@ -438,14 +432,43 @@ EOF
       conds = refined
     end
     
+    
+    if (include_related_results)
+      group_ids = ConditionGrouping.find_by_sql(["select distinct condition_group_id from condition_groupings where condition_id in (?)",
+        conds.map{|i|i.id}.join(",")])
+      related_groups = []
+      for group_id in group_ids
+        related_groups += find_related_groups(group_id)
+      end
+      
+      related_conds = []
+      for group in related_groups
+        related_conds += find_conditions_for_group(group.id)
+      end
+      
+      tmp = conds + related_conds
+      
+      conds = tmp.uniq
+      
+      # find group ids
+      # find related groups
+      # find conds from those
+      # merge them with conds
+    end
+    
 
     sorted_conds = sort_conditions_for_time_series(conds)
     
     sorted_conds = Condition.populate_num_groups(sorted_conds)
     
+    
+    
+    
     if (sorted_conds.empty?)
+      puts "sorted conds: no match"
       render :text => "none" and return false
     else
+      puts "structured search returning #{sorted_conds.size} results"
       render :text => sorted_conds.to_json(:methods => :num_groups) and return false
     end
     

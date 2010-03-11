@@ -39,6 +39,15 @@ module Util
     related_groups
   end
   
+    def find_conditions_for_group(group_id)
+      sql=<<"EOF"
+      select c.id as id, c.name from conditions c, condition_groupings g
+      where g.condition_id = c.id
+      and g.condition_group_id = ?
+      order by g.sequence
+EOF
+      conds = Condition.find_by_sql([sql, group_id])
+    end
   
   
   def sort_conditions_for_time_series(conds)
