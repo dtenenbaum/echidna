@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="300" creationComplete="init()"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="900" height="638" creationComplete="init()"
 	title="Save Current Search">
 	<mx:Script>
 		<![CDATA[
@@ -7,19 +7,30 @@
 			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
 			
 			
-			protected var currentSearch:CurrentlyActiveSearch;
-				
+			public var currentSearch:CurrentlyActiveSearch;
+			
+					
 		
 			protected function init():void {
+				if (currentSearch.isStructured) {
+					searchTypeText.text  = "Structured";
+				} else {
+					searchTypeText.text = "Free Text";
+					savedSearchName.text = currentSearch.freeTextSearch.join("/");
+				}
+			}
+			
+			protected function saveSearch():void {
 				
 			}
+			
 		]]>
 	</mx:Script>
 	<mx:Label x="10" y="40" text="Search Type:"/>
 	<mx:Text x="105" y="40" id="searchTypeText" width="114"/>
-	<mx:Label x="10" y="10" text="Name for saved search:"/>
-	<mx:Text x="156" y="10" width="214" id="savedSearchName"/>
-	<mx:Button x="10" y="228" label="OK" id="okButton" enabled="false"/>
+	<mx:Label x="10" y="10" text="Name for saved search:" />
+	<mx:Text x="156" y="10" width="595" id="savedSearchName"/>
+	<mx:Button x="10" y="228" label="Save" id="saveButton" enabled="false" click="saveSearch()"/>
 	<mx:Button x="61" y="228" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
 	<mx:HRule x="10" y="36" height="4" width="114"/>
 </mx:TitleWindow>

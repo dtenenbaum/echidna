@@ -252,6 +252,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.dialog.SaveCurrentSearchDialog;
 			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
 			import org.systemsbiology.echidna.events.GetConditionsEvent;
 			import org.systemsbiology.echidna.dialog.ImportExperimentDialog;
@@ -1092,6 +1093,11 @@
 		}
 		
 		protected function saveCurrentSearch():void {
+			var saveCurrentSearchDialog:SaveCurrentSearchDialog = new SaveCurrentSearchDialog();//SaveCurrentSearchDialog(PopUpManager.createPopUp(app, SaveCurrentSearchDialog, true));
+			saveCurrentSearchDialog.currentSearch = currentlyActiveSearch;
+			PopUpManager.addPopUp(saveCurrentSearchDialog, app, true);
+			PopUpManager.centerPopUp(saveCurrentSearchDialog);
+			saveCurrentSearchDialog.currentSearch = currentlyActiveSearch;
 			
 		}
 		
