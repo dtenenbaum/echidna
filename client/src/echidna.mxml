@@ -198,7 +198,7 @@
 					<mx:HBox id="searchTermsHbox" visible="false">
 						<mx:Label text="Search Terms:"/>
 						<mx:Text id="searchTermsText"/>
-						<mx:Button label="Save Current Search" id="saveCurrentSearchButton" click="saveCurrentSearch()" enabled="false"/>
+						<mx:Button label="Save Current Search" id="saveCurrentSearchButton" click="saveCurrentSearch()" enabled="true"/>
 					</mx:HBox>
 				</mx:VBox>
 
