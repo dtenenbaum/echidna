@@ -198,6 +198,7 @@
 					<mx:HBox id="searchTermsHbox" visible="false">
 						<mx:Label text="Search Terms:"/>
 						<mx:Text id="searchTermsText"/>
+						<mx:Button label="Save Current Search" id="saveCurrentSearchButton" click="saveCurrentSearch()" enabled="false"/>
 					</mx:HBox>
 				</mx:VBox>
 
@@ -251,6 +252,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
 			import org.systemsbiology.echidna.events.GetConditionsEvent;
 			import org.systemsbiology.echidna.dialog.ImportExperimentDialog;
 			import org.systemsbiology.echidna.events.SearchResultsReturnedEvent;
@@ -331,6 +333,10 @@
 		protected var alreadyResetPassword:Boolean = false;
 		
 		protected var ajaxFault:EchidnaAjaxFault;
+		
+		protected var lastAccordionItemClicked:String = null;
+		
+		protected var currentlyActiveSearch:CurrentlyActiveSearch = new CurrentlyActiveSearch();
 		
 			
 		public function init():void {
@@ -436,6 +442,11 @@
 		
 		protected function setResultsShown(event:ListEvent):void {
 			trace("in setResultsShown()");
+			
+			if(resultsChoicesGrid.selectedItem.shortname != 'search') {
+				lastAccordionItemClicked = resultsChoicesGrid.selectedItem.shortname;
+			}
+			
 			if (resultsChoicesGrid.selectedItems.length == 0) {
 				Alert.show("You must choose some category of conditions");
 				return;			
@@ -492,6 +503,7 @@
 		}
 		
 		protected function accordionClick(event:MouseEvent):void {
+			lastAccordionItemClicked = null;
 			searchTermsHbox.visible = false;
 			groupedInAC = new ArrayCollection();
 			trace("accordion clicked, current state is " + currentState);
@@ -1046,6 +1058,8 @@
 		
 		protected function showSearchDialog():void {
 			var searchDialog:SearchDialog = SearchDialog(PopUpManager.createPopUp(app, SearchDialog, true));
+			searchDialog.currentlyActiveSearch = currentlyActiveSearch;
+			searchDialog.lastResultsOptionSelected = lastAccordionItemClicked;
 			//searchDialog.searchItems = autoCompletionItemsAC;
 			var currentlyDisplayedIds:Array = new Array();
 			for (var i:int = 0; i < conditionsAC.length; i++) {
@@ -1065,6 +1079,7 @@
 				gotConditions(event);
 			});
 			searchDialog.addEventListener(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT, function(event:SearchResultsReturnedEvent):void {
+				trace("curr items free search length: " + currentlyActiveSearch.freeTextSearch.length);
 				searchTermsHbox.visible = true;
 				searchTermsText.text = event.searchTerms.join(", ");
 			});
@@ -1074,6 +1089,10 @@
 			var id:String = groupedInGrid.selectedItem['id'];
 			//populateGroupGrid(id);
 			trace("like an idiot, you clicked on " + id + ".");
+		}
+		
+		protected function saveCurrentSearch():void {
+			
 		}
 		
 		

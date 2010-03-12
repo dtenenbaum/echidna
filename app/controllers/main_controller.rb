@@ -134,7 +134,11 @@ class MainController < ApplicationController
     results = Condition.find_by_sql(["select * from conditions where id in (?)",ids])
     sorted_conds = sort_conditions_for_time_series(results)
     sorted_conds = Condition.populate_num_groups(sorted_conds)
-    render :text => sorted_conds.to_json(:methods => :num_groups)
+    if (sorted_conds.empty?)
+      render :text => "none" and return false
+    else
+      render :text => sorted_conds.to_json(:methods => :num_groups) and return false
+    end
   end
   
   def get_all_conditions

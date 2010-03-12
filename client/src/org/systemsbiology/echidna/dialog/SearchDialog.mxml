@@ -31,12 +31,13 @@
 	<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="40" y="263" label="Refine currently displayed results?"/>
 	<mx:Button x="40" y="335" label="Structured Search" click="structuredSearch()"/>
 	<mx:Button x="177" y="335" label="Cancel" click="PopUpManager.removePopUp(this)"/>
-	<mx:Button x="104" y="293" label="Remember This Search" click="rememberThisSearch()" enabled="false"/>
 	
 
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.common.SubSearch;
+			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
 			import mx.core.IFlexDisplayObject;
 			import org.systemsbiology.echidna.events.StopProgressBarEvent;
 			import org.systemsbiology.echidna.events.SearchResultsReturnedEvent;
@@ -71,6 +72,9 @@
 			private var progressBar:ProgressBarDialog;
 			
 			private var thisWindow:IFlexDisplayObject;
+			
+			public var currentlyActiveSearch:CurrentlyActiveSearch;
+			public var lastResultsOptionSelected:String;
 			
 			//loadedStrains?
 			
@@ -173,19 +177,27 @@
 			}
 
 			protected function search():void {
-				if (autoComplete.selectedItems.length == 0) {
+				trace("autoComplete.searchText = " + autoComplete.searchText);
+				if (autoComplete.selectedItems.length == 0 && (autoComplete.searchText == null || autoComplete.searchText == "") ) {
 					Alert.show("Nothing to search for!");
 					return;
 				}
+			
 				trace("num items selected:" +  autoComplete.selectedItems.length);
 				searchArr = new Array();
 				for(var i:int = 0; i < autoComplete.selectedItems.length; i++) {
 					searchArr.push(autoComplete.selectedItems[i]['name']);
 				}
+				
+				if (searchArr.length == 0) {
+					searchArr.push(autoComplete.searchText);
+				}
+				
+
+				
 				var search:String = JSON.encode(searchArr);
 				//loadingLabel.text = "Loading...";
 				
-				PopUpManager.removePopUp(this);
 				
 				Util.ajax("main/search_conditions", {"search": search}, searchResult, searchFault);
 				var startProgressBarEvent:StartProgressBarEvent = new StartProgressBarEvent(StartProgressBarEvent.START_PROGRESS_BAR_EVENT);
@@ -193,6 +205,17 @@
 			}				
 			
 			protected function searchResult(event:ResultEvent): void {
+				if (event.result.toString() == "none") {
+					var stopProgressBarEvent:StopProgressBarEvent = new StopProgressBarEvent(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT);
+					dispatchEvent(stopProgressBarEvent);
+					Alert.show("Nothing matches your search.");
+					return;
+				}
+				currentlyActiveSearch.freeTextSearch = searchArr;
+				currentlyActiveSearch.isStructured = false; 
+				trace("currently active search:\n" + currentlyActiveSearch.toString());
+				
+				PopUpManager.removePopUp(this);
 				var srre:SearchResultsReturnedEvent = new SearchResultsReturnedEvent(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT);
 				srre.searchTerms = searchArr;
 				dispatchEvent(srre);
@@ -249,6 +272,25 @@
 						Alert.show("Nothing matches your search.");
 						return;
 					}
+					currentlyActiveSearch.isStructured = true;
+					
+					var subSearch:SubSearch = new SubSearch();
+					subSearch.envPert = envPertAutoComplete.selectedItem;
+					subSearch.knockout = knockoutsAutoComplete.selectedItem;
+					subSearch.includeRelated = includeRelatedResultsCheckBox.selected;
+					subSearch.lastResultsOptionSelected = lastResultsOptionSelected;
+					
+					
+					if (refineCurrentlyDisplayedResultsCheckBox.selected) {
+						subSearch.refine = true;
+						currentlyActiveSearch.subSearches.push(subSearch);
+					} else {
+						currentlyActiveSearch.subSearches = new Array();
+						currentlyActiveSearch.subSearches.push(subSearch);
+					} 
+					
+					trace("currently active search:\n" + currentlyActiveSearch.toString()) ;
+					
 					//Alert.show("OK: " + event.result.toString());
 					//todo - populate search terms label
 					PopUpManager.removePopUp(thisWindow);
@@ -258,10 +300,6 @@
 				
 			}
 			
-			
-			protected function rememberThisSearch():void {
-				
-			}
 			
 		]]>
 	</mx:Script>
