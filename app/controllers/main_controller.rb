@@ -479,8 +479,18 @@ class MainController < ApplicationController
 
   end
   
+  def save_search
+    puts "in save_search, input is:\n#{params[:search]}"
+    render :text => "ok"
+  end
+  
   def test
     render :text => "ok"
+  end
+  
+  def get_timestamp_from_search_terms
+    render :text => SearchTerm.find_by_sql("select max(int_timestamp) as result from search_terms").first.result
+    
   end
   
 end

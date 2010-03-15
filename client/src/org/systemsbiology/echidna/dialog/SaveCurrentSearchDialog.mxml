@@ -3,25 +3,34 @@
 	title="Save Current Search">
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
+			import mx.rpc.events.ResultEvent;
+			import com.adobe.serialization.json.JSON;
+			import org.systemsbiology.echidna.common.Util;
 			import mx.managers.PopUpManager;
 			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
 			
 			
 			public var currentSearch:CurrentlyActiveSearch;
 			
+			protected var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
 					
 		
 			protected function init():void {
 				if (currentSearch.isStructured) {
 					searchTypeText.text  = "Structured";
+					savedSearchName.text = currentSearch.toString();
 				} else {
 					searchTypeText.text = "Free Text";
 					savedSearchName.text = currentSearch.freeTextSearch.join("/");
+					 
 				}
 			}
 			
 			protected function saveSearch():void {
-				
+				Util.ajax("main/save_search", {"search": JSON.encode(currentSearch)},function(event:ResultEvent):void {
+					
+				},ajaxFault.ajaxFault);
 			}
 			
 		]]>
@@ -30,7 +39,7 @@
 	<mx:Text x="105" y="40" id="searchTypeText" width="114"/>
 	<mx:Label x="10" y="10" text="Name for saved search:" />
 	<mx:Text x="156" y="10" width="595" id="savedSearchName"/>
-	<mx:Button x="10" y="228" label="Save" id="saveButton" enabled="false" click="saveSearch()"/>
+	<mx:Button x="10" y="228" label="Save" id="saveButton" enabled="true" click="saveSearch()"/>
 	<mx:Button x="61" y="228" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
 	<mx:HRule x="10" y="36" height="4" width="114"/>
 </mx:TitleWindow>

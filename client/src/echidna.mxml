@@ -252,6 +252,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.common.SearchTerms;
 			import org.systemsbiology.echidna.dialog.SaveCurrentSearchDialog;
 			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
 			import org.systemsbiology.echidna.events.GetConditionsEvent;
@@ -302,6 +303,9 @@
 		import mx.rpc.events.ResultEvent;
 		
 		import com.adobe.serialization.json.JSON;
+		
+		
+		protected var searchTerms:SearchTerms = new SearchTerms();
 		
 		
 		protected var app:DisplayObject;;
@@ -1060,6 +1064,7 @@
 		protected function showSearchDialog():void {
 			var searchDialog:SearchDialog = SearchDialog(PopUpManager.createPopUp(app, SearchDialog, true));
 			searchDialog.currentlyActiveSearch = currentlyActiveSearch;
+			searchDialog.searchTerms = searchTerms;
 			searchDialog.lastResultsOptionSelected = lastAccordionItemClicked;
 			//searchDialog.searchItems = autoCompletionItemsAC;
 			var currentlyDisplayedIds:Array = new Array();
@@ -1093,7 +1098,7 @@
 		}
 		
 		protected function saveCurrentSearch():void {
-			var saveCurrentSearchDialog:SaveCurrentSearchDialog = new SaveCurrentSearchDialog();//SaveCurrentSearchDialog(PopUpManager.createPopUp(app, SaveCurrentSearchDialog, true));
+			var saveCurrentSearchDialog:SaveCurrentSearchDialog = new SaveCurrentSearchDialog();
 			saveCurrentSearchDialog.currentSearch = currentlyActiveSearch;
 			PopUpManager.addPopUp(saveCurrentSearchDialog, app, true);
 			PopUpManager.centerPopUp(saveCurrentSearchDialog);

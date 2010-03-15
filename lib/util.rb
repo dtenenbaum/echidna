@@ -128,7 +128,7 @@ EOF
   
   def add_knockouts
     puts "add_knockouts"
-    sql = "select k.gene as name, ka.condition_id from knockouts k, knockout_associations ka "
+    sql = "select k.gene as name, ka.condition_id from knockouts k, knockout_associations ka " +
       "where ka.knockout_id = k.id order by name, condition_id"
     add_items sql
   end
@@ -159,7 +159,7 @@ EOF
     items = Condition.find_by_sql(sql)
     #puts "# of items: #{items.size}, uniq size = #{items.uniq.size}"
     for item in items
-      s = SearchTerm.new(:condition_id => item.condition_id, :word => item.name)
+      s = SearchTerm.new(:condition_id => item.condition_id, :word => item.name, :creation_time => Time.now, :int_timestamp => Time.now.to_i)
       s.save
     end
   end
@@ -172,7 +172,7 @@ EOF
     f_arr = (fields.is_a?(Array)) ? fields : [fields]
     for item in items
       for thing in f_arr
-        s = SearchTerm.new(:condition_id => item.send(id_column), :word => item.send(thing))
+        s = SearchTerm.new(:condition_id => item.send(id_column), :word => item.send(thing), :creation_time => Time.now, :int_timestamp => Time.now.to_i)
         #pp s
         s.save
       end

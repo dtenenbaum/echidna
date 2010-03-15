@@ -36,6 +36,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.common.SearchTerms;
 			import org.systemsbiology.echidna.common.SubSearch;
 			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
 			import mx.core.IFlexDisplayObject;
@@ -75,6 +76,7 @@
 			
 			public var currentlyActiveSearch:CurrentlyActiveSearch;
 			public var lastResultsOptionSelected:String;
+			public var searchTerms:SearchTerms;
 			
 			//loadedStrains?
 			
@@ -97,19 +99,58 @@
 				envPertAutoComplete.setStyle("selectedItemStyleName", AutoComplete.STYLE_FACEBOOK);
 				envPertAutoComplete.showRemoveIcon = true;
 
-
-				
 				startProgressBar();
-				
-				loadSearchTerms();
-				loadKnockouts();
-				loadEnvPerts();
-				//load strains??
-				
 				addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
 					stopProgressBar();
 				});
+
+				//Alert.show("lastUpdated = " + searchTerms.lastUpdated);
+				
+				if (searchTerms.lastUpdated == -1) {
+					// go ahead and update here
+					setTimestamp();
+					update();
+				} else {
+					// find out if we need to update
+					Util.ajax("main/get_timestamp_from_search_terms", null, function(event:ResultEvent):void {
+						var latest:int = (int)(event.result.toString());
+						//Alert.show("raw value = " + event.result.toString() + ", latest = " + latest);
+						if (latest > searchTerms.lastUpdated) {
+							// update
+							searchTerms.lastUpdated = latest;
+							update();
+						} else {
+							// we're good
+							knockouts = searchTerms.knockouts;
+							envPerts = searchTerms.envPerts;
+							searchItems = searchTerms.searchTerms;
+							stopProgressBar();
+						}
+						
+						
+					}, ajaxFault.ajaxFault);
+				}
+				
+				
+				
+				
 			}
+			
+			private function setTimestamp():void {
+					Util.ajax("main/get_timestamp_from_search_terms", null, function(event:ResultEvent):void {
+						var latest:int = (int)(event.result.toString());
+						//Alert.show("raw value = " + event.result.toString() + ", latest = " + latest);
+						
+						searchTerms.lastUpdated = latest;
+					}, ajaxFault.ajaxFault);				
+			}
+			
+		   private function update():void {
+		   		loadSearchTerms();
+		   		loadKnockouts();
+		   		loadEnvPerts();
+				//load strains??
+		   }
 			
 			private function loadSearchTerms():void {
 				Util.ajax("main/get_auto_completion_items", null, function(event:ResultEvent):void {
@@ -122,6 +163,7 @@
 						tmp.addItem(obj);
 					}
 					searchItems = tmp;
+					searchTerms.searchTerms = searchItems;
 					loadedSearchTerms = true;
 					tryToStopProgressBar();
 					trace("done with get_auto_completion_items callback");
@@ -137,6 +179,7 @@
 						tmp.addItem(ary[i]);
 					}
 					knockouts = tmp;
+					searchTerms.knockouts = knockouts;
 					loadedKnockouts = true;
 					tryToStopProgressBar();
 				}, ajaxFault.ajaxFault);
@@ -152,6 +195,7 @@
 						tmp.addItem(ary[i]);
 					}
 					envPerts = tmp;
+					searchTerms.envPerts = envPerts;
 					loadedEnvPerts = true;
 					tryToStopProgressBar();					
 				}, ajaxFault.ajaxFault);
@@ -294,6 +338,14 @@
 					//Alert.show("OK: " + event.result.toString());
 					//todo - populate search terms label
 					PopUpManager.removePopUp(thisWindow);
+					
+					
+					
+					var srre:SearchResultsReturnedEvent = new SearchResultsReturnedEvent(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT);
+					srre.searchTerms  = ["The quick brown fox"];
+					dispatchEvent(srre);
+
+					
 					dispatchEvent(event);
 					
 				},ajaxFault.ajaxFault, "POST");
