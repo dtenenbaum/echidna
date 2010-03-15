@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="336" height="456" title="Saved Searches" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			protected function init():void {
+			}
+			
+			
+		]]>
+	</mx:Script>
+	<mx:DataGrid x="0" y="0">
+		<mx:columns>
+			<mx:DataGridColumn headerText="Column 1" dataField="col1"/>
+			<mx:DataGridColumn headerText="Column 2" dataField="col2"/>
+			<mx:DataGridColumn headerText="Column 3" dataField="col3"/>
+		</mx:columns>
+	</mx:DataGrid>
+	<mx:Button x="10" y="378" label="Run Search"/>
+	<mx:Button x="108" y="378" label="Cancel" click="PopUpManager.removePopUp(this)"/>
+	<mx:TextArea x="0" y="150" width="302" height="109" text="coming soon..."/>
+</mx:TitleWindow>

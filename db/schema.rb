@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100315190238) do
+ActiveRecord::Schema.define(:version => 20100315225539) do
 
   create_table "citations", :force => true do |t|
     t.integer "paper_id",     :limit => 11
@@ -181,6 +181,17 @@ ActiveRecord::Schema.define(:version => 20100315190238) do
     t.string "alternate_name"
   end
 
+  create_table "sub_searches", :force => true do |t|
+    t.integer "user_search_id",               :limit => 11
+    t.string  "environmental_perturbation"
+    t.string  "knockout"
+    t.string  "free_text_term"
+    t.boolean "include_related"
+    t.boolean "refine"
+    t.string  "last_results_option_selected"
+    t.integer "sequence",                     :limit => 11
+  end
+
   create_table "tag_categories", :force => true do |t|
     t.string "category_name"
   end
@@ -197,6 +208,10 @@ ActiveRecord::Schema.define(:version => 20100315190238) do
   create_table "user_searches", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
+    t.boolean  "is_structured"
+    t.integer  "user_id",                :limit => 11
+    t.string   "free_text_search_terms"
   end
 
   create_table "users", :force => true do |t|

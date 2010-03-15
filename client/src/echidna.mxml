@@ -36,6 +36,10 @@
             <name>Search</name>
             <shortname>search</shortname>
         </category>
+        <category>
+            <name>Saved Searches</name>
+            <shortname>savedSearches</shortname>
+        </category>
     </mx:XMLList>
 	
 	<mx:Panel x="5" y="-10" width="100%" height="100%" layout="absolute" borderStyle="solid" id="mainPanel">
@@ -252,6 +256,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.dialog.ShowSavedSearchesDialog;
 			import org.systemsbiology.echidna.common.SearchTerms;
 			import org.systemsbiology.echidna.dialog.SaveCurrentSearchDialog;
 			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
@@ -448,9 +453,6 @@
 		protected function setResultsShown(event:ListEvent):void {
 			trace("in setResultsShown()");
 			
-			if(resultsChoicesGrid.selectedItem.shortname != 'search') {
-				lastAccordionItemClicked = resultsChoicesGrid.selectedItem.shortname;
-			}
 			
 			if (resultsChoicesGrid.selectedItems.length == 0) {
 				Alert.show("You must choose some category of conditions");
@@ -464,7 +466,13 @@
 				showSearchDialog();
 				return;
 			}
+			if (resultsChoicesGrid.selectedItem.shortname == 'savedSearches') {
+				//dante
+				showSavedSearchesDialog();
+				return;
+			}
 			startProgressBar();
+			lastAccordionItemClicked = resultsChoicesGrid.selectedItem.shortname;
 			Util.ajax("main/get_filtered_conditions", {"result_type" : resultsChoicesGrid.selectedItem.shortname}, gotConditions, ajaxFault.ajaxFault);
 		}
 		
@@ -1106,6 +1114,11 @@
 			
 		}
 		
+		protected function showSavedSearchesDialog():void {
+			var showSavedSearchesDialog:ShowSavedSearchesDialog = new ShowSavedSearchesDialog();
+			PopUpManager.addPopUp(showSavedSearchesDialog, app, true);
+			PopUpManager.centerPopUp(showSavedSearchesDialog);
+		}
 		
 		]]>
 	</mx:Script>

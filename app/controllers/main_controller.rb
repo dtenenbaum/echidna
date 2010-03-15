@@ -481,6 +481,35 @@ class MainController < ApplicationController
   
   def save_search
     puts "in save_search, input is:\n#{params[:search]}"
+    search = ActiveSupport::JSON.decode params[:search]
+    # todo - determine whether this is a duplicate
+    existing = UserSearch.find_by_name_and_user_id(search['name'], session[:user_id])
+    render :text => "duplicate" and return false unless existing.nil?
+    free_text_search_terms = (search['isStructured']) ? nil : search.freeTextSearch.join("~~")
+    begin
+      UserSearch.transaction do
+        user_search = UserSearch.new(:name => search['name'], :is_structured => search['isStructured'], :user_id => session[:user_id],
+          :free_text_search_terms => free_text_search_terms)
+        user_search.save
+        if (search['isStructured'])
+          search['subSearches'].each_with_index do |sub_search, i|
+            ss = SubSearch.new(:user_search_id => user_search.id, 
+              :environmental_perturbation => sub_search['envPert'],
+              :knockout => sub_search['knockout'],
+              :include_related => search['includeRelated'],
+              :refine => search['refine'],
+              :last_results_option_selected => search['lastResultsOptionSelected'],
+              :sequence => i+1)
+            ss.save
+          end
+        end
+      end
+    rescue Exception => ex
+      puts ex.message
+      puts ex.backtrace
+    end
+    
+    
     render :text => "ok"
   end
   
@@ -490,7 +519,6 @@ class MainController < ApplicationController
   
   def get_timestamp_from_search_terms
     render :text => SearchTerm.find_by_sql("select max(int_timestamp) as result from search_terms").first.result
-    
   end
   
 end

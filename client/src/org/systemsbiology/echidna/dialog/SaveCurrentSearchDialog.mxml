@@ -3,6 +3,8 @@
 	title="Save Current Search">
 	<mx:Script>
 		<![CDATA[
+			import mx.core.IFlexDisplayObject;
+			import mx.controls.Alert;
 			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			import mx.rpc.events.ResultEvent;
 			import com.adobe.serialization.json.JSON;
@@ -14,22 +16,33 @@
 			public var currentSearch:CurrentlyActiveSearch;
 			
 			protected var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
+			
+			protected var thisWindow:IFlexDisplayObject;
 					
 		
 			protected function init():void {
+				
+				thisWindow = this as IFlexDisplayObject;
+				
 				if (currentSearch.isStructured) {
 					searchTypeText.text  = "Structured";
-					savedSearchName.text = currentSearch.toString();
+					savedSearchName.text = currentSearch.briefName();
 				} else {
 					searchTypeText.text = "Free Text";
-					savedSearchName.text = currentSearch.freeTextSearch.join("/");
+					savedSearchName.text = currentSearch.briefName();
 					 
 				}
 			}
 			
 			protected function saveSearch():void {
+				//todo validate name
+				currentSearch.name = savedSearchName.text;
 				Util.ajax("main/save_search", {"search": JSON.encode(currentSearch)},function(event:ResultEvent):void {
-					
+					if (event.result.toString() == "duplicate") {
+						Alert.show("A search by this name is already saved.");
+						return;
+					}
+					PopUpManager.removePopUp(thisWindow);
 				},ajaxFault.ajaxFault);
 			}
 			
@@ -38,8 +51,8 @@
 	<mx:Label x="10" y="40" text="Search Type:"/>
 	<mx:Text x="105" y="40" id="searchTypeText" width="114"/>
 	<mx:Label x="10" y="10" text="Name for saved search:" />
-	<mx:Text x="156" y="10" width="595" id="savedSearchName"/>
+	<mx:TextInput x="156" y="10" width="595" id="savedSearchName"/>
 	<mx:Button x="10" y="228" label="Save" id="saveButton" enabled="true" click="saveSearch()"/>
-	<mx:Button x="61" y="228" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
+	<mx:Button x="72" y="228" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
 	<mx:HRule x="10" y="36" height="4" width="114"/>
 </mx:TitleWindow>

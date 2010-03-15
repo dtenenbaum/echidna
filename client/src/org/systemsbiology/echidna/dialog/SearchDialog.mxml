@@ -111,7 +111,8 @@
 					setTimestamp();
 					update();
 				} else {
-					// find out if we need to update
+					// find out if we need to update 
+					// todo refactor to remove code duplication (see setTimestamp())
 					Util.ajax("main/get_timestamp_from_search_terms", null, function(event:ResultEvent):void {
 						var latest:int = (int)(event.result.toString());
 						//Alert.show("raw value = " + event.result.toString() + ", latest = " + latest);
@@ -334,6 +335,7 @@
 					} 
 					
 					trace("currently active search:\n" + currentlyActiveSearch.toString()) ;
+					trace("brief name:\n" + currentlyActiveSearch.briefName());
 					
 					//Alert.show("OK: " + event.result.toString());
 					//todo - populate search terms label
@@ -342,7 +344,7 @@
 					
 					
 					var srre:SearchResultsReturnedEvent = new SearchResultsReturnedEvent(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT);
-					srre.searchTerms  = ["The quick brown fox"];
+					srre.searchTerms  = [currentlyActiveSearch.briefName()];//todo fix mismatch
 					dispatchEvent(srre);
 
 					
