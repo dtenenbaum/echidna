@@ -924,7 +924,8 @@
 		}
 		
 		public function loggedIn(event:ResultEvent):void {
-			getConditions();
+			//getConditions();
+			populateGroupGrid(null);
 		}
 
 		public function getConditions():void {
