@@ -69,7 +69,7 @@
 			private var ajaxFault:EchidnaAjaxFault;
 
 			protected function init():void {
-				ajaxFault = EchidnaAjaxFault(this);
+				ajaxFault = new EchidnaAjaxFault();
 				var _mwSupport:ExternalMouseWheelSupport = ExternalMouseWheelSupport.getInstance(stage); 
 				bm = BrowserManager.getInstance();
 				bm.init("","DMV - ratios");
