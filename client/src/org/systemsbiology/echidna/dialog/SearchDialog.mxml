@@ -290,20 +290,8 @@
 				}
 				startProgressBar();
 				var params:Object = new Object();
-				/*
-				var koList:Array = new Array();
-				for(var i:int = 0; i < knockoutsAutoComplete.selectedItems.length; i++) {
-					koList.push(knockoutsAutoComplete.selectedItems[i]);
-				}
-				*/
 				params['knockouts'] = knockoutsAutoComplete.selectedItem;
 				
-				/*
-				var epList:Array = new Array();
-				for(var j:int = 0; j < envPertAutoComplete.selectedItems.length; j++) {
-					epList.push(envPertAutoComplete.selectedItems[j]);
-				}
-				*/ 
 				params['env_perts'] = envPertAutoComplete.selectedItem;
 				if (refineCurrentlyDisplayedResultsCheckBox.selected) {
 					params['currently_displayed_ids'] = JSON.encode(currentlyDisplayedIds);

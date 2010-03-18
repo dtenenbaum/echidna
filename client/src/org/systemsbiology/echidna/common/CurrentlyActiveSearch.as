@@ -16,7 +16,8 @@ package org.systemsbiology.echidna.common
 		}
 		
 		public function toString():String {
-			var s:String = "isStructured: " + isStructured + "\n";
+			var s:String = "name: " + name + "\n"; 
+			s += "isStructured: " + isStructured + "\n";
 			if (isStructured) {
 				s += "sub searches:\n";
 				for (var x:int = 0; x < subSearches.length; x++) {

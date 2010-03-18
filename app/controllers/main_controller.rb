@@ -485,7 +485,7 @@ class MainController < ApplicationController
     # todo - determine whether this is a duplicate
     existing = UserSearch.find_by_name_and_user_id(search['name'], session[:user_id])
     render :text => "duplicate" and return false unless existing.nil?
-    free_text_search_terms = (search['isStructured']) ? nil : search.freeTextSearch.join("~~")
+    free_text_search_terms = (search['isStructured']) ? nil : search['freeTextSearch'].join("~~")
     begin
       UserSearch.transaction do
         user_search = UserSearch.new(:name => search['name'], :is_structured => search['isStructured'], :user_id => session[:user_id],
@@ -519,6 +519,23 @@ class MainController < ApplicationController
   
   def get_timestamp_from_search_terms
     render :text => SearchTerm.find_by_sql("select max(int_timestamp) as result from search_terms").first.result
+  end
+  
+  def get_saved_searches
+    results = UserSearch.find_all_by_user_id session[:user_id], :order => 'name', :include => :sub_searches
+    pp results
+    render :text => results.to_json(:methods => :sub_searches)
+  end
+  
+  def run_saved_search
+    canned_search = ActiveSupport::JSON.decode params[:canned_search]
+    puts "canned search:"
+    pp canned_search
+    
+    # determine depth of search
+    # canonical view
+    
+    render :text => "ok"
   end
   
 end

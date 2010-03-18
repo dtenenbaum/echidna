@@ -2,22 +2,130 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="336" height="456" title="Saved Searches" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.common.SubSearch;
+			import mx.controls.Alert;
+			import org.systemsbiology.echidna.events.SearchResultsReturnedEvent;
+			import org.systemsbiology.echidna.events.StopProgressBarEvent;
+			import mx.rpc.events.FaultEvent;
+			import org.systemsbiology.echidna.events.StartProgressBarEvent;
+			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
+			import mx.collections.ArrayCollection;
+			import com.adobe.serialization.json.JSON;
+			import mx.rpc.events.ResultEvent;
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
+			import org.systemsbiology.echidna.common.Util;
 			import mx.managers.PopUpManager;
 			
+			[Bindable]
+			protected var savedSearchesAC:ArrayCollection = new ArrayCollection();
+			
+			protected var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
+			protected var searchItems:Array;
+			
+			public var currentlyActiveSearch:CurrentlyActiveSearch;
+			
 			protected function init():void {
+				Util.ajax("main/get_saved_searches", null, function(event:ResultEvent):void {
+					var obj:Object = JSON.decode(event.result.toString());
+					savedSearchesAC =  Util.objectToArrayCollection(obj, "user_search");
+				
+				}, ajaxFault.ajaxFault);
+			}
+			
+			protected function runSearch():void {
+				var selectedSearch:Object = savedSearchGrid.selectedItem;
+				if (selectedSearch['is_structured']) {
+					//cf
+					//var anActiveSearch:CurrentlyActiveSearch = getActiveSearchFromServerResults(selectedSearch);
+					//trace("hokay:\n" + anActiveSearch.toString());
+					Util.ajax("main/run_saved_search", {"canned_search": JSON.encode(selectedSearch)}, function(event:ResultEvent):void {
+						trace("in callback function");
+					}, ajaxFault.ajaxFault);
+					
+					
+				} else {
+					searchItems = selectedSearch['free_text_search_terms'].toString().split("~~");
+					var search:String = JSON.encode(searchItems);
+				
+				
+					Util.ajax("main/search_conditions", {"search": search}, searchResult, searchFault);
+					var startProgressBarEvent:StartProgressBarEvent = new StartProgressBarEvent(StartProgressBarEvent.START_PROGRESS_BAR_EVENT);
+					dispatchEvent(startProgressBarEvent);
+
+				}
 			}
 			
 			
+			protected function getActiveSearchFromServerResults(obj:Object):CurrentlyActiveSearch {
+				var ret:CurrentlyActiveSearch = new CurrentlyActiveSearch();
+				ret.isStructured = obj['is_structured'];
+				ret.freeTextSearch = obj['free_text_search_terms'];
+				ret.name = obj['name']
+				var subsearches:Array = new Array();
+				for(var i:int = 0; i < obj['sub_searches'].length; i++) {
+					var ss:Object = obj['sub_searches'][i]['sub_search'];
+					var subSearch:SubSearch = new SubSearch();
+					subSearch.envPert = ss['environmental_perturbation'];
+					subSearch.includeRelated = ss['include_related'];
+					subSearch.knockout = ss['knockout'];
+					subSearch.lastResultsOptionSelected = ss['last_results_option_selected'];
+					subSearch.refine = ss['refine'];
+					subsearches.push(subSearch);
+				}
+				
+				ret.subSearches = subsearches;
+				
+				return ret;
+			}
+			
+			protected function searchResult(event:ResultEvent):void {
+				if (event.result.toString() == "none") {
+					var stopProgressBarEvent:StopProgressBarEvent = new StopProgressBarEvent(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT);
+					dispatchEvent(stopProgressBarEvent);
+					Alert.show("Nothing matches your search.");
+					return;
+				}
+				currentlyActiveSearch.freeTextSearch = searchItems;
+				currentlyActiveSearch.isStructured = false; 
+				trace("currently active search:\n" + currentlyActiveSearch.toString());
+				
+				PopUpManager.removePopUp(this);
+				var srre:SearchResultsReturnedEvent = new SearchResultsReturnedEvent(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT);
+				srre.searchTerms = searchItems;
+				dispatchEvent(srre);
+				dispatchEvent(event);
+
+			}
+			
+			protected function searchFault(event:FaultEvent):void {
+				ajaxFault.ajaxFault(event);
+	
+			}
+			
+			protected function doppelKlick():void {
+				trace("doppelklik!");
+			}
+			
+			protected function showSearchDetails():void {
+				var selectedSearch:Object = savedSearchGrid.selectedItem;
+				if (selectedSearch['is_structured']) {
+					var anActiveSearch:CurrentlyActiveSearch = getActiveSearchFromServerResults(selectedSearch);
+					searchDetailsTextArea.text = anActiveSearch.briefName();
+					//searchDetailsTextArea.text = "Open the pod bay doors, Hal.";
+				} else {
+					var tmp:Array = selectedSearch['free_text_search_terms'].toString().split("~~");
+					searchDetailsTextArea.text = tmp.join("\n");
+				}				
+			}
+			
 		]]>
 	</mx:Script>
-	<mx:DataGrid x="0" y="0">
+	<mx:DataGrid x="0" y="0" id="savedSearchGrid" dataProvider="{savedSearchesAC}" click="showSearchDetails()" width="306" doubleClick="doppelKlick()">
 		<mx:columns>
-			<mx:DataGridColumn headerText="Column 1" dataField="col1"/>
-			<mx:DataGridColumn headerText="Column 2" dataField="col2"/>
-			<mx:DataGridColumn headerText="Column 3" dataField="col3"/>
+			<mx:DataGridColumn headerText="Name" dataField="name"/>
 		</mx:columns>
 	</mx:DataGrid>
-	<mx:Button x="10" y="378" label="Run Search"/>
+	<mx:Button x="10" y="378" label="Run Search" click="runSearch()"/>
 	<mx:Button x="108" y="378" label="Cancel" click="PopUpManager.removePopUp(this)"/>
-	<mx:TextArea x="0" y="150" width="302" height="109" text="coming soon..."/>
+	<mx:TextArea x="0" y="150" width="302" height="109"  id="searchDetailsTextArea"/>
 </mx:TitleWindow>
