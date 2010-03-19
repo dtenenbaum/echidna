@@ -3,27 +3,10 @@
 	close="PopUpManager.removePopUp(this)" title="DMV Plot">
 	<mx:Button x="10" y="422" label="OK" click="PopUpManager.removePopUp(this)"/>
 	<mx:LineChart x="93" y="10" id="linechart" width="680" height="434" dataProvider="{_plotData}" showDataTips="true">
-		<!--
-		<mx:verticalAxis>
-			<mx:CategoryAxis categoryField="value"/>
-		</mx:verticalAxis>
-		-->
 		
 		<mx:horizontalAxis>
 			<mx:CategoryAxis categoryField="condition" dataProvider="{_plotData}"/>
 		</mx:horizontalAxis>
-		<!--
-		<mx:series>
-           <mx:LineSeries 
-                yField="gene1"
-                displayName="gene1" 
-           />
-           <mx:LineSeries 
-                yField="gene2"
-                displayName="gene2"
-           />
-        </mx:series>
-        -->
 	</mx:LineChart>
 	<mx:Legend dataProvider="{linechart}"/>
 

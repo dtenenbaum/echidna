@@ -1,5 +1,7 @@
 package org.systemsbiology.echidna.ui
 {
+	
+	// TODO - move this out of ui package
 	import flash.events.EventDispatcher;
 	
 	import mx.controls.Alert;

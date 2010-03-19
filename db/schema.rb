@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100315225539) do
+ActiveRecord::Schema.define(:version => 20100319205548) do
 
   create_table "citations", :force => true do |t|
     t.integer "paper_id",     :limit => 11
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(:version => 20100315225539) do
     t.boolean  "is_time_series"
     t.integer  "owner_id",       :limit => 11
     t.integer  "importer_id",    :limit => 11
+    t.integer  "type",           :limit => 11
   end
 
   create_table "conditions", :force => true do |t|
