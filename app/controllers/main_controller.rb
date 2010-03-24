@@ -554,5 +554,10 @@ class MainController < ApplicationController
     
     render :text => "ok"
   end
-  
+
+  def get_condition_info_for_ids
+    ids = ActiveSupport::JSON::decode params[:cond_ids]
+    conds = Condition.find_by_sql(["select * from conditions where id in (?)",ids])
+    render :text => conds.to_json
+  end
 end

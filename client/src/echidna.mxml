@@ -895,7 +895,18 @@
 			if (groupsGrid.selectedItems.length == 1) {
 				updateRelatedGroupsGrid();
 				dmvButton.enabled = true;
-				Util.ajax('main/get_conditions_for_group',{"group_id" : groupsGrid.selectedItem['id']},function(event:ResultEvent):void{
+
+
+				var url:String = "main/get_conditions_for_group";
+				var params:Object = new Object();
+				if (groupsGrid.selectedItem['name'] == 'Ungrouped Results') {
+					url = "main/get_condition_info_for_ids";
+					params['cond_ids'] = JSON.encode(groupsGrid.selectedItem['ungrouped_ids']);
+				} else {
+					params["group_id"] = groupsGrid.selectedItem['id'];
+				}
+				
+				Util.ajax(url, params,function(event:ResultEvent):void{
 					var obj:Object = JSON.decode(event.result.toString());
 					
 					smallConditionsAC = Util.objectToArrayCollection(obj,'condition');
