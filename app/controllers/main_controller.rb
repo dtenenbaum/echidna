@@ -125,6 +125,7 @@ class MainController < ApplicationController
     render :text => "ok"
   end
  
+  # todo rename
   def search_conditions
     #render :text => "hi"
     #return false if true
@@ -132,13 +133,21 @@ class MainController < ApplicationController
     search = ActiveSupport::JSON.decode(params[:search])
     ids = Condition.find_by_sql(["select distinct condition_id from search_terms where word in (?)", search]).map{|i|i.condition_id}
     results = Condition.find_by_sql(["select * from conditions where id in (?)",ids])
-    sorted_conds = sort_conditions_for_time_series(results)
-    sorted_conds = Condition.populate_num_groups(sorted_conds)
-    if (sorted_conds.empty?)
+    
+    groups = get_groups_for_conditions(results)
+    if (groups.empty?)
       render :text => "none" and return false
     else
-      render :text => sorted_conds.to_json(:methods => :num_groups) and return false
+      render :text => groups.to_json(:methods => :ungrouped_ids)
     end
+    
+    #sorted_conds = sort_conditions_for_time_series(results)
+    #sorted_conds = Condition.populate_num_groups(sorted_conds)
+    #if (sorted_conds.empty?)
+    #  render :text => "none" and return false
+    #else
+    #  render :text => sorted_conds.to_json(:methods => :num_groups) and return false
+    #end
   end
   
   def get_all_conditions
@@ -460,21 +469,29 @@ class MainController < ApplicationController
       # merge them with conds
     end
     
-
-    sorted_conds = sort_conditions_for_time_series(conds)
     
-    sorted_conds = Condition.populate_num_groups(sorted_conds)
-    
-    
-    
-    
-    if (sorted_conds.empty?)
-      puts "sorted conds: no match"
+    groups = get_groups_for_conditions(conds)
+    if (groups.empty?)
       render :text => "none" and return false
     else
-      puts "structured search returning #{sorted_conds.size} results"
-      render :text => sorted_conds.to_json(:methods => :num_groups) and return false
+      render :text => groups.to_json(:methods => :ungrouped_ids)
     end
+    
+    
+    #sorted_conds = sort_conditions_for_time_series(conds)
+    
+    #sorted_conds = Condition.populate_num_groups(sorted_conds)
+    
+    
+    
+    
+    #if (sorted_conds.empty?)
+    #  puts "sorted conds: no match"
+    #  render :text => "none" and return false
+    #else
+    #  puts "structured search returning #{sorted_conds.size} results"
+    #  render :text => sorted_conds.to_json(:methods => :num_groups) and return false
+    #end
     
 
   end

@@ -164,6 +164,42 @@ EOF
     end
   end
   
+  def get_groups_for_conditions(conds)
+    groupings = ConditionGrouping.find :all
+    groupmap = {}
+    for grouping in groupings
+      groupmap[grouping.condition_id] = [] unless groupmap.has_key?(grouping.condition_id)
+      groupmap[grouping.condition_id] << grouping.condition_group_id
+    end
+#    puts "groupmap:"
+#    pp groupmap
+    group_ids_to_get = {}
+    ungrouped_ids = []
+    
+    for cond in conds
+      if (groupmap.has_key?(cond.id))
+        groupmap[cond.id].each do |item|
+          group_ids_to_get[item] = 1
+        end
+      else
+        ungrouped_ids << cond.id
+      end
+    end
+    puts "group_ids_to_get:"
+    pp group_ids_to_get
+    
+    puts
+    puts "ungrouped_ids:"
+    pp ungrouped_ids
+    
+    groups = ConditionGroup.find_by_sql(["select * from condition_groups where id in (?)", group_ids_to_get.keys])
+    ungroup = ConditionGroup.new(:name => 'Ungrouped Results')
+    ungroup.ungrouped_ids = ungrouped_ids
+    groups << ungroup unless ungrouped_ids.empty?
+    
+    groups
+  end
+  
   def add_search_term(table, fields)
     items = []
     line = "items = #{table}.find :all"

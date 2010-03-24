@@ -32,6 +32,7 @@
             <name>Shared By others</name>
             <shortname>sharedbyothers</shortname>
         </category>
+        <!--
         <category>
             <name>Search</name>
             <shortname>search</shortname>
@@ -40,6 +41,7 @@
             <name>Saved Searches</name>
             <shortname>savedSearches</shortname>
         </category>
+        -->
     </mx:XMLList>
     
     <mx:XMLList id="groupCategories">
@@ -477,7 +479,7 @@
 		
 		protected function setGroupsShown(event:ListEvent):void {
 			if (groupsChoicesGrid.selectedItem.shortname == 'groupSearch') {
-				Alert.show("Coming soon...");
+				showSearchDialog();
 				return;
 			}
 			if (groupsChoicesGrid.selectedItem.shortname == 'groupSavedSearches') {
@@ -941,6 +943,12 @@
 			stopProgressBar();
 		}
 		
+		public function gotGroups(event:ResultEvent):void {
+			trace("in gotGroups()");
+			groupsAC = Util.objectToArrayCollection(JSON.decode(event.result.toString()), 'condition_group');
+			trace("end of gotGroups");
+			stopProgressBar();
+		}
 		
 		public function populateEmailAddress(event:ResultEvent):void {
 			trace("in populateEmailAddress()");
@@ -1137,7 +1145,8 @@
 			});
 			searchDialog.addEventListener(ResultEvent.RESULT, function(event:ResultEvent):void {
 				stopProgressBar();
-				gotConditions(event);
+				//gotConditions(event);
+				gotGroups(event);
 			});
 			searchDialog.addEventListener(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT, function(event:SearchResultsReturnedEvent):void {
 				trace("curr items free search length: " + currentlyActiveSearch.freeTextSearch.length);
