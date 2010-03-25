@@ -74,7 +74,7 @@
 
 
 			<mx:Accordion id="accordion" width="100%" height="100%" enabled="true" click="accordionClick(event)">
-				<mx:Canvas label="Results" width="100%" height="100%" enabled="true" click="accordionClick(event)">
+				<mx:Canvas label="Conditions" width="100%" height="100%" enabled="true" click="accordionClick(event)">
 					<mx:DataGrid id="resultsChoicesGrid" dataProvider="{resultCategories}" width="100%" showHeaders="false" itemClick="setResultsShown(event)">
 						<mx:columns>
 							<mx:DataGridColumn dataField="name"/> 
@@ -107,7 +107,7 @@
 							allowMultipleSelection="true">
 							<mx:columns>
 								<mx:DataGridColumn headerText="Name" dataField="name"/>
-								<mx:DataGridColumn headerText="# Results" dataField="num_results"/>
+								<mx:DataGridColumn headerText="# of Conditions" dataField="num_results"/>
 							</mx:columns>
 						</mx:DataGrid>
 						<mx:VDividedBox height="100%" width="295" horizontalScrollPolicy="off" verticalScrollPolicy="off">
@@ -262,7 +262,7 @@
 		<menuItem label="Groups">
 			<menuItem label="Rename Selected Group..." eventName="group.renameSelectedGroup"/>
 			<menuItem label="Delete Selected Group..." eventName="group.deleteSelectedGroup"/>
-    	    <menuItem label="Go To Results View" eventName="group.goToResultsView"/>
+    	    <menuItem label="Go To Conditions View" eventName="group.goToResultsView"/>
 		</menuItem>
 		<menuItem label="Visualization">
 			<menuItem label="DMV" enabled="false"/>
