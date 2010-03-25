@@ -10,7 +10,7 @@
 			<hc:AutoComplete id="autoComplete" label="Search" dataProvider="{searchItems}" 
 				matchType="anyPart" labelField="name" allowMultipleSelection="true" prompt="Search"
 				change="autoCompleteChange(event)" searchChange="autoCompleteSearchChange(event)"
-				valueCommit="autoCompleteValueCommit(event)" height="24" width="136">
+				valueCommit="autoCompleteValueCommit(event)" height="24" width="828">
 				
 			</hc:AutoComplete>
 		</mx:VBox>
@@ -21,16 +21,16 @@
 
 	<mx:Text x="406" y="55" width="101" id="loadingLabel"/>
 	<mx:Label x="24" y="132" text="Structured Search:"/>
-	<mx:Label x="40" y="169" text="Knockout:"/>
+	<mx:Label x="41" y="159" text="Knockout:"/>
 	<hc:AutoComplete id="knockoutsAutoComplete" x="40" y="185" dataProvider="{knockouts}" allowMultipleSelection="false"
-		matchType="anyPart" prompt="None"/>
-	<mx:Label x="257" y="169" text="Environmental Perturbation:"/>
-	<hc:AutoComplete x="257" y="185" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="false"
-		matchType="anyPart" prompt="None"/>
-	<mx:CheckBox id="includeRelatedResultsCheckBox" x="40" y="233" label="Include related results (controls, etc)" enabled="true"/>
-	<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="40" y="263" label="Refine currently displayed results?"/>
-	<mx:Button x="40" y="335" label="Structured Search" click="structuredSearch()"/>
-	<mx:Button x="177" y="335" label="Cancel" click="PopUpManager.removePopUp(this)"/>
+		matchType="anyPart" prompt="None" width="812"/>
+	<mx:Label x="39" y="225" text="Environmental Perturbation:"/>
+	<hc:AutoComplete x="41" y="265" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="false"
+		matchType="anyPart" prompt="None" width="812"/>
+	<mx:CheckBox id="includeRelatedResultsCheckBox" x="31" y="309" label="Include related results (controls, etc)" enabled="true"/>
+	<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="31" y="358" label="Refine currently displayed results?"/>
+	<mx:Button x="31" y="401" label="Structured Search" click="structuredSearch()"/>
+	<mx:Button x="168" y="401" label="Cancel" click="PopUpManager.removePopUp(this)"/>
 	
 
 	
@@ -345,6 +345,7 @@
 			
 		]]>
 	</mx:Script>
+	
 	
 	
 	
