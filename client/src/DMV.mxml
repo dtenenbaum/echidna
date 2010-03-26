@@ -74,6 +74,7 @@
 			private var bm:IBrowserManager;
 			
 			private var groupId:String;
+			private var groupIds:String;
 			private var conditionIds:String;
 			private var dataProvided:Boolean = false;
 
@@ -100,13 +101,14 @@
 				
 				groupId = Util.getQueryStringItem(bm, "groupId");
 				conditionIds = Util.getQueryStringItem(bm, "conditionIds");
+				groupIds = Util.getQueryStringItem(bm, "groupIds");
 				
 				trace("group id = " + groupId);
 				
 				trace("DMV init.");
 				setupTabs();
 				
-				if (groupId != null || conditionIds != null) {
+				if (groupId != null || conditionIds != null || groupIds != null) {
 					dataProvided = true;
 				}
 				
@@ -131,10 +133,18 @@
 				if (groupId != null) {
 					ret['url'] = "main/get_data_for_group";
 					ret['group_id'] = groupId;
-				} else if (conditionIds != null) {
+				}
+				
+				if (conditionIds != null) {
 					ret['url'] = "main/get_data_for_conditions";
 					ret['condition_ids'] = conditionIds;
 				}
+				
+				if (groupIds != null) {
+					ret['url'] = 'main/get_data_for_groups';
+					ret['group_ids'] = groupIds;
+				}
+				
 				return ret;	
 			}
 			

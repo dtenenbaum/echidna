@@ -113,7 +113,7 @@
 						<mx:VDividedBox height="100%" width="295" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 							<mx:HBox id="hbox1">
 								<mx:Button id="removeConditionsButton" label="Remove" click="removeSelectedConditions()" enabled="false"/>
-								<mx:Button id="dmvButton" label="DMV" enabled="false" toolTip="View selected group in Data Matrix Viewer (DMV)" click="launchDmv()"/>
+								<mx:Button id="dmvButton" label="DMV" enabled="true" toolTip="View selected group in Data Matrix Viewer (DMV)" click="launchDmv()"/>
 								<mx:Button label="..." enabled="false" id="button1"/>
 							</mx:HBox>
 							<mx:VBox id="vbox1">
@@ -759,14 +759,14 @@
 			removeConditionsButton.enabled = false;
 			if (groupsGrid.selectedIndices.length == 1) {
 				onGroupRowSelected(event.rowIndex);
-				dmvButton.enabled = true;
+				//dmvButton.enabled = true;
 				relateButton.enabled = false;
 			} else if (groupsGrid.selectedIndices.length == 2) {
 				relateButton.enabled = true;
-				dmvButton.enabled = false;
+				//dmvButton.enabled = false;
 			} else {
 				relateButton.enabled = false;
-				dmvButton.enabled = false;
+				//dmvButton.enabled = false;
 			}
 			/*
 			removeConditionsButton.enabled = false;
@@ -894,7 +894,7 @@
 			
 			if (groupsGrid.selectedItems.length == 1) {
 				updateRelatedGroupsGrid();
-				dmvButton.enabled = true;
+				//dmvButton.enabled = true;
 
 
 				var url:String = "main/get_conditions_for_group";
@@ -912,7 +912,7 @@
 					smallConditionsAC = Util.objectToArrayCollection(obj,'condition');
 				}, ajaxFault.ajaxFault);
 			} else {
-				dmvButton.enabled = false;
+				//dmvButton.enabled = false;
 				smallConditionsAC = new ArrayCollection();
 			}
 			
@@ -1052,8 +1052,23 @@
 		protected function launchDmv():void {
 			var originalUrl:String = bm.url;
 			var url:String = URLUtil.getFullURL(originalUrl, "/DMV.html"); // this could break on some configs (non-virtualname)
-			url += "?groupId=" + groupsGrid.selectedItem['id'];
-			url += "&groupName=" + groupsGrid.selectedItem['name'];
+			
+			if (groupsGrid.selectedItems.length == 0) {
+				Alert.show("Nothing selected.");
+				return;
+			}
+			
+			if (groupsGrid.selectedItems.length == 1) {
+				url += "?groupId=" + groupsGrid.selectedItem['id'];
+				//url += "&groupName=" + groupsGrid.selectedItem['name'];
+			} else {
+				var ids:Array = new Array();
+				for (var i:int = 0; i < groupsGrid.selectedItems.length; i++) {
+					ids.push(groupsGrid.selectedItems[i]['id']);
+				}
+				url += "?groupIds=" + ids.join(",");
+			}
+			
 			newWin(url); 			
 		}
 		

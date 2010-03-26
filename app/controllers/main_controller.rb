@@ -298,6 +298,17 @@ class MainController < ApplicationController
     
   end
   
+  
+  def get_data_for_groups
+    group_ids = params[:group_ids].split(",")
+    cond_ids = []
+    for group_id in group_ids
+      cond_ids += ConditionGrouping.find_by_sql(["select condition_id from condition_groupings where condition_group_id = ? order by sequence",group_id])
+    end
+    data = get_matrix_data(cond_ids.map{|i|i.condition_id},params[:data_type])
+    render :text => as_json(data)
+  end
+  
   def get_data_for_group
     data = get_matrix_data_for_group(params[:group_id],params[:data_type])
     headers['Content-type'] = 'text/plain'
