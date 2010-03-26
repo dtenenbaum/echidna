@@ -474,6 +474,7 @@
             		a[i] = i;
             	}
             	getGridForCurrentTab().selectedIndices = a;
+            	dmvSelectionChanged(null);
             }	
             
             protected function toggleNames():void {
