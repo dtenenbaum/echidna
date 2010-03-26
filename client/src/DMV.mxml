@@ -2,7 +2,7 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV -- ratios"
 	applicationComplete="init()" xmlns:bridge="bridge.*" xmlns:ui="flex.utils.ui.*"  width="1595" height="1372" xmlns:hc="com.hillelcoren.components.*">
 	<bridge:FABridge bridgeName="flex"/>
-	<mx:Label x="115" y="797" id="gaggleStatus" width="332"/>
+	<mx:Label x="115" y="797" id="gaggleStatus" width="952" height="18"/>
 	<!-- IMPORTANT! Note that creationPolicy for TabNavigator is set to null by default (it's supposed to be set to auto). 
 		 So we need to set it to "all" here or we will have issues that will be hard to figure out. -->
 	<mx:TabNavigator id="tabNavigator" x="119" y="99" width="948" height="649" change="onTabChanged()" creationPolicy="all">
@@ -247,7 +247,9 @@
 			}
 			
 			// todo also fire event if column order is changed
+			// todo - only fire event if we know we are running firefox(+firegoose)
 			protected function dmvSelectionChanged(event:Event):void {
+				gaggleStatus.text = "";
 				trace("in dmvSelectionChanged, # rows selected is " + getGridForCurrentTab().selectedIndices.length);
 				numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
 				var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
@@ -271,20 +273,31 @@
 					headers.push(getGridForCurrentTab().columns[h].headerText);
 				}
 				matrix.push(headers);
+
+
 				
-				for (var i:int = 0; i < getGridForCurrentTab().selectedItems.length; i++) {
-					var row:Array = new Array();
-					namelist.push(getGridForCurrentTab().selectedItems[i]['gene']);
-					for (var j:int = 0; j < getGridForCurrentTab().columnCount; j++) {
-						var columnField:String = getGridForCurrentTab().columns[j].dataField;
-						row.push(getGridForCurrentTab().selectedItems[i][columnField]);
+				if (getGridForCurrentTab().selectedItems.length < 200) {
+					for (var i:int = 0; i < getGridForCurrentTab().selectedItems.length; i++) {
+						var row:Array = new Array();
+						namelist.push(getGridForCurrentTab().selectedItems[i]['gene']);
+						for (var j:int = 0; j < getGridForCurrentTab().columnCount; j++) {
+							var columnField:String = getGridForCurrentTab().columns[j].dataField;
+							row.push(getGridForCurrentTab().selectedItems[i][columnField]);
+						}
+						matrix.push(row);
 					}
-					matrix.push(row);
+
+					//todo - use indirect pointer to matrix - this causes a choke
+					evt.selectedNames = namelist;
+					evt.matrix = matrix;
+					trace("dispatching event to js...")
+					dispatchEvent(evt);
+				} else {
+					gaggleStatus.text = "Too many items selected -- namelist and matrix not set in Firegoose.";
 				}
-				evt.selectedNames = namelist;
-				evt.matrix = matrix;
-				trace("dispatching event to js...")
-				dispatchEvent(evt);
+
+				
+				
 			}
 			
 			protected function clearSelections():void {
@@ -380,8 +393,6 @@
 				
 				genesAC = tmpAC;
 				tmpAC = null;
-				trace("genesAC.length= " + genesAC.length);
-				trace("geneList.length = " + geneList.length);
 				
 				trace("current tab data size = " + getDataForCurrentTab().length);
 			}
@@ -469,7 +480,7 @@
             
             protected function selectAll():void {
             	//todo - make this select all in both tabs?
-            	var a:Array = [];
+            	var a:Array = new Array();
             	for (var i:int = 0; i < getDataForCurrentTab().length; i++) {
             		a[i] = i;
             	}
