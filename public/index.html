@@ -36,11 +36,11 @@ body { margin: 0px; overflow:hidden }
 // -----------------------------------------------------------------------------
 // Globals
 // Major version of Flash required
-var requiredMajorVersion = 9;
+var requiredMajorVersion = 10;
 // Minor version of Flash required
 var requiredMinorVersion = 0;
 // Minor version of Flash required
-var requiredRevision = 124;
+var requiredRevision = 0;
 // -----------------------------------------------------------------------------
 // -->
 </script>
@@ -155,7 +155,22 @@ if ( hasProductInstall && !hasRequestedVersion ) {
                 </div>
              </div>
         </div>
+		
+		<div id="gaggle_indirect_matrix_outer">
+			<gaggleData version="0.1">
+				<dataMatrix type="indirect" name="" species="" size="" url="">
+				</dataMatrix>
+			</gaggleData>
+		</div>
+		
+		<div id="gaggle_indirect_namelist_outer">
+			<gaggleData version="0.1">
+				<namelist type="indirect" name="" species="" url="" size=""/>
+			</gaggleData>
+		</div>
 
+
+		
 		<div id="gaggle_namelist_species_from_firegoose"></div>
 		<div id="gaggle_namelist_names_from_firegoose"></div>
 		<div id="gaggle_firegoose_event_listener_element"></div>

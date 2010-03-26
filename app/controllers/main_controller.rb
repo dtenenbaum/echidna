@@ -138,7 +138,14 @@ class MainController < ApplicationController
     if (groups.empty?)
       render :text => "none" and return false
     else
-      render :text => groups.to_json(:methods => :ungrouped_ids)
+      ret = []
+      groups.each do |g|
+        h = g.attributes
+        h['num_results'] = g.num_results
+        ret << {"condition_group" => h}
+      end
+      render :text => ret.to_json
+      #render :text => groups.to_json(:methods => :ungrouped_ids)
     end
     
     #sorted_conds = sort_conditions_for_time_series(results)
@@ -485,7 +492,17 @@ class MainController < ApplicationController
     if (groups.empty?)
       render :text => "none" and return false
     else
-      render :text => groups.to_json(:methods => :ungrouped_ids)
+      ret = []
+      groups.each do |g|
+        h = g.attributes
+        h['num_results'] = g.num_results
+        ret << {"condition_group" => h}
+      end
+      
+      
+      
+      #render :text => groups.to_json(:methods => :ungrouped_ids)
+      render :text => ret.to_json
     end
     
     

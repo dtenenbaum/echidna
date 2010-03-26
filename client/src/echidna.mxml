@@ -10,8 +10,8 @@
 			<mx:AddChild relativeTo="{hbox1}" position="lastChild">
 				<mx:Button label="Relate" id="relateButton" toolTip="Relate two groups" enabled="false" click="relateTwoGroups()"/>
 			</mx:AddChild>
-			<mx:RemoveChild target="{button1}"/>
-			<mx:AddChild relativeTo="{relateButton}" position="before" target="{button1}"/>
+			<mx:RemoveChild target="{showAllGroupsButton}"/>
+			<mx:AddChild relativeTo="{relateButton}" position="before" target="{showAllGroupsButton}"/>
 		</mx:State>
 	</mx:states>
 	
@@ -60,8 +60,8 @@
 		<mx:Text x="10" y="0" text="Echidna" width="61" height="21"/>
 
 		<mx:MenuBar x="79" y="-1" width="273" 
-			labelField="@label" itemClick="menuClick(event)" fillAlphas="[1.0, 1.0]" fillColors="[#FFFFFF, #FFFFFF]"
-			borderColor="#FFFFFF" id="menuBar">
+			labelField="@label" itemClick="menuClick(event)" 
+			 id="menuBar">
 			
 		</mx:MenuBar>
 
@@ -103,7 +103,7 @@
 			<mx:Canvas id="groupView">
 				<mx:VBox>
 					<mx:HDividedBox x="0" y="0" width="725" height="100%">
-						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  itemClick="groupClick(event)"
+						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  itemClick="groupClick(event)"  change="onGroupsGridChange(event)"
 							allowMultipleSelection="true">
 							<mx:columns>
 								<mx:DataGridColumn headerText="Name" dataField="name"/>
@@ -114,7 +114,7 @@
 							<mx:HBox id="hbox1">
 								<mx:Button id="removeConditionsButton" label="Remove" click="removeSelectedConditions()" enabled="false"/>
 								<mx:Button id="dmvButton" label="DMV" enabled="true" toolTip="View selected group in Data Matrix Viewer (DMV)" click="launchDmv()"/>
-								<mx:Button label="..." enabled="false" id="button1"/>
+								<mx:Button label="Show All" enabled="true" toolTip="Show all groups" click="showAllGroups()" id="showAllGroupsButton"/>
 							</mx:HBox>
 							<mx:VBox id="vbox1">
 							    <mx:Label text="Drag conditions to change order."/>							
@@ -156,6 +156,10 @@
 						<mx:Text text="{groupsGrid.selectedItems.length}"/>
 					</mx:HBox>
 				</mx:VBox>
+				<mx:Label x="1" y="630" text="Total Conditions:"/>
+				<mx:Text x="109" y="631" id="totalConditionsText"/>
+				<mx:Label x="213" y="631" text="Selected Conditions:"/>
+				<mx:Text x="340" y="631" id="selectedConditionsText"/>
 				
 			</mx:Canvas>
 
@@ -274,58 +278,59 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import org.systemsbiology.echidna.dialog.ShowSavedSearchesDialog;
-			import org.systemsbiology.echidna.common.SearchTerms;
-			import org.systemsbiology.echidna.dialog.SaveCurrentSearchDialog;
-			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
-			import org.systemsbiology.echidna.events.GetConditionsEvent;
-			import org.systemsbiology.echidna.dialog.ImportExperimentDialog;
-			import org.systemsbiology.echidna.events.SearchResultsReturnedEvent;
-			import org.systemsbiology.echidna.events.StartProgressBarEvent;
-			import org.systemsbiology.echidna.dialog.SearchDialog;
-			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
-			import org.systemsbiology.echidna.events.StopProgressBarEvent;
-			import org.systemsbiology.echidna.dialog.ProgressBarDialog;
-			import mx.effects.IAbstractEffect;
-			import org.systemsbiology.echidna.events.ReloginEvent;
-			import org.systemsbiology.echidna.events.ResetPasswordEvent;
-			import org.systemsbiology.echidna.dialog.ResetPasswordDialog;
-			import org.systemsbiology.echidna.dialog.RegistrationDialog;
-			import org.systemsbiology.echidna.events.RegistrationEvent;
-			import org.hasseg.externalMouseWheel.ExternalMouseWheelSupport;
-			import org.systemsbiology.echidna.events.RenamedGroupEvent;
-			import org.systemsbiology.echidna.dialog.RenameGroupDialog;
-			import org.systemsbiology.echidna.events.CreatedRelationshipEvent;
-			import mx.utils.URLUtil;
-			import mx.managers.IBrowserManager;
-			import mx.managers.BrowserManager;
-			import org.systemsbiology.echidna.dialog.CreateRelationshipDialog;
-			import mx.events.StateChangeEvent;
-			import mx.states.State;
-			import org.systemsbiology.echidna.events.GotExistingGroupIdEvent;
-			import org.systemsbiology.echidna.dialog.AddToExistingGroupDialog;
+			import com.adobe.serialization.json.JSON;
+			
 			import flash.utils.setInterval;
-			import mx.events.DragEvent;
-			import mx.controls.dataGridClasses.DataGridItemRenderer;
-			import mx.events.ListEvent;
-			import org.systemsbiology.echidna.events.GotNewGroupNameEvent;
-			import org.systemsbiology.echidna.dialog.NewGroupDialog;
-			import mx.events.MenuEvent;
+			
 			import mx.collections.ArrayCollection;
+			import mx.containers.TitleWindow;
+			import mx.controls.Alert;
+			import mx.controls.dataGridClasses.DataGridItemRenderer;
+			import mx.effects.IAbstractEffect;
 			import mx.events.ChildExistenceChangedEvent;
 			import mx.events.CloseEvent;
-			import org.systemsbiology.echidna.events.GotLoginInfoEvent;
-			import mx.containers.TitleWindow;
-			import org.systemsbiology.echidna.dialog.LoginDialog;
+			import mx.events.DragEvent;
+			import mx.events.ListEvent;
+			import mx.events.MenuEvent;
+			import mx.events.StateChangeEvent;
+			import mx.managers.BrowserManager;
+			import mx.managers.IBrowserManager;
 			import mx.managers.PopUpManager;
-			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			import mx.rpc.http.HTTPService;
+			import mx.states.State;
+			import mx.utils.URLUtil;
+			
+			import org.hasseg.externalMouseWheel.ExternalMouseWheelSupport;
+			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
+			import org.systemsbiology.echidna.common.SearchTerms;
 			import org.systemsbiology.echidna.common.Util;
-
-		import mx.rpc.events.FaultEvent;
-		import mx.rpc.events.ResultEvent;
-		
-		import com.adobe.serialization.json.JSON;
+			import org.systemsbiology.echidna.dialog.AddToExistingGroupDialog;
+			import org.systemsbiology.echidna.dialog.CreateRelationshipDialog;
+			import org.systemsbiology.echidna.dialog.ImportExperimentDialog;
+			import org.systemsbiology.echidna.dialog.LoginDialog;
+			import org.systemsbiology.echidna.dialog.NewGroupDialog;
+			import org.systemsbiology.echidna.dialog.ProgressBarDialog;
+			import org.systemsbiology.echidna.dialog.RegistrationDialog;
+			import org.systemsbiology.echidna.dialog.RenameGroupDialog;
+			import org.systemsbiology.echidna.dialog.ResetPasswordDialog;
+			import org.systemsbiology.echidna.dialog.SaveCurrentSearchDialog;
+			import org.systemsbiology.echidna.dialog.SearchDialog;
+			import org.systemsbiology.echidna.dialog.ShowSavedSearchesDialog;
+			import org.systemsbiology.echidna.events.CreatedRelationshipEvent;
+			import org.systemsbiology.echidna.events.GetConditionsEvent;
+			import org.systemsbiology.echidna.events.GotExistingGroupIdEvent;
+			import org.systemsbiology.echidna.events.GotLoginInfoEvent;
+			import org.systemsbiology.echidna.events.GotNewGroupNameEvent;
+			import org.systemsbiology.echidna.events.RegistrationEvent;
+			import org.systemsbiology.echidna.events.ReloginEvent;
+			import org.systemsbiology.echidna.events.RenamedGroupEvent;
+			import org.systemsbiology.echidna.events.ResetPasswordEvent;
+			import org.systemsbiology.echidna.events.SearchResultsReturnedEvent;
+			import org.systemsbiology.echidna.events.StartProgressBarEvent;
+			import org.systemsbiology.echidna.events.StopProgressBarEvent;
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 		
 		
 		protected var searchTerms:SearchTerms = new SearchTerms();
@@ -742,6 +747,7 @@
 			menuBar.dataProvider = menuItems_groupsView;
 			accordion.selectedIndex=1;
 			
+			
 			//rowCountText.text = "{groupsAC.size}";
 			//rowsSelectedText.text = "{groupsGrid.selectedItems.length}";
 		}
@@ -854,6 +860,8 @@
 				Util.ajax('main/get_all_groups', null, function(event:ResultEvent):void {
 					var groupsObj:Object = JSON.decode(event.result.toString());
 					groupsAC = Util.objectToArrayCollection(groupsObj,"condition_group");
+					calculateSelectedConditions();
+					calculateTotalConditions();
 					if (initialRow == null) {
 						stopProgressBar();
 						return;
@@ -883,6 +891,11 @@
 		
 		protected function onGroupRowSelected(rowIndex:int):void {
 			trace("# of selected items: " + groupsGrid.selectedItems.length);
+			
+			calculateSelectedConditions();
+			calculateTotalConditions();
+			
+			
 			relatedGroupsAC = new ArrayCollection();
 			deleteRelationshipButton.enabled = false;
 			goToGroupButton.enabled = false;
@@ -957,6 +970,8 @@
 		public function gotGroups(event:ResultEvent):void {
 			trace("in gotGroups()");
 			groupsAC = Util.objectToArrayCollection(JSON.decode(event.result.toString()), 'condition_group');
+			calculateSelectedConditions();
+			calculateTotalConditions();
 			trace("end of gotGroups");
 			stopProgressBar();
 		}
@@ -1220,6 +1235,32 @@
 			showSavedSearchesDialog.currentlyActiveSearch = currentlyActiveSearch;
 			PopUpManager.addPopUp(showSavedSearchesDialog, app, true);
 			PopUpManager.centerPopUp(showSavedSearchesDialog);
+		}
+		
+		protected function showAllGroups():void {
+			startProgressBar();
+			populateGroupGrid(null);
+		}
+			
+		protected function calculateTotalConditions():void {
+			var total:int = 0;
+			for(var i:int = 0; i < groupsAC.length; i++) {
+				total += groupsAC.getItemAt(i)['num_results'];
+			}
+			totalConditionsText.text = "" + total;
+		}
+			
+		protected function calculateSelectedConditions():void {
+			var numSelected:int = 0;
+			for(var i:int = 0; i < groupsGrid.selectedItems.length; i++) {
+				numSelected += groupsGrid.selectedItems[i]['num_results'];
+			}
+			selectedConditionsText.text = "" + numSelected;
+		}
+		
+		protected function onGroupsGridChange(event:ListEvent):void {
+			calculateSelectedConditions();
+			calculateTotalConditions();
 		}
 		
 		]]>

@@ -105,7 +105,7 @@
 		]]>
 	</mx:Script>
 
-	<mx:Canvas id="addNewRelationshipCanvas" x="26" y="77" width="453" height="128" borderThickness="1" visible="false" borderStyle="solid">
+	<mx:Canvas id="addNewRelationshipCanvas" x="26" y="77" width="453" height="128"  visible="false">
 		<mx:Label x="10" y="10" text="Add a new type of relationship:" width="211"/>
 		<mx:TextInput x="10" y="66" id="newRelationshipText"/>
 		<mx:TextInput x="178" y="66" id="inverseNameText"/>

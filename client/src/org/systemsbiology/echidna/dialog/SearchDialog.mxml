@@ -24,7 +24,7 @@
 	<mx:Label x="41" y="159" text="Gene"/>
 	<hc:AutoComplete id="knockoutsAutoComplete" x="40" y="185" dataProvider="{knockouts}" allowMultipleSelection="false"
 		matchType="anyPart" prompt="None" width="812"/>
-	<mx:Label x="39" y="225" text="Environmental:"/>
+	<mx:Label x="39" y="225" text="Environment:"/>
 	<hc:AutoComplete x="41" y="265" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="false"
 		matchType="anyPart" prompt="None" width="812"/>
 	<mx:CheckBox id="includeRelatedResultsCheckBox" x="31" y="309" label="Include related results (controls, etc)" enabled="true"/>
