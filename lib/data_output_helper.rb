@@ -43,7 +43,17 @@ EOF
     
   end
   
+  def get_alias_map
+    genes = Gene.find :all
+    alias_map = {}
+    for gene in genes
+      alias_map[gene.name] = gene.gene_name unless gene.gene_name.nil?
+    end
+    alias_map
+  end
+  
   def as_json(data)
+    alias_map = get_alias_map
     columns = data.map{|i|i.condition_name}.uniq
     col_ids = {}
     columns.each_with_index do |col, index|
@@ -75,7 +85,7 @@ EOF
         cur_row = []
       end
       
-      cur_row << small_form_of(i, col_ids)
+      cur_row << small_form_of(i, col_ids, alias_map)
       
       i.gene_name
     end
@@ -86,9 +96,12 @@ EOF
     h.to_json
   end
 
-  def small_form_of(item, col_ids)
+  def small_form_of(item, col_ids, alias_map)
+    
     col_id = col_ids[item.condition_name]
-    {'v' => item.value, 'g' => item.gene_name, 'c' => col_id}
+    hsh = {'v' => item.value, 'g' => item.gene_name, 'c' => col_id}
+    hsh['a'] = alias_map[item.gene_name] if alias_map.has_key?(item.gene_name)
+    hsh
   end
   
   def sort_by_condition_group_sequence(data, cond_ids)

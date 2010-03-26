@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100319205548) do
+ActiveRecord::Schema.define(:version => 20100325230920) do
 
   create_table "citations", :force => true do |t|
     t.integer "paper_id",     :limit => 11
@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(:version => 20100319205548) do
   create_table "genes", :force => true do |t|
     t.string "name"
     t.string "alias"
+    t.string "gene_name"
   end
 
   add_index "genes", ["id"], :name => "index_genes_on_id"

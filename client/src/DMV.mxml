@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV -- ratios"
-	applicationComplete="init()" xmlns:bridge="bridge.*" xmlns:ui="flex.utils.ui.*" >
+	applicationComplete="init()" xmlns:bridge="bridge.*" xmlns:ui="flex.utils.ui.*"  width="1595" height="1372" xmlns:hc="com.hillelcoren.components.*">
 	<bridge:FABridge bridgeName="flex"/>
 	<mx:Label x="115" y="797" id="gaggleStatus" width="332"/>
 	<!-- IMPORTANT! Note that creationPolicy for TabNavigator is set to null by default (it's supposed to be set to auto). 
@@ -19,15 +19,24 @@
 	</mx:TabNavigator>
 	<mx:Label x="115" y="757" text="Number of selected rows:" width="149"/>
 	<mx:Text x="272" y="757" width="39" id="numSelectedRowsText" text="0"/>
-	<mx:Button x="319" y="755" label="Clear Selections" id="clearSelectionsButton" click="clearSelections()"/>
-	<mx:Label x="443" y="757" width="131" id="loadingLabel"/> 
-	<mx:Button x="596" y="755" label="Plot" id="plotButton" click="showPlot()"/>
+	<mx:Button x="558" y="755" label="Clear Selections" id="clearSelectionsButton" click="clearSelections()"/>
+	<mx:Label x="316" y="757" width="131" id="loadingLabel"/> 
+	<mx:Button x="682" y="755" label="Plot" id="plotButton" click="showPlot()"/>
+	<mx:Button x="455" y="755" label="Select All" width="95" height="21" id="selectAllButton" click="selectAll()"/>
+	<mx:Label x="119" y="36" text="Gene Search:"/>
+	<hc:AutoComplete x="207" y="36" id="geneSearchAutoComplete" label="Gene Search" matchType="anyPart" allowMultipleSelection="true"
+		dataProvider="{genesAC}" labelField="name">
+	</hc:AutoComplete>
+	<mx:Button x="375" y="34" label="Select Genes" id="selectGenesButton" click="selectGenes()"/>
+	<mx:Button x="739" y="755" label="Toggle Names" id="toggleNamesButton" click="toggleNames()"/>
 
 
 	<mx:Script>
 	
 		
 		<![CDATA[
+			import mx.collections.SortField;
+			import mx.collections.Sort;
 			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			import org.hasseg.externalMouseWheel.ExternalMouseWheelSupport;
 			import flex.utils.ui.DataGridToolTipColumn;
@@ -57,6 +66,8 @@
 			[Bindable]
 			protected var lambdasData:ArrayCollection = new ArrayCollection();
 
+			[Bindable]
+			protected var genesAC:ArrayCollection = new ArrayCollection();
 
 
 			protected var tabs:Array = new Array();
@@ -67,6 +78,13 @@
 			private var dataProvided:Boolean = false;
 
 			private var ajaxFault:EchidnaAjaxFault;
+			
+			private var showingVNGNames:Boolean = true;
+
+			private var vngToAliasMap:Object = new Object();
+			private var aliasToVngMap:Object = new Object();	
+			private var geneList:Object = new Object();		
+			
 
 			protected function init():void {
 				ajaxFault = new EchidnaAjaxFault();
@@ -75,6 +93,10 @@
 				bm.init("","DMV - ratios");
 				
 				trace("policy: " + tabNavigator.creationPolicy);
+				
+				geneSearchAutoComplete.setStyle("selectedItemStyleName", AutoComplete.STYLE_FACEBOOK);
+				geneSearchAutoComplete.showRemoveIcon = true;
+
 				
 				groupId = Util.getQueryStringItem(bm, "groupId");
 				conditionIds = Util.getQueryStringItem(bm, "conditionIds");
@@ -97,6 +119,7 @@
 					loadingLabel.text = "No data selected.";
 				}
 			}
+			
 			
 			private function getParamsObject(ratios:Boolean = true):Object {
 				var ret:Object = new Object();
@@ -229,6 +252,9 @@
 				numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
 				var evt:DMVSelectionChangedEvent = new DMVSelectionChangedEvent(DMVSelectionChangedEvent.DMV_SELECTION_CHANGED_EVENT);
 				evt.numRowsSelected = getGridForCurrentTab().selectedItems.length;
+				
+				numSelectedRowsText.text = "" + getGridForCurrentTab().selectedItems.length;
+				
 				evt.numColumns = getGridForCurrentTab().columnCount -1; //todo be aware of disabled columns, also handle it if there are no columns for some reason
 				//(otherwise this will return -1)
 				evt.species = "Halobacterium sp. NRC-1"; //todo unhardcode
@@ -279,6 +305,14 @@
 			
 			protected function onGotData(event:ResultEvent):void {
 				trace("server returned DMV data");
+				
+				// do i want to do this?
+				geneList = new Object();
+				vngToAliasMap = new Object();
+				aliasToVngMap = new Object();
+				
+				
+				
 				setDataForCurrentTab(new ArrayCollection());
 				var tmpAC:ArrayCollection = new ArrayCollection();
 				
@@ -311,6 +345,17 @@
 					for (var j:int = 0; j < curRow.length; j++) {
 						var item:Object = curRow[j];
 						tableItem['gene'] = item['g'];
+						tableItem['id'] = item['g']; // immutable id for row
+						geneList[item['g']] = 1;
+						if (item['a'] != null) {
+							geneList[item['a']] = 1;
+							tableItem['alias'] = item['a'];
+							vngToAliasMap[item['g']] = item['a'];
+							aliasToVngMap[item['a']] = item['g'];
+						} else {
+							vngToAliasMap[item['g']] = item['g'];
+							aliasToVngMap[item['g']] = item['g'];
+						}
 						tableItem[colHash[item['c']]] = item['v'];
 					}
 					tmpAC.addItem(tableItem);
@@ -318,6 +363,26 @@
 				loadingLabel.text = "";
 				setDataForCurrentTab(tmpAC);
 				tmpAC = null;
+				
+				tmpAC = new ArrayCollection();
+				for (var z:String in geneList) {
+					var o:Object = new Object();
+					o['name']  = z;
+					tmpAC.addItem(o);
+				}
+				var sortField:SortField = new SortField();
+				sortField.name = "name";
+				sortField.numeric = false;
+				var sort:Sort = new Sort();
+				sort.fields = [sortField];
+				tmpAC.sort = sort;
+				tmpAC.refresh();
+				
+				genesAC = tmpAC;
+				tmpAC = null;
+				trace("genesAC.length= " + genesAC.length);
+				trace("geneList.length = " + geneList.length);
+				
 				trace("current tab data size = " + getDataForCurrentTab().length);
 			}
 			
@@ -402,7 +467,58 @@
             	}
             }
             
+            protected function selectAll():void {
+            	//todo - make this select all in both tabs?
+            	var a:Array = [];
+            	for (var i:int = 0; i < getDataForCurrentTab().length; i++) {
+            		a[i] = i;
+            	}
+            	getGridForCurrentTab().selectedIndices = a;
+            }	
             
+            protected function toggleNames():void {
+            	showingVNGNames = !showingVNGNames;
+            	trace("toggling names...showing vng names? " + showingVNGNames); 
+        		// change to aliases
+        		for (var i:int = 0; i < getDataForCurrentTab().length; i++) {
+        			//dante
+        			if (showingVNGNames) {
+        				getDataForCurrentTab()[i]['gene'] = aliasToVngMap[getDataForCurrentTab()[i]['gene']];
+        			} else {
+	        			getDataForCurrentTab()[i]['gene'] = vngToAliasMap[getDataForCurrentTab()[i]['id']];
+        			}
+        			//trace("gene = " + getDataForCurrentTab()[i]['gene']);
+        		}
+        		getGridForCurrentTab().invalidateList();
+            }
+            
+			protected function selectGenes():void {
+				if (geneSearchAutoComplete.selectedItems.length == 0) {
+					Alert.show("Nothing to search for!");
+					return;
+				}
+				var searchHash:Object = new Object();
+				for (var i:int = 0; i < geneSearchAutoComplete.selectedItems.length; i++) {
+					searchHash[geneSearchAutoComplete.selectedItems[i]['name']] = 1;
+				}
+				var indicesToSelect:Array = new Array();
+				for (i = 0; i < getDataForCurrentTab().length; i++) {
+					var gene:String = getDataForCurrentTab()[i]['gene'];
+					var alias:String = getDataForCurrentTab()[i]['alias'];
+					if (searchHash[gene] != null) {
+						indicesToSelect.push(i);
+					}
+					if (alias != null && searchHash[alias] != null) {
+						indicesToSelect.push(i);
+					}
+				}
+				if (indicesToSelect.length == 0) {
+					Alert.show("No match for your search, selection unchanged.");
+					return;
+				}	
+				getGridForCurrentTab().selectedIndices = indicesToSelect;
+				dmvSelectionChanged(null);
+			}            
 
 		]]>
 	</mx:Script>

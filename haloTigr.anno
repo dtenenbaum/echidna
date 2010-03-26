@@ -1,0 +1,2430 @@
+ORF	Gene	Function
+VNG0001H	VNG0001H	hypothetical protein
+VNG0002G	yvrO	amino acid ABC transporter, ATP-binding protein
+VNG0003C	VNG0003C	conserved hypothetical protein
+VNG0005H	VNG0005H	hypothetical protein
+VNG0006G	glmS	glutamine-fructose-6-phosphate transaminase
+VNG0008G	graD5	glucose-1-phosphate thymidylyltransferase
+VNG0009G	graD2	glucose-1-phosphate thymidylyltransferase
+VNG0011C	VNG0011C	conserved hypothetical protein
+VNG0013C	VNG0013C	conserved hypothetical protein
+VNG0014C	VNG0014C	conserved hypothetical protein
+VNG0015H	VNG0015H	hypothetical protein
+VNG0016H	VNG0016H	hypothetical protein
+VNG0017H	VNG0017H	hypothetical protein
+VNG0018H	VNG0018H	hypothetical protein
+VNG0019H	VNG0019H	hypothetical protein
+VNG0020H	VNG0020H	hypothetical protein
+VNG0021H	VNG0021H	hypothetical protein encoded by ISH10
+VNG0022H	VNG0022H	hypothetical protein
+VNG0023H	VNG0023H	hypothetical protein
+VNG0024H	VNG0024H	hypothetical protein
+VNG0025H	VNG0025H	hypothetical protein
+VNG0026C	VNG0026C	conserved hypothetical protein
+VNG0027H	VNG0027H	hypothetical protein
+VNG0028C	VNG0028C	conserved hypothetical protein
+VNG0029H	VNG0029H	hypothetical protein
+VNG0030H	VNG0030H	hypothetical protein
+VNG0031H	VNG0031H	hypothetical protein
+VNG0032H	VNG0032H	hypothetical protein
+VNG0033H	VNG0033H	hypothetical protein
+VNG0034H	VNG0034H	hypothetical protein
+VNG0035H	VNG0035H	hypothetical protein encoded by ISH1
+VNG0037H	VNG0037H	hypothetical protein
+VNG0038H	VNG0038H	hypothetical protein
+VNG0039H	VNG0039H	hypothetical protein
+VNG0040C	VNG0040C	conserved hypothetical protein
+VNG0041C	VNG0041C	conserved hypothetical protein
+VNG0042G	ntp	neutral proteinase
+VNG0043H	VNG0043H	hypothetical protein encoded by ISH12
+VNG0044H	VNG0044H	hypothetical protein encoded by ISH12
+VNG0045C	VNG0045C	conserved hypothetical protein
+VNG0046G	ugd	UDP-glucose dehydrogenase
+VNG0047G	graD6	glucose-1-phosphate thymidylyltransferase
+VNG0049H	VNG0049H	hypothetical protein
+VNG0050C	VNG0050C	conserved hypothetical protein
+VNG0051G	rfbU1	LPS biosynthesis
+VNG0052H	VNG0052H	hypothetical protein encoded by ISH8
+VNG0053H	VNG0053H	hypothetical protein
+VNG0054H	VNG0054H	hypothetical protein
+VNG0055H	VNG0055H	hypothetical protein
+VNG0056H	VNG0056H	hypothetical protein encoded by ISH10
+VNG0057H	VNG0057H	hypothetical protein
+VNG0058H	VNG0058H	hypothetical protein
+VNG0059H	VNG0059H	hypothetical protein encoded by ISH8
+VNG0060G	lpg	LPS glycosyltransferase
+VNG0061C	VNG0061C	conserved hypothetical protein
+VNG0062G	lpb	LPS biosynthesis protein
+VNG0063G	galE2	UDP-glucose 4-epimerase
+VNG0064G	graD3	glucose-1-phosphate thymidylyltransferase
+VNG0065G	gmd	GDP-D-mannose dehydratase
+VNG0066H	VNG0066H	hypothetical protein
+VNG0067H	VNG0067H	hypothetical protein
+VNG0068H	VNG0068H	hypothetical protein
+VNG0069H	VNG0069H	hypothetical protein
+VNG0070H	VNG0070H	hypothetical protein
+VNG0072H	VNG0072H	hypothetical protein
+VNG0073C	VNG0073C	conserved hypothetical protein
+VNG0075H	VNG0075H	hypothetical protein
+VNG0076H	VNG0076H	hypothetical protein
+VNG0077H	VNG0077H	hypothetical protein
+VNG0079H	VNG0079H	hypothetical protein
+VNG0080H	VNG0080H	hypothetical protein
+VNG0081G	moaE	molybdenum cofactor biosynthesis protein
+VNG0084G	moeB	molybdenum cofactor biosynthesis protein
+VNG0085G	moaA	molybdenum cofactor biosynthesis protein
+VNG0086G	moeA2	molybdenum cofactor biosynthesis protein
+VNG0090G	moeA1	molybdenum cofactor biosynthesis protein
+VNG0089G	pimT1	L-isoaspartyl protein carboxyl methyltransferase
+VNG0091C	VNG0091C	conserved hypothetical protein
+VNG0094C	VNG0094C	conserved hypothetical protein
+VNG0096C	VNG0096C	conserved hypothetical protein
+VNG0095G	gapB	glyceraldehyde 3-phosphate dehydrogenase
+VNG0097G	hsp2	putative heat shock protein
+VNG0098G	rimK	ribosomal protein S6 modification protein
+VNG0099G	rpl10e	50S ribosomal protein L10E
+VNG0101G	cspD1	cold shock protein
+VNG0102C	VNG0102C	conserved hypothetical protein
+VNG0104G	serA3	phosphoglycerate dehydrogenase
+VNG0105H	VNG0105H	hypothetical protein
+VNG0106G	rmeM	type I restriction modification enzyme, M subunit
+VNG0107G	rmeS	type I restriction modification enzyme, S subunit
+VNG0108G	rmeR	type I restriction modification enzyme, R subunit
+VNG0110C	VNG0110C	conserved hypothetical protein
+VNG0112H	VNG0112H	hypothetical protein encoded by ISH3
+VNG0113H	VNG0113H	hypothetical protein
+VNG0115G	yusZ1	oxidoreductase
+VNG0116H	VNG0116H	hypothetical protein
+VNG0117H	VNG0117H	hypothetical protein
+VNG0118H	VNG0118H	hypothetical protein
+VNG0119H	VNG0119H	hypothetical protein
+VNG0120H	VNG0120H	hypothetical protein
+VNG0121H	VNG0121H	hypothetical protein
+VNG0123G	trp1	ABC transport protein
+VNG0124C	VNG0124C	conserved hypothetical protein
+VNG0125H	VNG0125H	hypothetical protein
+VNG0127C	VNG0127C	conserved hypothetical protein
+VNG0128C	VNG0128C	conserved hypothetical protein
+VNG0129G	hsp4	heat shock protein
+VNG0130H	VNG0130H	hypothetical protein
+VNG0132C	VNG0132C	conserved hypothetical protein
+VNG0133G	rpa	replication A related protein
+VNG0134G	hpyA	archaeal histone A1
+VNG0136G	aup	acetoin utilization protein
+VNG0137G	cca	tRNA nucleotidyltransferase
+VNG0138H	VNG0138H	hypothetical protein
+VNG0139H	VNG0139H	hypothetical protein
+VNG0140H	VNG0140H	hypothetical protein
+VNG0141H	VNG0141H	hypothetical protein
+VNG0142C	VNG0142C	conserved hypothetical protein
+VNG0143H	VNG0143H	hypothetical protein
+VNG0144H	VNG0144H	hypothetical protein
+VNG0146H	VNG0146H	hypothetical protein
+VNG0147C	VNG0147C	conserved hypothetical protein
+VNG0148H	VNG0148H	hypothetical protein
+VNG0149G	zntA	zinc-transporting ATPase
+VNG0150H	VNG0150H	hypothetical protein
+VNG0151C	VNG0151C	conserved hypothetical protein
+VNG0152G	prrC	regulatory protein
+VNG0153C	VNG0153C	conserved hypothetical protein
+VNG0154G	merA	mercury(II) reductase
+VNG0156C	VNG0156C	conserved hypothetical protein
+VNG0157G	oxlT	oxalate/formate antiporter
+VNG0158G	kdgK	2-keto-3-deoxygluconate kinase
+VNG0159G	mutL	DNA mismatch repair protein
+VNG0160G	boa1	bacterio-opsin activator-like protein
+VNG0161G	gdhB	glutamate dehydrogenase
+VNG0162G	alkK	medium-chain acyl-CoA ligase
+VNG0163G	mutS1	mismatch repair protein
+VNG0164G	hef	hydrogenase expression/formation
+VNG0166G	psmB	proteasome, subunit beta
+VNG0167H	VNG0167H	hypothetical protein
+VNG0168H	VNG0168H	hypothetical protein
+VNG0170C	VNG0170C	conserved hypothetical protein
+VNG0171C	VNG0171C	conserved hypothetical protein
+VNG0172G	mutS2	mismatch repair protein
+VNG0174G	cat1	cationic amino acid transporter
+VNG0175G	trkA1	TRK potassium uptake system protein
+VNG0176H	VNG0176H	hypothetical protein
+VNG0177G	rpl15e	50S ribosomal protein L15E
+VNG0178H	VNG0178H	hypothetical protein
+VNG0179C	VNG0179C	conserved hypothetical protein
+VNG0180G	hop	halorhodopsin
+VNG0181G	lpl	lipoate protein ligase
+VNG0183G	xthA	endonuclease IV
+VNG0184H	VNG0184H	hypothetical protein
+VNG0186G	pepB1	aminopeptidase homolog
+VNG0187H	VNG0187H	hypothetical protein
+VNG0188H	VNG0188H	hypothetical protein
+VNG0189C	VNG0189C	conserved hypothetical protein
+VNG0190C	VNG0190C	conserved hypothetical protein
+VNG0192G	ftsZ2	cell division protein
+VNG0194H	VNG0194H	hypothetical protein
+VNG0195H	VNG0195H	hypothetical protein
+VNG0196H	VNG0196H	hypothetical protein
+VNG0197C	VNG0197C	conserved hypothetical protein
+VNG0198H	VNG0198H	hypothetical protein
+VNG0199H	VNG0199H	hypothetical protein
+VNG0200C	VNG0200C	conserved hypothetical protein
+VNG0204H	VNG0204H	hypothetical protein
+VNG0203C	VNG0203C	conserved hypothetical protein
+VNG0205H	VNG0205H	hypothetical protein
+VNG0207H	VNG0207H	hypothetical protein
+VNG0208H	VNG0208H	hypothetical protein
+VNG0209H	VNG0209H	hypothetical protein
+VNG0210H	VNG0210H	hypothetical protein encoded by ISH2
+VNG0212H	VNG0212H	hypothetical protein
+VNG0213H	VNG0213H	hypothetical protein encoded by ISH11
+VNG0214C	VNG0214C	conserved hypothetical protein
+VNG0215C	VNG0215C	conserved hypothetical protein
+VNG0216H	VNG0216H	hypothetical protein
+VNG0217H	VNG0217H	hypothetical protein
+VNG0218G	gspE1	type II secretion system protein
+VNG0219H	VNG0219H	hypothetical protein
+VNG0220H	VNG0220H	hypothetical protein
+VNG0222C	VNG0222C	conserved hypothetical protein
+VNG0223G	moxR	methanol dehydrogenase regulatory protein
+VNG0226G	htrA	serine proteinase
+VNG0227H	VNG0227H	hypothetical protein
+VNG0228G	guaAa	GMP synthase subunit A
+VNG0230C	VNG0230C	conserved hypothetical protein
+VNG0231C	VNG0231C	conserved hypothetical protein
+VNG0233H	VNG0233H	hypothetical protein
+VNG0234C	VNG0234C	conserved hypothetical protein
+VNG0237H	VNG0237H	hypothetical protein
+VNG0239C	VNG0239C	conserved hypothetical protein
+VNG0238H	VNG0238H	hypothetical protein
+VNG0240C	VNG0240C	conserved hypothetical protein
+VNG0243C	VNG0243C	conserved hypothetical protein
+VNG0244H	VNG0244H	hypothetical protein
+VNG0245G	dtd	deoxycytidine triphosphate deaminase
+VNG0247C	VNG0247C	conserved hypothetical protein
+VNG0248C	VNG0248C	conserved hypothetical protein
+VNG0249G	fbr	cytochrome-like protein
+VNG0250C	VNG0250C	conserved hypothetical protein
+VNG0251C	VNG0251C	conserved hypothetical protein
+VNG0252C	VNG0252C	conserved hypothetical protein
+VNG0254G	tfbG	transcription initiation factor IIB
+VNG0255C	VNG0255C	conserved hypothetical protein
+VNG0256H	VNG0256H	hypothetical protein
+VNG0258H	VNG0258H	hypothetical protein
+VNG0259G	ipp	inorganic pyrophosphatase
+VNG0261H	VNG0261H	hypothetical protein
+VNG0262C	VNG0262C	conserved hypothetical protein
+VNG0264H	VNG0264H	hypothetical protein
+VNG0265G	ftsZ4	cell division protein
+VNG0266H	VNG0266H	hypothetical protein
+VNG0267H	VNG0267H	hypothetical protein
+VNG0268C	VNG0268C	conserved hypothetical protein
+VNG0270C	VNG0270C	conserved hypothetical protein
+VNG0271C	VNG0271C	conserved hypothetical protein
+VNG0272H	VNG0272H	hypothetical protein
+VNG0274C	VNG0274C	conserved hypothetical protein
+VNG0277G	crtI3	phytoene dehydrogenase
+VNG0280H	VNG0280H	hypothetical protein
+VNG0281G	soxB	sarcosine oxidase
+VNG0283C	VNG0283C	conserved hypothetical protein
+VNG0282H	VNG0282H	hypothetical protein
+VNG0284C	VNG0284C	conserved hypothetical protein
+VNG0285C	VNG0285C	conserved hypothetical protein
+VNG0286C	VNG0286C	conserved hypothetical protein
+VNG0287H	VNG0287H	hypothetical protein
+VNG0289H	VNG0289H	hypothetical protein
+VNG0291H	VNG0291H	hypothetical protein
+VNG0293H	VNG0293H	hypothetical protein
+VNG0294G	pnm	N-methyltransferase homolog
+VNG0296H	VNG0296H	hypothetical protein
+VNG0297H	VNG0297H	hypothetical protein
+VNG0298H	VNG0298H	hypothetical protein
+VNG0300C	VNG0300C	conserved hypothetical protein
+VNG0301C	VNG0301C	conserved hypothetical protein
+VNG0303G	lon	lipoate protein ligase
+VNG0306C	VNG0306C	conserved hypothetical protein
+VNG0305G	trpC	indole-3-glycerol-phosphate synthase
+VNG0307G	trpB	tryptophan synthase beta chain
+VNG0308G	trpA	tryptophan synthase alpha chain
+VNG0309C	VNG0309C	conserved hypothetical protein
+VNG0311H	VNG0311H	hypothetical protein
+VNG0310C	VNG0310C	conserved hypothetical protein
+VNG0312H	VNG0312H	hypothetical protein
+VNG0314G	aroD	3-dehydroquinate dehydratase
+VNG0315G	tfbF	transcription initiation factor IIB
+VNG0316C	VNG0316C	conserved hypothetical protein
+VNG0318G	dpg	dolichol-P-glucose synthetase
+VNG0319H	VNG0319H	hypothetical protein
+VNG0320H	VNG0320H	hypothetical protein
+VNG0321G	ids	bifunctional short chain isoprenyl diphosphate synthase
+VNG0322H	VNG0322H	hypothetical protein
+VNG0323H	VNG0323H	hypothetical protein
+VNG0324G	pykA	pyruvate kinase
+VNG0326G	metS	methionine-tRNA synthetase
+VNG0327G	gadD	glutamate decarboxylase
+VNG0329G	caaX	zinc metalloproteinase homolog
+VNG0330G	ppsA	phosphoenolpyruvate synthase
+VNG0331H	VNG0331H	hypothetical protein
+VNG0332C	VNG0332C	conserved hypothetical protein
+VNG0335G	gptA1	purine phosphoribosyltransferase
+VNG0337H	VNG0337H	hypothetical protein encoded by ISH8
+VNG0339H	VNG0339H	hypothetical protein
+VNG0340C	VNG0340C	conserved hypothetical protein
+VNG0342G	smc1	chromosome segregation
+VNG0343H	VNG0343H	hypothetical protein
+VNG0345G	gatB2	Glu-tRNA amidotransferase
+VNG0346H	VNG0346H	hypothetical protein
+VNG0347H	VNG0347H	hypothetical protein
+VNG0349G	topA	DNA topoisomerase I
+VNG0351C	VNG0351C	conserved hypothetical protein
+VNG0352H	VNG0352H	hypothetical protein
+VNG0354C	VNG0354C	conserved hypothetical protein
+VNG0355G	htr14	Htr14 transducer
+VNG0357H	VNG0357H	hypothetical protein
+VNG0359C	VNG0359C	conserved hypothetical protein
+VNG0360C	VNG0360C	conserved hypothetical protein
+VNG0361C	VNG0361C	conserved hypothetical protein
+VNG0363G	nfi	endonuclease V
+VNG0364G	yusZ3	oxidoreductase
+VNG0365G	arsA1	arsenical pump-driving ATPase
+VNG0367H	VNG0367H	hypothetical protein
+VNG0368C	VNG0368C	conserved hypothetical protein
+VNG0370H	VNG0370H	hypothetical protein
+VNG0371G	acd1	acyl-CoA dehydrogenase
+VNG0373H	VNG0373H	hypothetical protein
+VNG0374G	nusG	transcription termination-antitermination factor
+VNG0375G	secE	protein translocase
+VNG0376G	ftsZ1	cell division protein
+VNG0378C	VNG0378C	conserved hypothetical protein
+VNG0380G	caa	cation antiporter
+VNG0382G	aroE	shikimate 5-dehydrogenase
+VNG0383H	VNG0383H	hypothetical protein
+VNG0384G	trpE2	anthranilate synthase alpha chain
+VNG0386G	trpG2	anthranilate synthase beta chain
+VNG0387G	ilvE1	branched-chain amino acid aminotransferase
+VNG0388C	VNG0388C	conserved hypothetical protein
+VNG0389C	VNG0389C	conserved hypothetical protein
+VNG0390G	graD1	glucose-1-phosphate thymidylyltransferase
+VNG0391C	VNG0391C	conserved hypothetical protein
+VNG0393C	VNG0393C	conserved hypothetical protein
+VNG0394C	VNG0394C	conserved hypothetical protein
+VNG0396C	VNG0396C	conserved hypothetical protein
+VNG0398G	nthA1	endonuclease III
+VNG0399H	VNG0399H	hypothetical protein
+VNG0401G	epf2	mRNA 3-end processing factor homolog
+VNG0402H	VNG0402H	hypothetical protein
+VNG0403G	proS	proline-tRNA synthetase
+VNG0404H	VNG0404H	hypothetical protein
+VNG0405C	VNG0405C	conserved hypothetical protein
+VNG0406C	VNG0406C	conserved hypothetical protein
+VNG0407H	VNG0407H	hypothetical protein
+VNG0408H	VNG0408H	hypothetical protein
+VNG0409C	VNG0409C	conserved hypothetical protein
+VNG0410G	rfbU2	LPS biosynthesis
+VNG0412G	folP	dihydropteroate synthase
+VNG0414G	purH	phosphoribosylaminoimidazole-succinocarboxamide formyltransferase
+VNG0415G	purB	adenylosuccinate lyase
+VNG0417H	VNG0417H	hypothetical protein
+VNG0419C	VNG0419C	conserved hypothetical protein
+VNG0420H	VNG0420H	hypothetical protein
+VNG0421C	VNG0421C	conserved hypothetical protein
+VNG0422G	cyc	cytochrome P450
+VNG0424C	VNG0424C	conserved hypothetical protein
+VNG0425G	pimT2	L-isoaspartyl protein carboxyl methyltransferase
+VNG0426G	rpoM	DNA-directed RNA-polymerase subunit M
+VNG0427G	yfmO2	multidrug resistance protein homolog
+VNG0428G	fad2	enoyl-CoA hydratase
+VNG0429H	VNG0429H	hypothetical protein
+VNG0430H	VNG0430H	hypothetical protein
+VNG0431G	apa	diadenosine tetraphosphate pyrophosphohydrolase
+VNG0433C	VNG0433C	conserved hypothetical protein
+VNG0435H	VNG0435H	hypothetical protein
+VNG0436G	nhaC1	Na+/H+ antiporter
+VNG0437C	VNG0437C	conserved hypothetical protein
+VNG0439C	VNG0439C	conserved hypothetical protein
+VNG0438G	ferA3	ferredoxin
+VNG0440C	VNG0440C	conserved hypothetical protein
+VNG0441H	VNG0441H	hypothetical protein
+VNG0442G	rspA	starvation sensing protein
+VNG0444G	dapA	dihydrodipicolinate synthase
+VNG0447H	VNG0447H	hypothetical protein
+VNG0446G	gcd	glucose dehydrogenase
+VNG0448G	pyrE1	aspartate carbamoyltransferase catalytic subunit
+VNG0450C	VNG0450C	conserved hypothetical protein
+VNG0451G	phoU	transcriptional regulator
+VNG0452G	pstB2	phosphate transport ATP-binding
+VNG0453G	pstA2	phosphate ABC transporter permease
+VNG0455G	pstC2	phosphate ABC transporter permease
+VNG0457G	phoX	phosphate ABC transporter periplasmic phosphate-binding
+VNG0458G	prp1	phosphate regulatory protein homolog
+VNG0459G	nodP	nodulation protein
+VNG0461G	aspS	aspartyl-tRNA synthetase
+VNG0462C	VNG0462C	conserved hypothetical protein
+VNG0463C	VNG0463C	conserved hypothetical protein
+VNG0465G	nosF2	copper transport ATP-binding protein
+VNG0466C	VNG0466C	conserved hypothetical protein
+VNG0467G	yafB	aldehyde reductase
+VNG0468C	VNG0468C	conserved hypothetical protein
+VNG0469H	VNG0469H	hypothetical protein
+VNG0470G	trp3	daunorubicin resistance ABC transporter ATP-binding protein
+VNG0471C	VNG0471C	conserved hypothetical protein
+VNG0472H	VNG0472H	hypothetical protein
+VNG0473G	porB	pyruvate ferredoxin oxidoreductase, subunit beta
+VNG0474G	porA	pyruvate ferredoxin oxidoreductase, subunit alpha
+VNG0475C	VNG0475C	conserved hypothetical protein
+VNG0478C	VNG0478C	conserved hypothetical protein
+VNG0479G	yajO1	probable oxidoreductase
+VNG0481G	mcmA1	methylmalonyl-CoA mutase, subunit alpha
+VNG0482H	VNG0482H	hypothetical protein
+VNG0483C	VNG0483C	conserved hypothetical protein
+VNG0484G	acs1	acetyl-CoA synthetase
+VNG0485H	VNG0485H	hypothetical protein
+VNG0486G	hat1	probable acetyltransferase
+VNG0487H	VNG0487H	hypothetical protein
+VNG0488H	VNG0488H	hypothetical protein
+VNG0489G	dnaJ	heat shock protein
+VNG0491G	dnaK	heat shock protein
+VNG0492H	VNG0492H	hypothetical protein
+VNG0494G	grpE	heat shock protein
+VNG0496H	VNG0496H	hypothetical protein
+VNG0498C	VNG0498C	conserved hypothetical protein
+VNG0499G	cna	proliferating-cell nucleolar antigen
+VNG0500G	ppd	3-isopropylmalate dehydratase
+VNG0501G	yfmO1	multidrug resistance protein homolog
+VNG0502G	aspB1	aspartate aminotransferase
+VNG0503C	VNG0503C	conserved hypothetical protein
+VNG0504G	gbp5	GTP-binding protein homolog
+VNG0505C	VNG0505C	conserved hypothetical protein
+VNG0506H	VNG0506H	hypothetical protein
+VNG0507C	VNG0507C	conserved hypothetical protein
+VNG0508H	VNG0508H	hypothetical protein
+VNG0509H	VNG0509H	hypothetical protein
+VNG0510G	prrIV2	ATP-dependent 26S proteinase regulatory subunit 4 homolog
+VNG0511H	VNG0511H	hypothetical protein
+VNG0512G	ppe	phosphoesterase
+VNG0514C	VNG0514C	conserved hypothetical protein
+VNG0516H	VNG0516H	hypothetical protein
+VNG0518H	VNG0518H	hypothetical protein
+VNG0520H	VNG0520H	hypothetical protein
+VNG0521G	polB1	DNA polymerase B1
+VNG0523G	inb	oxidoreductase homolog
+VNG0524G	yurY	ABC transporter, ATP-binding protein
+VNG0525C	VNG0525C	conserved hypothetical protein
+VNG0527C	VNG0527C	conserved hypothetical protein
+VNG0529H	VNG0529H	hypothetical protein
+VNG0530G	troR	iron-dependent repressor
+VNG0532H	VNG0532H	hypothetical protein
+VNG0533H	VNG0533H	hypothetical protein
+VNG0534C	VNG0534C	conserved hypothetical protein
+VNG0535C	VNG0535C	conserved hypothetical protein
+VNG0536G	sirR	transcription repressor
+VNG0537C	VNG0537C	conserved hypothetical protein
+VNG0539C	VNG0539C	conserved hypothetical protein
+VNG0540G	imp	immunogenic protein
+VNG0541G	thrC2	threonine synthase
+VNG0542C	VNG0542C	conserved hypothetical protein
+VNG0543H	VNG0543H	hypothetical protein
+VNG0544H	VNG0544H	hypothetical protein
+VNG0546C	VNG0546C	conserved hypothetical protein
+VNG0548C	VNG0548C	conserved hypothetical protein
+VNG0549G	eif2a	translation initiation factor eIF-2 subunit alpha
+VNG0550G	rps27e	30S ribosomal protein S27E
+VNG0551G	rpl44e	50S ribosomal protein L44E
+VNG0553C	VNG0553C	conserved hypothetical protein
+VNG0555C	VNG0555C	conserved hypothetical protein
+VNG0556G	sgb	succinoglycan biosynthesis transport protein
+VNG0557H	VNG0557H	hypothetical protein
+VNG0559G	apt	adenine phosphoribosyltransferase
+VNG0560C	VNG0560C	conserved hypothetical protein
+VNG0562C	VNG0562C	conserved hypothetical protein
+VNG0563G	ndhG2	NADH dehydrogenase/oxidoreductase
+VNG0565C	VNG0565C	conserved hypothetical protein
+VNG0564H	VNG0564H	hypothetical protein
+VNG0566C	VNG0566C	conserved hypothetical protein
+VNG0570H	VNG0570H	hypothetical protein
+VNG0568C	VNG0568C	conserved hypothetical protein
+VNG0571C	VNG0571C	conserved hypothetical protein
+VNG0572G	dfp	pantothenate metabolism flavoprotein
+VNG0573C	VNG0573C	conserved hypothetical protein
+VNG0574C	VNG0574C	conserved hypothetical protein
+VNG0575G	ywaD	aminopeptidase
+VNG0576C	VNG0576C	conserved hypothetical protein
+VNG0578H	VNG0578H	hypothetical protein
+VNG0579H	VNG0579H	hypothetical protein
+VNG0581H	VNG0581H	hypothetical protein
+VNG0582C	VNG0582C	conserved hypothetical protein
+VNG0583G	cyb	cytochrome b6
+VNG0584H	VNG0584H	hypothetical protein
+VNG0585H	VNG0585H	hypothetical protein
+VNG0586C	VNG0586C	conserved hypothetical protein
+VNG0587H	VNG0587H	hypothetical protein
+VNG0590H	VNG0590H	hypothetical protein
+VNG0591C	VNG0591C	conserved hypothetical protein
+VNG0592G	nthA2	endonuclease III
+VNG0593G	dmd	diphosphomevalonate decarboxylase
+VNG0594H	VNG0594H	hypothetical protein
+VNG0595H	VNG0595H	hypothetical protein
+VNG0596H	VNG0596H	hypothetical protein
+VNG0597H	VNG0597H	hypothetical protein
+VNG0598C	VNG0598C	conserved hypothetical protein
+VNG0600C	VNG0600C	conserved hypothetical protein
+VNG0599C	VNG0599C	conserved hypothetical protein
+VNG0601H	VNG0601H	hypothetical protein
+VNG0602C	VNG0602C	conserved hypothetical protein
+VNG0604H	VNG0604H	hypothetical protein
+VNG0606G	yrhA	cysteine synthase
+VNG0608C	VNG0608C	conserved hypothetical protein
+VNG0609C	VNG0609C	conserved hypothetical protein
+VNG0610G	hhoA	4-hydroxybenzoate octaprenyltransferase
+VNG0611H	VNG0611H	hypothetical protein
+VNG0612H	VNG0612H	hypothetical protein
+VNG0613H	VNG0613H	hypothetical protein
+VNG0614G	htr16	Htr16 transducer
+VNG0615C	VNG0615C	conserved hypothetical protein
+VNG0617H	VNG0617H	hypothetical protein
+VNG0620G	edp	proteinase IV homolog
+VNG0622H	VNG0622H	hypothetical protein
+VNG0623G	yngE	propionyl-CoA carboxylase homolog
+VNG0624H	VNG0624H	hypothetical protein
+VNG0626G	maoC2	molybdenum cofactor biosynthesis protein
+VNG0627G	citE	citrate (pro-3S)-lyase
+VNG0628G	gdhA1	glutamate dehydrogenase
+VNG0629G	aspB2	aspartate aminotransferase
+VNG0630G	ribE	riboflavin synthase beta subunit
+VNG0631C	VNG0631C	conserved hypothetical protein
+VNG0632G	purK	phosphoribosylaminoimidazole carboxylase ATP binding subunit
+VNG0633G	purE	phosphoribosylaminoimidazole carboxylase catalytic subunit
+VNG0635G	nolB	NADH dehydrogenase/oxidoreductase-like protein
+VNG0636G	ndhG1	NADH dehydrogenase/oxidoreductase
+VNG0637G	ndhG5	NADH dehydrogenase/oxidoreductase
+VNG0639G	ndhG4	NADH dehydrogenase/oxidoreductase
+VNG0640G	nolD	NADH dehydrogenase/oxidoreductase-like protein
+VNG0641C	VNG0641C	conserved hypothetical protein
+VNG0642C	VNG0642C	conserved hypothetical protein
+VNG0643G	nolC	NADH dehydrogenase/oxidoreductase-like protein
+VNG0646G	nuoL	F420H2:quinone oxidoreductase chain L
+VNG0647G	nuoM	F420H2:quinone oxidoreductase chain M
+VNG0648G	ndhG3	NADH dehydrogenase/oxidoreductase
+VNG0650C	VNG0650C	conserved hypothetical protein
+VNG0651G	imd1	inosine-5-monophosphate dehydrogenase
+VNG0652H	VNG0652H	hypothetical protein
+VNG0653G	mcmA1	methylmalonyl-CoA mutase, subunit alpha
+VNG0654C	VNG0654C	conserved hypothetical protein
+VNG0656H	VNG0656H	hypothetical protein
+VNG0657G	coxA2	cytochrome c oxidase subunit I
+VNG0659H	VNG0659H	hypothetical protein
+VNG0660H	VNG0660H	hypothetical protein
+VNG0662G	coxC	cytochrome c oxidase subunit III
+VNG0664G	birL	biotin acetyl-CoA carboxylase ligase
+VNG0665G	coxB1	cytochrome c oxidase subunit II
+VNG0666G	ctaB	heme synthase
+VNG0667G	trp4	ABC transporter, ATP-binding protein homolog
+VNG0668C	VNG0668C	conserved hypothetical protein
+VNG0669H	VNG0669H	hypothetical protein
+VNG0670H	VNG0670H	hypothetical protein
+VNG0671H	VNG0671H	hypothetical protein
+VNG0673G	mcmA2	methylmalonyl-CoA mutase
+VNG0674C	VNG0674C	conserved hypothetical protein
+VNG0675C	VNG0675C	conserved hypothetical protein
+VNG0676C	VNG0676C	conserved hypothetical protein
+VNG0678G	acaB1	3-ketoacyl-CoA thiolase
+VNG0677H	VNG0677H	hypothetical protein
+VNG0679G	acd4	acyl-CoA dehydrogenase
+VNG0680G	fdfT	farnesyl-diphosphate farnesyltransferase
+VNG0681G	hbd1	3-hydroxyacyl-CoA dehydrogenase
+VNG0682C	VNG0682C	conserved hypothetical protein
+VNG0683C	VNG0683C	conserved hypothetical protein
+VNG0684G	fbp	fructose-bisphosphatase
+VNG0686C	VNG0686C	conserved hypothetical protein
+VNG0688H	VNG0688H	hypothetical protein
+VNG0689G	trp5	ABC transporter, ATP-binding protein
+VNG0690C	VNG0690C	conserved hypothetical protein
+VNG0692C	VNG0692C	conserved hypothetical protein
+VNG0694G	nthB	endonuclease III
+VNG0697H	VNG0697H	hypothetical protein
+VNG0698H	VNG0698H	hypothetical protein
+VNG0700G	yvgX	molybdenum-binding protein
+VNG0702H	VNG0702H	hypothetical protein
+VNG0703H	VNG0703H	hypothetical protein
+VNG0704C	VNG0704C	conserved hypothetical protein
+VNG0705C	VNG0705C	conserved hypothetical protein
+VNG0707C	VNG0707C	conserved hypothetical protein
+VNG0708H	VNG0708H	hypothetical protein
+VNG0709C	VNG0709C	conserved hypothetical protein
+VNG0711C	VNG0711C	conserved hypothetical protein
+VNG0713C	VNG0713C	conserved hypothetical protein
+VNG0715G	thiC	thiamine biosynthesis protein
+VNG0716G	afsQ2	sensory histidine protein kinase homolog
+VNG0717H	VNG0717H	hypothetical protein
+VNG0718C	VNG0718C	conserved hypothetical protein
+VNG0719G	araL	unknown L-arabinose operon protein
+VNG0720G	dip2	DNA damage-inducible protein
+VNG0723G	pepQ1	probable peptidase
+VNG0724H	VNG0724H	hypothetical protein
+VNG0725H	VNG0725H	hypothetical protein
+VNG0726C	VNG0726C	conserved hypothetical protein
+VNG0727C	VNG0727C	conserved hypothetical protein
+VNG0729H	VNG0729H	hypothetical protein
+VNG0730C	VNG0730C	conserved hypothetical protein
+VNG0731H	VNG0731H	hypothetical protein
+VNG0732G	tpc	RNA 3-terminal phosphate cyclase
+VNG0733H	VNG0733H	hypothetical protein
+VNG0734G	tfbB	transcription initiation factor IIB
+VNG0735G	hlx2	HoxA-like transcriptional regulator
+VNG0736G	kinA2	signal-transducing histidine kinase homolog
+VNG0738H	VNG0738H	hypothetical protein
+VNG0737H	VNG0737H	hypothetical protein
+VNG0740C	VNG0740C	conserved hypothetical protein
+VNG0741H	VNG0741H	hypothetical protein
+VNG0742H	VNG0742H	hypothetical protein
+VNG0743H	VNG0743H	hypothetical protein
+VNG0745G	spoVR	spore cortex synthesis protein
+VNG0746C	VNG0746C	conserved hypothetical protein
+VNG0748G	prkA	kinase anchor protein
+VNG0749G	prk	protein kinase
+VNG0750C	VNG0750C	conserved hypothetical protein
+VNG0751C	VNG0751C	conserved hypothetical protein
+VNG0752G	galE1	UDP-glucose 4-epimerase
+VNG0753G	ylnA	anion permease
+VNG0754C	VNG0754C	conserved hypothetical protein
+VNG0755C	VNG0755C	conserved hypothetical protein
+VNG0757G	tfeA	transcription initiation factor IIE alpha subunit
+VNG0758C	VNG0758C	conserved hypothetical protein
+VNG0759H	VNG0759H	hypothetical protein
+VNG0761G	dip3	competence-damage protein CinA-like
+VNG0762H	VNG0762H	hypothetical protein
+VNG0763G	ybjG	membrane protein
+VNG0764C	VNG0764C	conserved hypothetical protein
+VNG0765H	VNG0765H	hypothetical protein
+VNG0766G	prp2	phosphate regulatory protein homolog
+VNG0767H	VNG0767H	hypothetical protein
+VNG0768H	VNG0768H	hypothetical protein
+VNG0769H	VNG0769H	hypothetical protein
+VNG0771G	aldY2	aldehyde dehydrogenase (retinol)
+VNG0772H	VNG0772H	hypothetical protein
+VNG0775G	acd2	acyl-CoA dehydrogenase
+VNG0777G	taqD	glycerol-3-phosphate cytidyltransferase
+VNG0778C	VNG0778C	conserved hypothetical protein
+VNG0779C	VNG0779C	conserved hypothetical protein
+VNG0780H	VNG0780H	hypothetical protein
+VNG0782H	VNG0782H	hypothetical protein
+VNG0784G	pssA	CDP-diacylglycerol-serine O-phosphatidyltransferase
+VNG0786G	pcy	plastocyanin homology
+VNG0787G	rps3e	30S ribosomal protein S3E
+VNG0788H	VNG0788H	hypothetical protein
+VNG0789C	VNG0789C	conserved hypothetical protein
+VNG0790G	rps15p	30S ribosomal protein S15P
+VNG0793G	htr6	Htr6 transducer
+VNG0794G	yufN	ABC transporter (lipoprotein)
+VNG0795G	hcpC	halocyanin precursor-like
+VNG0796G	cgs	cystathionine gamma-synthase
+VNG0798H	VNG0798H	hypothetical protein
+VNG0799C	VNG0799C	conserved hypothetical protein
+VNG0800H	VNG0800H	hypothetical protein
+VNG0801C	VNG0801C	conserved hypothetical protein
+VNG0804C	VNG0804C	conserved hypothetical protein
+VNG0806G	htr4	Htr4 transducer
+VNG0808G	gabD	succinate-semialdehyde dehydrogenase
+VNG0810H	VNG0810H	hypothetical protein
+VNG0811H	VNG0811H	hypothetical protein
+VNG0812G	htr18	Htr18 transducer
+VNG0813G	potD	spermidine/putrescine-binding protein
+VNG0814C	VNG0814C	conserved hypothetical protein
+VNG0815G	yfmJ	quinone oxidoreductase
+VNG0816G	chi	chitinase
+VNG0818C	VNG0818C	conserved hypothetical protein
+VNG0819C	VNG0819C	conserved hypothetical protein
+VNG0821C	VNG0821C	conserved hypothetical protein
+VNG0822C	VNG0822C	conserved hypothetical protein
+VNG0823G	gspE2	type II secretion system protein
+VNG0824G	gdb	molybdopterin-guanine dinucleotide biosynthesis protein A
+VNG0825C	VNG0825C	conserved hypothetical protein
+VNG0826C	VNG0826C	conserved hypothetical protein
+VNG0828H	VNG0828H	hypothetical protein
+VNG0829G	dmsA	dimethylsulfoxide reductase
+VNG0830G	hmoA	molybdopterin oxidoreductase
+VNG0831G	moz	molybdopterin oxidoreductase
+VNG0832C	VNG0832C	conserved hypothetical protein
+VNG0834C	VNG0834C	conserved hypothetical protein
+VNG0835G	idr2	iron-dependent repressor homolog
+VNG0836H	VNG0836H	hypothetical protein
+VNG0837H	VNG0837H	hypothetical protein
+VNG0838G	ssrA	integrase/recombinase
+VNG0840H	VNG0840H	hypothetical protein
+VNG0841G	icfA	carbonic anhydrase
+VNG0845C	VNG0845C	conserved hypothetical protein
+VNG0846C	VNG0846C	conserved hypothetical protein
+VNG0847H	VNG0847H	hypothetical protein
+VNG0849C	VNG0849C	conserved hypothetical protein
+VNG0851C	VNG0851C	conserved hypothetical protein
+VNG0852C	VNG0852C	conserved hypothetical protein
+VNG0853C	VNG0853C	conserved hypothetical protein
+VNG0854C	VNG0854C	conserved hypothetical protein
+VNG0857C	VNG0857C	conserved hypothetical protein
+VNG0858C	VNG0858C	conserved hypothetical protein
+VNG0860G	rpoL	DNA-directed RNA polymerase subunit L
+VNG0862G	hisF	imidazoleglycerol-phosphate synthase
+VNG0861H	VNG0861H	hypothetical protein
+VNG0863H	VNG0863H	hypothetical protein
+VNG0864G	purL	phosphoribosylformylglycinamide synthase I
+VNG0865C	VNG0865C	conserved hypothetical protein
+VNG0867G	asnA	asparagine synthetase
+VNG0868H	VNG0868H	hypothetical protein
+VNG0869G	tfbD	transcription initiation factor IIB
+VNG0870G	gatC	Glu-tRNA amidotransferase subunit C
+VNG0872G	gatA	Glu-tRNA amidotransferase
+VNG0873G	ykhA	acyl-CoA hydrolase
+VNG0874G	traB	possible signaling protein
+VNG0875C	VNG0875C	conserved hypothetical protein
+VNG0876G	purM	phosphoribosylformylglycinamidine cycloligase
+VNG0878G	gul1	inosine-5-monophosphate dehydrogenase-like
+VNG0879C	VNG0879C	conserved hypothetical protein
+VNG0880G	psmA	proteasome, subunit alpha
+VNG0881G	lig	DNA ligase
+VNG0882G	pho2	p-nitrophenyl phosphatase
+VNG0883H	VNG0883H	hypothetical protein
+VNG0884G	top6A	DNA topoisomerase VI subunit A
+VNG0885G	top6B	DNA topoisomerase VI subunit B
+VNG0887G	gyrB	DNA gyrase subunit B
+VNG0889G	gyrA	DNA gyrase subunit A
+VNG0890G	imd2	inosine-5-monophosphate dehydrogenase
+VNG0891G	yjlD	NADH dehydrogenase
+VNG0892H	VNG0892H	hypothetical protein
+VNG0893G	udp2	uridine phosphorylase
+VNG0896G	cda	cytidine aminohydrolase
+VNG0897G	rbsC1	ribose ABC transporter permease
+VNG0898G	rbsC2	ribose ABC transporter permease
+VNG0901G	rbsA	ribose ABC transporter ATP-binding
+VNG0903C	VNG0903C	conserved hypothetical protein
+VNG0905G	pmu2	phosphomannomutase
+VNG0906H	VNG0906H	hypothetical protein
+VNG0907H	VNG0907H	hypothetical protein
+VNG0908G	putP	proline permease
+VNG0909H	VNG0909H	hypothetical protein
+VNG0911H	VNG0911H	hypothetical protein
+VNG0913H	VNG0913H	hypothetical protein
+VNG0914H	VNG0914H	hypothetical protein
+VNG0915G	hakA	atrazine chlorohydrolase
+VNG0916G	ark	adaptive-response sensory-kinase
+VNG0917G	hrg	transcriptional regulatory protein
+VNG0918H	VNG0918H	hypothetical protein encoded by ISH4
+VNG0919G	gst	galactosyltransferase homolog
+VNG0920H	VNG0920H	hypothetical protein
+VNG0921G	potA1	spermidine/putrescine ABC transporter ATP-binding
+VNG0923G	sfuB	iron transporter-like protein
+VNG0924G	ibp	iron-binding protein
+VNG0925C	VNG0925C	conserved hypothetical protein
+VNG0926H	VNG0926H	hypothetical protein
+VNG0927C	VNG0927C	conserved hypothetical protein
+VNG0928G	mak	MAPK-activated protein kinase
+VNG0930G	yvbT	alkanal monooxygenase homolog
+VNG0931G	acaB2	3-ketoacyl-CoA thiolase
+VNG0932C	VNG0932C	conserved hypothetical protein
+VNG0933G	yqjM	NADH-dependent flavin oxidoreductase
+VNG0934H	VNG0934H	hypothetical protein
+VNG0935G	noxC	NADH oxidase
+VNG0936C	VNG0936C	conserved hypothetical protein
+VNG0937G	gap	glyceraldehyde-3-phosphate dehydrogenase
+VNG0938G	gufA	GufA protein
+VNG0940G	acs3	acetyl-CoA synthetase
+VNG0941C	VNG0941C	conserved hypothetical protein
+VNG0942G	cheW2	chemotaxis protein
+VNG0943C	VNG0943C	conserved hypothetical protein
+VNG0945H	VNG0945H	hypothetical protein
+VNG0946G	minD1	cell division inhibitor
+VNG0947G	fapJ	flagella accessory protein J
+VNG0949G	gspE3	type II secretion system protein
+VNG0950G	fapH	flagella-related protein H
+VNG0953C	VNG0953C	conserved hypothetical protein
+VNG0954C	VNG0954C	conserved hypothetical protein
+VNG0955G	fapE	flagella-related protein E
+VNG0958G	htr15	Htr15 transducer
+VNG0959H	VNG0959H	hypothetical protein
+VNG0960G	flaB1	flagellin B1 precursor
+VNG0961G	flaB2	flagellin B2 precursor
+VNG0962G	flaB3	flagellin B3 precursor
+VNG0963G	cpcE	phycocyanin alpha phycocyanobilin lyase-like
+VNG0964C	VNG0964C	conserved hypothetical protein
+VNG0965C	VNG0965C	conserved hypothetical protein
+VNG0966G	cheR	chemotaxis protein
+VNG0967G	cheD	chemotaxis protein
+VNG0969H	VNG0969H	hypothetical protein
+VNG0970G	cheC1	chemotaxis protein
+VNG0971G	cheA	chemotaxis protein
+VNG0973G	cheB	chemotaxis protein
+VNG0974G	cheY	chemotaxis protein
+VNG0976G	cheW1	chemotaxis protein
+VNG0978H	VNG0978H	hypothetical protein
+VNG0979H	VNG0979H	hypothetical protein
+VNG0981C	VNG0981C	conserved hypothetical protein
+VNG0982C	VNG0982C	conserved hypothetical protein
+VNG0983C	VNG0983C	conserved hypothetical protein
+VNG0985H	VNG0985H	hypothetical protein
+VNG0986H	VNG0986H	hypothetical protein
+VNG0987H	VNG0987H	hypothetical protein
+VNG0988H	VNG0988H	hypothetical protein
+VNG0989C	VNG0989C	conserved hypothetical protein
+VNG0990H	VNG0990H	hypothetical protein
+VNG0991H	VNG0991H	hypothetical protein
+VNG0992H	VNG0992H	hypothetical protein
+VNG0993H	VNG0993H	hypothetical protein
+VNG0994H	VNG0994H	hypothetical protein encoded by ISH2
+VNG0995H	VNG0995H	hypothetical protein
+VNG0996G	boa4	bacterio-opsin activator-like protein
+VNG0997G	acs2	acetyl-CoA synthetase
+VNG0998G	yajO2	probable oxidoreductase
+VNG0999H	VNG0999H	hypothetical protein
+VNG1000H	VNG1000H	hypothetical protein
+VNG1001G	guaB	inosine monophosphate dehydrogenase
+VNG1002H	VNG1002H	hypothetical protein
+VNG1003H	VNG1003H	hypothetical protein
+VNG1005H	VNG1005H	hypothetical protein
+VNG1006H	VNG1006H	hypothetical protein
+VNG1007H	VNG1007H	hypothetical protein encoded by ISH2
+VNG1008G	flaA1a	flagellin A1 precursor
+VNG1009G	flaA2	flagellin A2 precursor
+VNG1011C	VNG1011C	conserved hypothetical protein
+VNG1012H	VNG1012H	hypothetical protein
+VNG1013G	htr13	Htr13 transducer
+VNG1014G	yqjH	trans lesion repair
+VNG1015H	VNG1015H	hypothetical protein
+VNG1017H	VNG1017H	hypothetical protein
+VNG1018G	adh3	alcohol dehydrogenase
+VNG1020C	VNG1020C	conserved hypothetical protein
+VNG1021C	VNG1021C	conserved hypothetical protein
+VNG1023C	VNG1023C	conserved hypothetical protein
+VNG1024C	VNG1024C	conserved hypothetical protein
+VNG1025H	VNG1025H	hypothetical protein
+VNG1026H	VNG1026H	hypothetical protein
+VNG1027G	tpiA	triosephosphate isomerase
+VNG1029C	VNG1029C	conserved hypothetical protein
+VNG1030G	pgsA	CDP-diacylglycerol-glycerol-3-phosphate 3-phosphatidyltransferase
+VNG1031C	VNG1031C	conserved hypothetical protein
+VNG1033G	hisC1	histidinol-phosphate transaminase
+VNG1034H	VNG1034H	hypothetical protein
+VNG1035C	VNG1035C	conserved hypothetical protein
+VNG1036H	VNG1036H	hypothetical protein
+VNG1037G	hpcE	2-hydroxyhepta-2,4-diene-1,7-dioate isomerase
+VNG1038C	VNG1038C	conserved hypothetical protein
+VNG1039H	VNG1039H	hypothetical protein
+VNG1041H	VNG1041H	hypothetical protein
+VNG1042H	VNG1042H	hypothetical protein
+VNG1047H	VNG1047H	hypothetical protein
+VNG1046H	VNG1046H	hypothetical protein
+VNG1048G	udg1	UDP-glucose dehydrogenase
+VNG1050H	VNG1050H	hypothetical protein
+VNG1052H	VNG1052H	hypothetical protein
+VNG1053G	gtl	glycosyl transferase-like
+VNG1054G	ptp	probable transport protein
+VNG1055G	graD4	glucose-1-phosphate thymidylyltransferase
+VNG1056C	VNG1056C	conserved hypothetical protein
+VNG1057C	VNG1057C	conserved hypothetical protein
+VNG1058H	VNG1058H	hypothetical protein
+VNG1059C	VNG1059C	conserved hypothetical protein
+VNG1060H	VNG1060H	hypothetical protein
+VNG1062G	rfbQ	rhamnosyl transferase
+VNG1063H	VNG1063H	hypothetical protein
+VNG1064H	VNG1064H	hypothetical protein encoded by ISH6
+VNG1065C	VNG1065C	conserved hypothetical protein
+VNG1066C	VNG1066C	conserved hypothetical protein
+VNG1067G	exoM	succinoglycan biosynthesis protein
+VNG1068G	tot	transmembrane oligosaccharyl transferase
+VNG1069C	VNG1069C	conserved hypothetical protein
+VNG1070G	gpdA1	glycerol-3-phosphate dehydrogenase chain A
+VNG1071G	cinR	transcription repressor
+VNG1073G	lfl1	long-chain fatty-acid-CoA ligase
+VNG1074G	ykfB2	chloromuconate cycloisomerase
+VNG1075G	menA	menaquinone biosynthesis
+VNG1077G	opuD	glycine betaine transporter
+VNG1079G	menB	dihydroxynaphthoic acid synthase
+VNG1081G	menD	2-succinyl-6-hydroxy-2,4-cyclohexadiene-1-carboxylate synthase
+VNG1083G	menF	isochorismate synthase
+VNG1084G	yuiH	sulfite oxidase homolog
+VNG1085H	VNG1085H	hypothetical protein
+VNG1086C	VNG1086C	conserved hypothetical protein
+VNG1087C	VNG1087C	conserved hypothetical protein
+VNG1088C	VNG1088C	conserved hypothetical protein
+VNG1089G	purA	adenylosuccinate synthase
+VNG1090H	VNG1090H	hypothetical protein
+VNG1092C	VNG1092C	conserved hypothetical protein
+VNG1093C	VNG1093C	conserved hypothetical protein
+VNG1094H	VNG1094H	hypothetical protein
+VNG1095H	VNG1095H	hypothetical protein
+VNG1096H	VNG1096H	hypothetical protein
+VNG1097G	cysS	cysteinyl-tRNA synthetase
+VNG1099C	VNG1099C	conserved hypothetical protein
+VNG1100C	VNG1100C	conserved hypothetical protein
+VNG1101C	VNG1101C	conserved hypothetical protein
+VNG1103G	rpl12p	50S ribosomal protein L12P
+VNG1104G	rpl10p	50S ribosomal protein L10P
+VNG1105G	rpl1p	50S ribosomal protein L1P
+VNG1108G	rpl11p	50S ribosomal protein L11P
+VNG1110C	VNG1110C	conserved hypothetical protein
+VNG1111G	drg	GTP-binding protein DRG
+VNG1112H	VNG1112H	hypothetical protein
+VNG1114G	glo1	glyoxalase
+VNG1115H	VNG1115H	hypothetical protein
+VNG1118G	lds	L-lactate permease
+VNG1117C	VNG1117C	conserved hypothetical protein
+VNG1119H	VNG1119H	hypothetical protein
+VNG1120H	VNG1120H	hypothetical protein
+VNG1121G	aspC2	aspartate aminotransferase
+VNG1123G	trh7	transcription regulator
+VNG1125G	korB	putative 2-ketoglutarate ferredoxin oxidoreductase (beta)
+VNG1128G	korA	putative 2-ketoglutarate ferredoxin oxidoreductase (alpha)
+VNG1130H	VNG1130H	hypothetical protein
+VNG1131G	mrp	Mrp protein homolog
+VNG1132G	rps13p	30S ribosomal protein S13P
+VNG1133G	rps4p	30S ribosomal protein S4P
+VNG1134G	rps11p	30S ribosomal protein S11P
+VNG1136G	rpb3	DNA-directed RNA polymerase II
+VNG1137G	rpl18e	50S ribosomal protein L18E
+VNG1138G	rpl13p	50S ribosomal protein L13P
+VNG1139G	rps9p	30S ribosomal protein S9P
+VNG1140G	rpoN	DNA-directed RNA polymerase subunit N
+VNG1141G	rpoK	DNA-directed RNA polymerase subunit K
+VNG1142G	eno	phosphopyruvate hydratase
+VNG1143G	rps2p	30S ribosomal protein S2P
+VNG1144H	VNG1144H	hypothetical protein
+VNG1145G	mvk	mevalonate kinase
+VNG1148G	argB	ornithine carbamoyltransferase
+VNG1149C	VNG1149C	conserved hypothetical protein
+VNG1150G	idsA	geranylgeranyl diphosphate synthase
+VNG1151H	VNG1151H	hypothetical protein
+VNG1153G	gltS	glutamyl-tRNA synthetase
+VNG1154H	VNG1154H	hypothetical protein
+VNG1156G	hsp3	small heat shock protein
+VNG1157G	rphs6	30S ribosomal protein S14P
+VNG1158G	rps28e	30S ribosomal protein S28E
+VNG1159G	rpl24e	50S ribosomal protein L24E
+VNG1160G	ndk	nucleoside diphosphate kinase
+VNG1162H	VNG1162H	hypothetical protein
+VNG1163G	hemK	protoporphyrinogen oxidase
+VNG1164C	VNG1164C	conserved hypothetical protein
+VNG1165G	ksgA	dimethyladenosine transferase
+VNG1168C	VNG1168C	conserved hypothetical protein
+VNG1169C	VNG1169C	conserved hypothetical protein
+VNG1170G	rpl21e	50S ribosomal protein L21E
+VNG1172G	metB	cystathionine alpha synthase
+VNG1173G	eef1b	translation elongation factor eEF-1 subunit beta
+VNG1175G	phoR	PhoR protein homolog
+VNG1174G	nop56/58	archaeal nucleolar protein homolog
+VNG1176G	fib	fibrillarin
+VNG1178H	VNG1178H	hypothetical protein
+VNG1179C	VNG1179C	conserved hypothetical protein
+VNG1180G	msrA	peptide methionine sulfoxide reductase
+VNG1181G	flaA1b	flagellin A1 precursor
+VNG1182H	VNG1182H	hypothetical protein
+VNG1184G	nirJ	heme biosynthesis protein
+VNG1183H	VNG1183H	hypothetical protein
+VNG1185G	pqqE	coenzyme PQQ synthesis protein
+VNG1187G	pan1	membrane protein
+VNG1188G	hcpD	halocyanin precursor-like
+VNG1189H	VNG1189H	hypothetical protein
+VNG1190G	sod1	superoxide dismutase
+VNG1191G	acd3	acyl-CoA dehydrogenase
+VNG1193C	VNG1193C	conserved hypothetical protein
+VNG1194H	VNG1194H	hypothetical protein
+VNG1196H	VNG1196H	hypothetical protein
+VNG1197G	bcp	bacterioferritin comigrating protein
+VNG1198C	VNG1198C	conserved hypothetical protein
+VNG1200H	VNG1200H	hypothetical protein
+VNG1201G	fucA	fuculose-1-phosphate aldolase
+VNG1202C	VNG1202C	conserved hypothetical protein
+VNG1204G	gdhA2	glutamate dehydrogenase
+VNG1205C	VNG1205C	conserved hypothetical protein
+VNG1207C	VNG1207C	conserved hypothetical protein
+VNG1208G	hutU	urocanate hydratase
+VNG1209G	hutG	formiminoglutamate hydrolase
+VNG1211G	hutI	imidazolone-5-propionate hydrolase
+VNG1212G	hutH	histidine ammonia-lyase
+VNG1213C	VNG1213C	conserved hypothetical protein
+VNG1214H	VNG1214H	hypothetical protein
+VNG1215G	pai1	sporulation regulator homolog
+VNG1216G	pgk	glucose-6-phosphate isomerase
+VNG1218C	VNG1218C	conserved hypothetical protein
+VNG1219G	urk	uridine kinase
+VNG1220H	VNG1220H	hypothetical protein
+VNG1224G	orc8	orc / cell division control protein 6
+VNG1227H	VNG1227H	hypothetical protein
+VNG1226H	VNG1226H	hypothetical protein
+VNG1228C	VNG1228C	conserved hypothetical protein
+VNG1229H	VNG1229H	hypothetical protein
+VNG1230G	aroC	chorismate synthase
+VNG1232G	psc	3-phosphoshikimate 1-carboxyvinyltransferase
+VNG1233G	pepQ2	X-pro aminopeptidase homolog
+VNG1234C	VNG1234C	conserved hypothetical protein
+VNG1235C	VNG1235C	conserved hypothetical protein
+VNG1236C	VNG1236C	conserved hypothetical protein
+VNG1237C	VNG1237C	conserved hypothetical protein
+VNG1239H	VNG1239H	hypothetical protein
+VNG1238C	VNG1238C	conserved hypothetical protein
+VNG1240G	yhdG	amino acid transporter
+VNG1241G	surE	stationary phase survival protein
+VNG1244C	VNG1244C	conserved hypothetical protein
+VNG1245C	VNG1245C	conserved hypothetical protein
+VNG1246H	VNG1246H	hypothetical protein
+VNG1247G	ybhF	ABC-type transport protein
+VNG1249C	VNG1249C	conserved hypothetical protein
+VNG1250H	VNG1250H	hypothetical protein
+VNG1251G	helA	ATP-dependent helicase
+VNG1252G	yhcR	phosphoesterase
+VNG1253C	VNG1253C	conserved hypothetical protein
+VNG1255C	VNG1255C	conserved hypothetical protein
+VNG1256G	ribG	riboflavin-specific deaminase
+VNG1257H	VNG1257H	hypothetical protein
+VNG1259G	trxB2	thioredoxin
+VNG1260C	VNG1260C	conserved hypothetical protein
+VNG1261H	VNG1261H	hypothetical protein
+VNG1262G	eif2b	translation initiation factor eIF-2 subunit beta
+VNG1263C	VNG1263C	conserved hypothetical protein
+VNG1264C	VNG1264C	conserved hypothetical protein
+VNG1266G	ogg	8-oxoguanine DNA glycosylase
+VNG1268H	VNG1268H	hypothetical protein
+VNG1270H	VNG1270H	hypothetical protein
+VNG1271H	VNG1271H	hypothetical protein
+VNG1272C	VNG1272C	conserved hypothetical protein
+VNG1273G	moaC	molybdenum cofactor biosynthesis protein
+VNG1275G	hflX2	GTP-binding protein
+VNG1276C	VNG1276C	conserved hypothetical protein
+VNG1279H	VNG1279H	hypothetical protein
+VNG1280C	VNG1280C	conserved hypothetical protein
+VNG1281H	VNG1281H	hypothetical protein
+VNG1282G	trkA5	TRK potassium uptake system protein
+VNG1283H	VNG1283H	hypothetical protein
+VNG1284G	trkH1	TRK potassium uptake system protein
+VNG1285G	trh2	transcription regulator
+VNG1287C	VNG1287C	conserved hypothetical protein
+VNG1289H	VNG1289H	hypothetical protein
+VNG1291H	VNG1291H	hypothetical protein
+VNG1292H	VNG1292H	hypothetical protein
+VNG1294G	slyD	peptidyl-prolyl cis-trans isomerase
+VNG1295H	VNG1295H	hypothetical protein
+VNG1296C	VNG1296C	conserved hypothetical protein
+VNG1297C	VNG1297C	conserved hypothetical protein
+VNG1299C	VNG1299C	conserved hypothetical protein
+VNG1300H	VNG1300H	hypothetical protein
+VNG1301G	cysK	cysteine synthase
+VNG1302H	VNG1302H	hypothetical protein
+VNG1303C	VNG1303C	conserved hypothetical protein
+VNG1305G	purD	phosphoribosylglycinamide synthetase
+VNG1306G	sdhA	succinate dehydrogenase subunit A
+VNG1308G	sdhB	succinate dehydrogenase subunit B
+VNG1309G	sdhD	membrane anchor
+VNG1310G	sdhC	succinate dehydrogenase subunit C
+VNG1311G	alkA	3-methyladenine DNA glycosylase
+VNG1313G	hbd2	3-hydroxyacyl-CoA dehydrogenase
+VNG1314H	VNG1314H	hypothetical protein
+VNG1315H	VNG1315H	hypothetical protein
+VNG1317H	VNG1317H	hypothetical protein
+VNG1318H	VNG1318H	hypothetical protein
+VNG1319H	VNG1319H	hypothetical protein
+VNG1320G	cbp	calcium-binding protein homology
+VNG1323C	VNG1323C	conserved hypothetical protein
+VNG1324C	VNG1324C	conserved hypothetical protein
+VNG1325C	VNG1325C	conserved hypothetical protein
+VNG1326H	VNG1326H	hypothetical protein
+VNG1327G	fprA	flavoprotein
+VNG1329H	VNG1329H	hypothetical protein
+VNG1330H	VNG1330H	hypothetical protein
+VNG1332G	sod2	superoxide dismutase
+VNG1335G	phr2	photolyase/cryptochrome
+VNG1336C	VNG1336C	conserved hypothetical protein
+VNG1337C	VNG1337C	conserved hypothetical protein
+VNG1339C	VNG1339C	conserved hypothetical protein
+VNG1340C	VNG1340C	conserved hypothetical protein
+VNG1341G	fabG	3-oxoacyl-[acyl-carrier-protein] reductase
+VNG1342G	mer	N5,N10-methylenetetrahydromethanopterin reductase
+VNG1343C	VNG1343C	conserved hypothetical protein
+VNG1344G	dchpS	dihydropteroate synthase
+VNG1345H	VNG1345H	hypothetical protein
+VNG1347C	VNG1347C	conserved hypothetical protein
+VNG1349C	VNG1349C	conserved hypothetical protein
+VNG1350C	VNG1350C	conserved hypothetical protein
+VNG1351G	trh6	transcription regulator
+VNG1352G	gatB1	Glu-tRNA amidotransferase
+VNG1353C	VNG1353C	conserved hypothetical protein
+VNG1355H	VNG1355H	hypothetical protein
+VNG1356G	fumC	fumarate hydratase
+VNG1357C	VNG1357C	conserved hypothetical protein
+VNG1359G	rad2	DNA repair protein
+VNG1360H	VNG1360H	hypothetical protein
+VNG1362H	VNG1362H	hypothetical protein
+VNG1364G	ocd2	ornithine cyclodeaminase
+VNG1365C	VNG1365C	conserved hypothetical protein
+VNG1366H	VNG1366H	hypothetical protein
+VNG1367G	srp19	signal recognition particle
+VNG1369G	hemV1	iron (III) ABC transporter ATP-binding
+VNG1370G	hemU	iron (III) ABC transporter permease
+VNG1371G	hemV2	iron (III) ABC transporter ATP-binding
+VNG1372C	VNG1372C	conserved hypothetical protein
+VNG1374G	kinA1	signal-transducing histidine kinase homolog
+VNG1375C	VNG1375C	conserved hypothetical protein
+VNG1376H	VNG1376H	hypothetical protein
+VNG1377G	asnC	transcription regulator
+VNG1379G	suhB	extragenic suppressor homolog
+VNG1380H	VNG1380H	hypothetical protein
+VNG1381H	VNG1381H	hypothetical protein
+VNG1382H	VNG1382H	hypothetical protein
+VNG1383G	rad3a	helicase
+VNG1384H	VNG1384H	hypothetical protein
+VNG1385G	yvoF	acetyltransferase homolog
+VNG1387H	VNG1387H	hypothetical protein
+VNG1388H	VNG1388H	hypothetical protein
+VNG1389C	VNG1389C	conserved hypothetical protein
+VNG1390H	VNG1390H	hypothetical protein
+VNG1394H	VNG1394H	hypothetical protein
+VNG1395G	htr9	Htr9 transducer
+VNG1397C	VNG1397C	conserved hypothetical protein
+VNG1398C	VNG1398C	conserved hypothetical protein
+VNG1402H	VNG1402H	hypothetical protein
+VNG1401C	VNG1401C	conserved hypothetical protein
+VNG1403H	VNG1403H	hypothetical protein
+VNG1405C	VNG1405C	conserved hypothetical protein
+VNG1404G	trh1	transcription regulator
+VNG1406G	rhl	putative DNA helicase
+VNG1407C	VNG1407C	conserved hypothetical protein
+VNG1408G	ush	UDP-sugar hydrolase
+VNG1409C	VNG1409C	conserved hypothetical protein
+VNG1410H	VNG1410H	hypothetical protein
+VNG1412H	VNG1412H	hypothetical protein
+VNG1413H	VNG1413H	hypothetical protein
+VNG1414G	glyA	glycine hydroxymethyltransferase
+VNG1416G	folD	methylenetetrahydrofolate dehydrogenase
+VNG1417H	VNG1417H	hypothetical protein
+VNG1418C	VNG1418C	conserved hypothetical protein
+VNG1420H	VNG1420H	hypothetical protein
+VNG1422H	VNG1422H	hypothetical protein
+VNG1423H	VNG1423H	hypothetical protein
+VNG1425H	VNG1425H	hypothetical protein
+VNG1426H	VNG1426H	hypothetical protein
+VNG1427H	VNG1427H	hypothetical protein
+VNG1428G	htlA	Htr-like protein
+VNG1429C	VNG1429C	conserved hypothetical protein
+VNG1431C	VNG1431C	conserved hypothetical protein
+VNG1432G	dhs	deoxyhypusine synthase
+VNG1433G	rps17e	30S ribosomal protein S17E
+VNG1435G	asd	aspartate-semialdehyde dehydrogenase
+VNG1437G	serA2	phosphoglycerate dehydrogenase
+VNG1438H	VNG1438H	hypothetical protein
+VNG1440H	VNG1440H	hypothetical protein
+VNG1442G	htr12	Htr12 transducer
+VNG1444G	hisD	histidinol dehydrogenase
+VNG1446H	VNG1446H	hypothetical protein
+VNG1447H	VNG1447H	hypothetical protein
+VNG1448H	VNG1448H	hypothetical protein
+VNG1450G	yfkN	2,3-cyclic-nucleotide 2-phosphodiesterase
+VNG1451C	VNG1451C	conserved hypothetical protein
+VNG1452G	eif2bd	translation initiation factor eIF-2B subunit delta
+VNG1453H	VNG1453H	hypothetical protein
+VNG1454C	VNG1454C	conserved hypothetical protein
+VNG1455H	VNG1455H	hypothetical protein
+VNG1456H	VNG1456H	hypothetical protein
+VNG1457C	VNG1457C	conserved hypothetical protein
+VNG1458G	crtB1	phytoene synthase
+VNG1459H	VNG1459H	hypothetical protein
+VNG1461H	VNG1461H	hypothetical protein
+VNG1462G	cdc48a	cell division cycle protein
+VNG1463G	blp	bacterio-opsin linked product
+VNG1464G	bat	bacterio-opsin activator
+VNG1465G	brp	bacteriorhodopsin related protein
+VNG1466H	VNG1466H	hypothetical protein
+VNG1467G	bop	bacteriorhodopsin
+VNG1468H	VNG1468H	hypothetical protein
+VNG1470G	pri	DNA primase
+VNG1471C	VNG1471C	conserved hypothetical protein
+VNG1472G	cdc48b	cell division cycle protein
+VNG1473H	VNG1473H	hypothetical protein
+VNG1474G	est	carboxylesterase
+VNG1475C	VNG1475C	conserved hypothetical protein
+VNG1476C	VNG1476C	conserved hypothetical protein
+VNG1478G	panB	ketopantoate hydroxymethyltransferase-like
+VNG1479H	VNG1479H	hypothetical protein
+VNG1480C	VNG1480C	conserved hypothetical protein
+VNG1481G	sat	serine acetyltransferase
+VNG1482G	acd5	acyl-CoA dehydrogenase
+VNG1483C	VNG1483C	conserved hypothetical protein
+VNG1484H	VNG1484H	hypothetical protein
+VNG1486H	VNG1486H	hypothetical protein
+VNG1487H	VNG1487H	hypothetical protein
+VNG1488G	boa2	bacterio-opsin activator-like protein
+VNG1490H	VNG1490H	hypothetical protein
+VNG1492C	VNG1492C	conserved hypothetical protein
+VNG1493G	purF	amidophosphoribosyl-pyrophosphate amidotransferase
+VNG1494G	rpl37e	50S ribosomal protein L37E
+VNG1496G	snp	snRNP homolog
+VNG1498G	celM	endoglucanase
+VNG1497C	VNG1497C	conserved hypothetical protein
+VNG1500H	VNG1500H	hypothetical protein
+VNG1501G	hel	DNA helicase
+VNG1503C	VNG1503C	conserved hypothetical protein
+VNG1505G	htr10	Htr10 transducer
+VNG1506G	pelA	cell division protein pelota
+VNG1508C	VNG1508C	conserved hypothetical protein
+VNG1510C	VNG1510C	conserved hypothetical protein
+VNG1511C	VNG1511C	conserved hypothetical protein
+VNG1513H	VNG1513H	hypothetical protein
+VNG1514H	VNG1514H	hypothetical protein
+VNG1515G	tdk	thymidine kinase
+VNG1518H	VNG1518H	hypothetical protein
+VNG1519H	VNG1519H	hypothetical protein
+VNG1520G	mutY	A/G specific adenine glycosylase, repair protein
+VNG1523G	htr8	Htr8 transducer
+VNG1524C	VNG1524C	conserved hypothetical protein
+VNG1525C	VNG1525C	conserved hypothetical protein
+VNG1526G	trp6	daunorubicin resistance ABC transporter ATP-binding protein
+VNG1528G	nac	sodium- and chloride-dependent transporter
+VNG1529G	mmdA	methylmalonyl-CoA decarboxylase, subunit alpha
+VNG1530H	VNG1530H	hypothetical protein
+VNG1532G	acc	biotin carboxylase
+VNG1533H	VNG1533H	hypothetical protein
+VNG1534H	VNG1534H	hypothetical protein
+VNG1536C	VNG1536C	conserved hypothetical protein
+VNG1537C	VNG1537C	conserved hypothetical protein
+VNG1538H	VNG1538H	hypothetical protein
+VNG1540G	ywfD	glucose 1-dehydrogenase
+VNG1541G	sucC	succinyl-CoA synthetase beta chain
+VNG1542G	sucD	succinyl-CoA synthetase alpha chain
+VNG1543G	zim	CTAG modification methylase
+VNG1544G	clc	chloride channel
+VNG1547C	VNG1547C	conserved hypothetical protein
+VNG1546H	VNG1546H	hypothetical protein
+VNG1548C	VNG1548C	conserved hypothetical protein
+VNG1550G	cbiT	cobalamin biosynthesis
+VNG1551G	cbiL	cobalamin biosynthesis
+VNG1553G	cbiF	cobalamin biosynthesis
+VNG1554G	cbiG	cobalamin biosynthesis
+VNG1555G	cobH	cobalamin biosynthesis
+VNG1557G	cbiH	cobalamin biosynthesis
+VNG1558H	VNG1558H	hypothetical protein
+VNG1559H	VNG1559H	hypothetical protein
+VNG1561C	VNG1561C	conserved hypothetical protein
+VNG1562H	VNG1562H	hypothetical protein
+VNG1564H	VNG1564H	hypothetical protein
+VNG1565G	hmcA	protoporphyrin IX magnesium chelatase
+VNG1566G	cobN	cobalamin biosynthesis protein
+VNG1567G	cbiC	precorrin isomerase
+VNG1568G	cbiJ	precorrin-3  methylase
+VNG1570H	VNG1570H	hypothetical protein
+VNG1572C	VNG1572C	conserved hypothetical protein
+VNG1573G	cbiA	cobyrinic acid a,c-diamide synthase
+VNG1574G	cobI	cobalamin adenosyltransferase
+VNG1576G	cbiP	cobyric acid synthase
+VNG1577C	VNG1577C	conserved hypothetical protein
+VNG1578H	VNG1578H	hypothetical protein
+VNG1580H	VNG1580H	hypothetical protein
+VNG1581C	VNG1581C	conserved hypothetical protein
+VNG1582G	hisC2	histidinol-phosphate transaminase
+VNG1583C	VNG1583C	conserved hypothetical protein
+VNG1585C	VNG1585C	conserved hypothetical protein
+VNG1587H	VNG1587H	hypothetical protein encoded by ISH11
+VNG1589C	VNG1589C	conserved hypothetical protein
+VNG1590H	VNG1590H	hypothetical protein
+VNG1591H	VNG1591H	hypothetical protein
+VNG1592G	cysT2	sulfate transport system permease protein
+VNG1595C	VNG1595C	conserved hypothetical protein
+VNG1598H	VNG1598H	hypothetical protein
+VNG1601G	gcvP2	glycine dehydrogenase subunit 2
+VNG1603G	gcvP1	glycine dehydrogenase subunit 1
+VNG1605G	gdcH	glycine decarboxylase complex h-protein
+VNG1606G	gcvT1	aminomethyltransferase
+VNG1607G	cheC2	chemotaxis protein
+VNG1608C	VNG1608C	conserved hypothetical protein
+VNG1609C	VNG1609C	conserved hypothetical protein
+VNG1610C	VNG1610C	conserved hypothetical protein
+VNG1611C	VNG1611C	conserved hypothetical protein
+VNG1613H	VNG1613H	hypothetical protein
+VNG1615G	mvaB	3-hydroxy-3-methylglutaryl-coenzyme A synthase
+VNG1618H	VNG1618H	hypothetical protein
+VNG1616C	VNG1616C	conserved hypothetical protein
+VNG1617H	VNG1617H	hypothetical protein
+VNG1619H	VNG1619H	hypothetical protein
+VNG1621H	VNG1621H	hypothetical protein
+VNG1622G	rfcB	replication factor C large subunit
+VNG1623G	ccp	cytochrome aa3 controlling protein
+VNG1624G	mdh	malate dehydrogenase
+VNG1625H	VNG1625H	hypothetical protein
+VNG1626C	VNG1626C	conserved hypothetical protein
+VNG1628G	aad	aryl-alcohol dehydrogenase
+VNG1630H	VNG1630H	hypothetical protein
+VNG1631G	cbiO2	cobalt transport ATP-binding protein
+VNG1632G	cbiQ	cobalt transport protein
+VNG1634G	cbiN	cobalt transport protein
+VNG1635G	cbiM	cobalamin biosynthesis protein
+VNG1637G	hcpA	halocyanin precursor-like
+VNG1638H	VNG1638H	hypothetical protein
+VNG1640H	VNG1640H	hypothetical protein
+VNG1641H	VNG1641H	hypothetical protein
+VNG1642H	VNG1642H	hypothetical protein
+VNG1644G	nrdB2	ribonucleoside reductase large chain
+VNG1645H	VNG1645H	hypothetical protein
+VNG1646G	trpG1	anthranilate synthase beta chain
+VNG1647G	trpE1	anthranilate synthase alpha chain
+VNG1648G	trpF	phosphoribosylanthranilate isomerase
+VNG1649G	trpD1	phosphoribosyl transferase
+VNG1650H	VNG1650H	hypothetical protein
+VNG1651H	VNG1651H	hypothetical protein encoded by ISH2
+VNG1653H	VNG1653H	hypothetical protein encoded by ISH8
+VNG1654G	cdc48e	cell division cycle protein
+VNG1655H	VNG1655H	hypothetical protein
+VNG1657H	VNG1657H	hypothetical protein
+VNG1656H	VNG1656H	hypothetical protein
+VNG1658C	VNG1658C	conserved hypothetical protein
+VNG1659G	htr1	Htr1 transducer
+VNG1660G	sop1	sensory rhodopsin I
+VNG1663C	VNG1663C	conserved hypothetical protein
+VNG1664H	VNG1664H	hypothetical protein
+VNG1665G	radA2	DNA repair protein
+VNG1666H	VNG1666H	hypothetical protein
+VNG1667G	cdc48c	cell division cycle protein
+VNG1668G	rps8e	30S ribosomal protein S8E
+VNG1670C	VNG1670C	conserved hypothetical protein
+VNG1672H	VNG1672H	hypothetical protein
+VNG1673G	pyrF	orotidine-5-monophosphate (Ura3)
+VNG1674H	VNG1674H	hypothetical protein
+VNG1675H	VNG1675H	hypothetical protein
+VNG1676G	gbp2	GTP-binding protein homolog
+VNG1678H	VNG1678H	hypothetical protein
+VNG1679H	VNG1679H	hypothetical protein
+VNG1680G	crtB2	phytoene synthase
+VNG1681C	VNG1681C	conserved hypothetical protein
+VNG1682C	VNG1682C	conserved hypothetical protein
+VNG1684G	crtI1	phytoene dehydrogenase
+VNG1686G	mch	N5,N10-methenyltetrahydromethanopterin cyclohydrolase
+VNG1687C	VNG1687C	conserved hypothetical protein
+VNG1688C	VNG1688C	conserved hypothetical protein
+VNG1689G	rpl3p	50S ribosomal protein L13P
+VNG1690G	rpl4e	50S ribosomal protein L4E
+VNG1691G	rpl23p	50S ribosomal protein L23P
+VNG1692G	rpl2p	50S ribosomal protein L2P
+VNG1693G	rps19p	30S ribosomal protein S19P
+VNG1695G	rpl22p	50S ribosomal protein L22P
+VNG1697G	rps3p	30S ribosomal protein S3P
+VNG1698G	rpl29p	50S ribosomal protein L29P
+VNG1699C	VNG1699C	conserved hypothetical protein
+VNG1700G	rps17p	30S ribosomal protein S17P
+VNG1701G	rpl14p	50S ribosomal protein L14P
+VNG1702G	rpl24p	50S ribosomal protein L24P
+VNG1703G	rps4e	30S ribosomal protein S4E
+VNG1705G	rpl5p	50S ribosomal protein L5P
+VNG1706G	rps14p	30S ribosomal protein S14P
+VNG1707G	rps8p	30S ribosomal protein S8P
+VNG1709G	rpl6p	50S ribosomal protein L6P
+VNG1711G	rpl32e	50S ribosomal protein L32E
+VNG1713G	rpl19e	50S ribosomal protein L19E
+VNG1714G	rpl18p	50S ribosomal protein L18P
+VNG1715G	rps5p	30S ribosomal protein S5P
+VNG1716G	rpl30p	50S ribosomal protein L30P
+VNG1718G	rpl15p	50S ribosomal protein L15P
+VNG1719G	secY	protein translocase
+VNG1720H	VNG1720H	hypothetical protein
+VNG1721G	trkH2	TRK potassium uptake system protein
+VNG1723H	VNG1723H	hypothetical protein
+VNG1724G	adk	adenylate kinase
+VNG1726G	htlB	Htr-like protein
+VNG1727G	cmk	cytidydylate kinase
+VNG1729G	sus	tRNA-pseudouridine synthase
+VNG1732C	VNG1732C	conserved hypothetical protein
+VNG1733G	htr17	Htr17 transducer
+VNG1734H	VNG1734H	hypothetical protein
+VNG1735C	VNG1735C	conserved hypothetical protein
+VNG1737H	VNG1737H	hypothetical protein
+VNG1739G	htlC	Htr-like protein
+VNG1740C	VNG1740C	conserved hypothetical protein
+VNG1743C	VNG1743C	conserved hypothetical protein
+VNG1744H	VNG1744H	hypothetical protein
+VNG1746C	VNG1746C	conserved hypothetical protein
+VNG1748C	VNG1748C	conserved hypothetical protein
+VNG1749G	gbp1	GTP-binding protein homolog
+VNG1751H	VNG1751H	hypothetical protein
+VNG1752C	VNG1752C	conserved hypothetical protein
+VNG1754G	phr1	photolyase/cryptochrome
+VNG1755G	crtI2	phytoene dehydrogenase
+VNG1756G	eif1a2	translation initiation factor eIF-1A
+VNG1758H	VNG1758H	hypothetical protein
+VNG1759G	htr7	Htr7 transducer
+VNG1760G	htr5	Htr5 transducer
+VNG1762G	proX	putative ABC transporter
+VNG1764G	sop2	sensory rhodopsin II
+VNG1765G	htr2	Htr2 transducer
+VNG1766C	VNG1766C	conserved hypothetical protein
+VNG1767G	speB	agmatinase
+VNG1768G	eif5a	translation initiation factor eIF-5A
+VNG1769C	VNG1769C	conserved hypothetical protein
+VNG1770C	VNG1770C	conserved hypothetical protein
+VNG1771C	VNG1771C	conserved hypothetical protein
+VNG1772G	pgp	3-phosphoglycerate kinase
+VNG1773G	cad	pterin-4a-carbinolamine dehydratase
+VNG1774G	hemA	glutamyl-tRNA reductase
+VNG1775C	VNG1775C	conserved hypothetical protein
+VNG1776G	nirH	heme biosynthesis protein
+VNG1777H	VNG1777H	hypothetical protein
+VNG1779C	VNG1779C	conserved hypothetical protein
+VNG1781C	VNG1781C	conserved hypothetical protein
+VNG1782C	VNG1782C	conserved hypothetical protein
+VNG1784C	VNG1784C	conserved hypothetical protein
+VNG1783H	VNG1783H	hypothetical protein
+VNG1785G	panF	pantothenate permease
+VNG1786H	VNG1786H	hypothetical protein
+VNG1787H	VNG1787H	hypothetical protein
+VNG1788C	VNG1788C	conserved hypothetical protein
+VNG1790H	VNG1790H	hypothetical protein
+VNG1791C	VNG1791C	conserved hypothetical protein
+VNG1793C	VNG1793C	conserved hypothetical protein
+VNG1794C	VNG1794C	conserved hypothetical protein
+VNG1797G	thrB	homoserine kinase
+VNG1795C	VNG1795C	conserved hypothetical protein
+VNG1796H	VNG1796H	hypothetical protein
+VNG1798H	VNG1798H	hypothetical protein
+VNG1800H	VNG1800H	hypothetical protein
+VNG1801G	hsp1	small heat shock protein
+VNG1802H	VNG1802H	hypothetical protein
+VNG1804G	noxA	NADH oxidase
+VNG1806H	VNG1806H	hypothetical protein
+VNG1807H	VNG1807H	hypothetical protein
+VNG1809H	VNG1809H	hypothetical protein
+VNG1811G	eye	succinoglycan biosynthesis
+VNG1814G	carB	carbamoyl-phosphate synthase large subunit
+VNG1815G	carA	carbamoyl-phosphate synthase small subunit
+VNG1816G	trh3	transcription regulator
+VNG1818G	idi	isopentenyl pyrophosphate isomerase
+VNG1820H	VNG1820H	hypothetical protein
+VNG1821G	adh4	alcohol dehydrogenase
+VNG1822G	moaB	molybdenum cofactor biosynthesis protein
+VNG1823C	VNG1823C	conserved hypothetical protein
+VNG1826H	VNG1826H	hypothetical protein
+VNG1827H	VNG1827H	hypothetical protein
+VNG1829G	guaAb	GMP synthase subunit B
+VNG1830G	pyrG	CTP synthase
+VNG1831H	VNG1831H	hypothetical protein
+VNG1832H	VNG1832H	hypothetical protein
+VNG1833C	VNG1833C	conserved hypothetical protein
+VNG1834G	hyrA	monooxygenase
+VNG1835G	thrS	threonyl-tRNA synthetase
+VNG1836G	cspD2	cold shock protein
+VNG1837G	ykfB1	chloromuconate cycloisomerase
+VNG1839H	VNG1839H	hypothetical protein
+VNG1838H	VNG1838H	hypothetical protein
+VNG1842H	VNG1842H	hypothetical protein
+VNG1843C	VNG1843C	conserved hypothetical protein
+VNG1844G	ansA	L-asparaginase
+VNG1845C	VNG1845C	conserved hypothetical protein
+VNG1846C	VNG1846C	conserved hypothetical protein
+VNG1848H	VNG1848H	hypothetical protein
+VNG1847G	pchA	potassium channel homolog
+VNG1849H	VNG1849H	hypothetical protein
+VNG1850G	udp1	uridine phosphorylase
+VNG1851G	suk	sugar kinase
+VNG1852H	VNG1852H	hypothetical protein
+VNG1853G	eif2ba	translation initiation factor eIF-2B subunit alpha
+VNG1856G	htr3	Htr3 transducer
+VNG1857C	VNG1857C	conserved hypothetical protein
+VNG1859G	deoC	deoxyribose-phosphate aldolase
+VNG1861C	VNG1861C	conserved hypothetical protein
+VNG1862G	cef	cation efflux system protein (zinc/cadmium)
+VNG1864G	hit2	histidine triad protein
+VNG1865H	VNG1865H	hypothetical protein
+VNG1866G	map	methionyl aminopeptidase
+VNG1867G	potC	spermidine/putrescine ABC transporter permease
+VNG1868G	potB	spermidine/putrescine ABC transporter permease
+VNG1869C	VNG1869C	conserved hypothetical protein
+VNG1871G	potA2	spermidine/putrescine ABC transporter
+VNG1872C	VNG1872C	conserved hypothetical protein
+VNG1873G	icd	isocitrate dehydrogenase, NADP
+VNG1874C	VNG1874C	conserved hypothetical protein
+VNG1875G	mvaA	3-hydroxy-3-methylglutaryl-coenzyme A reductase
+VNG1877C	VNG1877C	conserved hypothetical protein
+VNG1879G	thb	thiamin-binding periplasmic protein precursor homolog
+VNG1880C	VNG1880C	conserved hypothetical protein
+VNG1882G	nadA	quinolinate synthetase
+VNG1883G	nadB	L-aspartate oxidase
+VNG1884G	nadC	quinolinate phosphoribosyltransferase
+VNG1886C	VNG1886C	conserved hypothetical protein
+VNG1887G	gpm	phosphoglycerate mutase
+VNG1889H	VNG1889H	hypothetical protein
+VNG1890H	VNG1890H	hypothetical protein
+VNG1891H	VNG1891H	hypothetical protein
+VNG1893G	trp2	ABC transport protein
+VNG1894C	VNG1894C	conserved hypothetical protein
+VNG1895H	VNG1895H	hypothetical protein
+VNG1896C	VNG1896C	conserved hypothetical protein
+VNG1898C	VNG1898C	conserved hypothetical protein
+VNG1899G	kaiC	circadian regulator
+VNG1900C	VNG1900C	conserved hypothetical protein
+VNG1901C	VNG1901C	conserved hypothetical protein
+VNG1902H	VNG1902H	hypothetical protein
+VNG1903C	VNG1903C	conserved hypothetical protein
+VNG1904H	VNG1904H	hypothetical protein
+VNG1905C	VNG1905C	conserved hypothetical protein
+VNG1906H	VNG1906H	hypothetical protein
+VNG1907H	VNG1907H	hypothetical protein
+VNG1910H	VNG1910H	hypothetical protein
+VNG1911G	nirD	heme biosynthesis protein
+VNG1912G	trpD2	phosphoribosyl transferase
+VNG1914G	ppiA	peptidyl-prolyl isomerase
+VNG1916H	VNG1916H	hypothetical protein
+VNG1917H	VNG1917H	hypothetical protein
+VNG1918C	VNG1918C	conserved hypothetical protein
+VNG1919H	VNG1919H	hypothetical protein
+VNG1921H	VNG1921H	hypothetical protein
+VNG1920H	VNG1920H	hypothetical protein
+VNG1922G	trh5	transcription regulator
+VNG1924G	trkA6	TRK potassium uptake system protein
+VNG1925H	VNG1925H	hypothetical protein
+VNG1926G	pdhA1	pyruvate dehydrogenase alpha subunit
+VNG1927H	VNG1927H	hypothetical protein
+VNG1929G	tmk	thymidylate kinase
+VNG1932G	nolA	NADH dehydrogenase/oxidoreductase-like protein
+VNG1933G	ftsZ3	cell division protein
+VNG1934H	VNG1934H	hypothetical protein
+VNG1935C	VNG1935C	conserved hypothetical protein
+VNG1937C	VNG1937C	conserved hypothetical protein
+VNG1938C	VNG1938C	conserved hypothetical protein
+VNG1939G	purC	phosphoribosylaminoimidazole-succinocarboxamide synthase
+VNG1940H	VNG1940H	hypothetical protein
+VNG1941C	VNG1941C	conserved hypothetical protein
+VNG1942H	VNG1942H	hypothetical protein
+VNG1943H	VNG1943H	hypothetical protein
+VNG1945G	purL2	phosphoribosylformylglycinamide synthase I
+VNG1944C	VNG1944C	conserved hypothetical protein
+VNG1946G	purU	formyltetrahydrofolate deformylase
+VNG1948H	VNG1948H	hypothetical protein
+VNG1949G	gul2	inosine-5-monophosphate dehydrogenase-like
+VNG1951G	sub	subtilisin homolog
+VNG1952H	VNG1952H	hypothetical protein
+VNG1953C	VNG1953C	conserved hypothetical protein
+VNG1954H	VNG1954H	hypothetical protein
+VNG1956H	VNG1956H	hypothetical protein
+VNG1957G	tgtA2	archaeosine tRNA-ribosyltransferase
+VNG1959G	tgtA1	archaeosine tRNA-ribosyltransferase
+VNG1960H	VNG1960H	hypothetical protein
+VNG1962C	VNG1962C	conserved hypothetical protein
+VNG1963H	VNG1963H	hypothetical protein
+VNG1964H	VNG1964H	hypothetical protein
+VNG1965H	VNG1965H	hypothetical protein
+VNG1967G	glpK	glycerol kinase
+VNG1969G	gpdA2	glycerol-3-phosphate dehydrogenase chain A
+VNG1971G	gpdB	glycerol-3-phosphate dehydrogenase chain B
+VNG1972G	gpdC	glycerol-3-phosphate dehydrogenase chain C
+VNG1973H	VNG1973H	hypothetical protein
+VNG1974H	VNG1974H	hypothetical protein
+VNG1976H	VNG1976H	hypothetical protein
+VNG1977H	VNG1977H	hypothetical protein
+VNG1978H	VNG1978H	hypothetical protein
+VNG1980C	VNG1980C	conserved hypothetical protein
+VNG1983H	VNG1983H	hypothetical protein
+VNG1982C	VNG1982C	conserved hypothetical protein
+VNG1984G	rnh	RNAase H
+VNG1985C	VNG1985C	conserved hypothetical protein
+VNG1986C	VNG1986C	conserved hypothetical protein
+VNG1987G	secD	protein-export membrane protein
+VNG1988G	secF	protein-export membrane protein
+VNG1989H	VNG1989H	hypothetical protein
+VNG1991H	VNG1991H	hypothetical protein
+VNG1992G	pgi	peroxidase / catalase
+VNG1993H	VNG1993H	hypothetical protein
+VNG1994C	VNG1994C	conserved hypothetical protein
+VNG1995C	VNG1995C	conserved hypothetical protein
+VNG1997G	infB	bacterial-like IF2
+VNG1998H	VNG1998H	hypothetical protein
+VNG1999H	VNG1999H	hypothetical protein
+VNG2000G	prrIV1	ATP-dependent 26S proteinase regulatory subunit 4 homolog
+VNG2001G	yjbG	oligopeptidase
+VNG2002H	VNG2002H	hypothetical protein
+VNG2003G	truA	pseudouridylate synthase I
+VNG2005G	hisS	histidyl-tRNA synthetase
+VNG2006C	VNG2006C	conserved hypothetical protein
+VNG2008H	VNG2008H	hypothetical protein
+VNG2010G	rps19e	30S ribosomal protein S19E
+VNG2011G	thiL	thiamine monophosphate kinase
+VNG2012C	VNG2012C	conserved hypothetical protein
+VNG2014H	VNG2014H	hypothetical protein
+VNG2015C	VNG2015C	conserved hypothetical protein
+VNG2017G	lysS	lysyl-tRNA synthetase
+VNG2019C	VNG2019C	conserved hypothetical protein
+VNG2020C	VNG2020C	conserved hypothetical protein
+VNG2021C	VNG2021C	conserved hypothetical protein
+VNG2023G	gsp	general stress protein 69
+VNG2024H	VNG2024H	hypothetical protein
+VNG2025G	yyaI	acetyltransferase homolog
+VNG2027H	VNG2027H	hypothetical protein
+VNG2028H	VNG2028H	hypothetical protein
+VNG2029H	VNG2029H	hypothetical protein
+VNG2031G	nadE	NAD+ synthetase
+VNG2032G	fad1	enoyl-CoA hydratase
+VNG2034H	VNG2034H	hypothetical protein
+VNG2035H	VNG2035H	hypothetical protein
+VNG2036G	hlx1	HoxA-like transcriptional regulator
+VNG2037C	VNG2037C	conserved hypothetical protein
+VNG2039H	VNG2039H	hypothetical protein
+VNG2041H	VNG2041H	hypothetical protein
+VNG2042H	VNG2042H	hypothetical protein
+VNG2043G	ham1	HAM1 protein homolog
+VNG2044H	VNG2044H	hypothetical protein
+VNG2045G	gcp	O-sialoglycoprotein endopeptidase homolog
+VNG2047G	rps27ae	30S ribosomal protein S27E
+VNG2048G	rps24e	30S ribosomal protein S24E
+VNG2049C	VNG2049C	conserved hypothetical protein
+VNG2051G	rpoE	DNA-directed RNA polymerase subunit E
+VNG2053G	rpoE	DNA-directed RNA polymerase subunit E
+VNG2054H	VNG2054H	hypothetical protein
+VNG2056G	eif2g	translation initiation factor eIF-2 subunit gamma
+VNG2059H	VNG2059H	hypothetical protein
+VNG2060G	phnP	ATP-binding protein
+VNG2062G	atp	aaa superfamily atpase
+VNG2064H	VNG2064H	hypothetical protein
+VNG2063G	aca	probable acetyl-coa acetyltransferase
+VNG2065G	dgs	dolichol-P-glucose transferase
+VNG2067H	VNG2067H	hypothetical protein
+VNG2068C	VNG2068C	conserved hypothetical protein
+VNG2071G	lfl2	long-chain fatty-acid-CoA ligase
+VNG2073C	VNG2073C	conserved hypothetical protein
+VNG2072G	serS	serine-tRNA synthetase
+VNG2074H	VNG2074H	hypothetical protein
+VNG2075C	VNG2075C	conserved hypothetical protein
+VNG2076G	rpl40e	50S ribosomal protein L40E
+VNG2079G	mutT	mismatch repair protein
+VNG2078G	hat2	probable acetyltransferase
+VNG2080C	VNG2080C	conserved hypothetical protein
+VNG2081H	VNG2081H	hypothetical protein
+VNG2082G	polC	DNA polymerase bacteriophage-type
+VNG2084G	phnE	transport protein
+VNG2085G	phnC	phosphonates transport ATP-binding
+VNG2086G	hpb	possible phosphate binding protein
+VNG2087G	hisH2	imidazoleglycerol-phosphate synthase
+VNG2088G	trm1	N2,N2-dimethylguanosine tRNA methyltransferase
+VNG2089H	VNG2089H	hypothetical protein
+VNG2091H	VNG2091H	hypothetical protein
+VNG2093G	glnA	glutamine synthetase
+VNG2094G	trh4	transcription regulator
+VNG2096G	cctB	thermosome subunit beta
+VNG2097C	VNG2097C	conserved hypothetical protein
+VNG2098H	VNG2098H	hypothetical protein
+VNG2099C	VNG2099C	conserved hypothetical protein
+VNG2100G	iluA	threonine dehydratase
+VNG2101H	VNG2101H	hypothetical protein
+VNG2102G	citZ	citrate synthase
+VNG2104G	pchB	potassium channel homolog
+VNG2105H	VNG2105H	hypothetical protein
+VNG2106G	sdh	succinate dehydrogenase subunit
+VNG2108G	thrC3	threonine synthase
+VNG2109H	VNG2109H	hypothetical protein
+VNG2110C	VNG2110C	conserved hypothetical protein
+VNG2112C	VNG2112C	conserved hypothetical protein
+VNG2113C	VNG2113C	conserved hypothetical protein
+VNG2115H	VNG2115H	hypothetical protein
+VNG2116C	VNG2116C	conserved hypothetical protein
+VNG2117C	VNG2117C	conserved hypothetical protein
+VNG2118G	pyrE2	orotate phosphoribosyl transferase
+VNG2119C	VNG2119C	conserved hypothetical protein
+VNG2120G	yusM	proline dehydrogenase
+VNG2121C	VNG2121C	conserved hypothetical protein
+VNG2122G	ilvE2	branched-chain amino acid aminotransferase
+VNG2123G	nhaC2	Na+/H+ antiporter
+VNG2124C	VNG2124C	conserved hypothetical protein
+VNG2125G	ribA	GTP cyclohydrolase II
+VNG2126C	VNG2126C	conserved hypothetical protein
+VNG2128C	VNG2128C	conserved hypothetical protein
+VNG2129H	VNG2129H	hypothetical protein
+VNG2130G	minD2	cell division inhibitor
+VNG2131G	erf1	peptide chain release factor eRF-1
+VNG2132G	fer1	ferredoxin
+VNG2133H	VNG2133H	hypothetical protein
+VNG2135G	atpD	H+-transporting ATP synthase subunit D
+VNG2136G	blh	Brp-like homolog
+VNG2137G	ggt	geranylgeranyl-diphosphate geranylgeranyltransferase
+VNG2138G	atpB	H+-transporting ATP synthase subunit B
+VNG2139G	atpA	H+-transporting ATP synthase subunit A
+VNG2140G	atpF	H+-transporting ATP synthase subunit F
+VNG2141G	atpC	H+-transporting ATP synthase subunit C
+VNG2142G	atpE	H+-transporting ATP synthase subunit E
+VNG2143G	atpK	H+-transporting ATP synthase subunit K
+VNG2144G	atpI	H+-transporting ATP synthase subunit I
+VNG2146H	VNG2146H	hypothetical protein
+VNG2147G	hmp	membrane protein
+VNG2148H	VNG2148H	hypothetical protein
+VNG2149H	VNG2149H	hypothetical protein
+VNG2150G	etfB	electron transfer flavoprotein subunit beta
+VNG2151G	etfA	electron transfer flavoprotein subunit alpha
+VNG2152C	VNG2152C	conserved hypothetical protein
+VNG2153G	fps	putative isopentenyl pyrophosphate isomerase
+VNG2154C	VNG2154C	conserved hypothetical protein
+VNG2155C	VNG2155C	conserved hypothetical protein
+VNG2156C	VNG2156C	conserved hypothetical protein
+VNG2157C	VNG2157C	conserved hypothetical protein
+VNG2158G	oxrA	putative oxidoreductase
+VNG2159G	manC	mannose-1-phosphate guanylyltransferase
+VNG2160C	VNG2160C	conserved hypothetical protein
+VNG2162C	VNG2162C	conserved hypothetical protein
+VNG2163H	VNG2163H	hypothetical protein
+VNG2164C	VNG2164C	conserved hypothetical protein
+VNG2165H	VNG2165H	hypothetical protein
+VNG2166C	VNG2166C	conserved hypothetical protein
+VNG2167G	dbp	DNA binding protein eukaryotic-like
+VNG2168C	VNG2168C	conserved hypothetical protein
+VNG2171G	adh1	alcohol dehydrogenase
+VNG2170H	VNG2170H	hypothetical protein
+VNG2172C	VNG2172C	conserved hypothetical protein
+VNG2173G	rad24a	DNA repair protein
+VNG2174H	VNG2174H	hypothetical protein
+VNG2175H	VNG2175H	hypothetical protein encoded by ISH8
+VNG2176H	VNG2176H	hypothetical protein
+VNG2177H	VNG2177H	hypothetical protein
+VNG2178H	VNG2178H	hypothetical protein
+VNG2179H	VNG2179H	hypothetical protein
+VNG2180C	VNG2180C	conserved hypothetical protein
+VNG2181G	mcm	MCM / cell division control protein 21
+VNG2182H	VNG2182H	hypothetical protein
+VNG2183H	VNG2183H	hypothetical protein
+VNG2184G	tfbA	transcription initiation factor IIB
+VNG2185H	VNG2185H	hypothetical protein
+VNG2186G	hit1	histidine triad protein
+VNG2187H	VNG2187H	hypothetical protein
+VNG2189H	VNG2189H	hypothetical protein
+VNG2190G	ileS	isoleucyl-tRNA synthetase
+VNG2191H	VNG2191H	hypothetical protein
+VNG2193G	coxA1	cytochrome c oxidase subunit I
+VNG2195G	coxB2	cytochrome c oxidase subunit II
+VNG2196G	hcpB	halocyanin precursor-like
+VNG2197H	VNG2197H	hypothetical protein
+VNG2199H	VNG2199H	hypothetical protein
+VNG2201G	cpx	heavy-metal transporting CPx-type ATPase
+VNG2202H	VNG2202H	hypothetical protein
+VNG2203G	prsA	ribose phosphate pyrophosphokinase
+VNG2204H	VNG2204H	hypothetical protein
+VNG2205H	VNG2205H	hypothetical protein
+VNG2206G	pmu1	phosphomannomutase
+VNG2207H	VNG2207H	hypothetical protein
+VNG2208G	trpS1	tryptophanyl-tRNA synthetase
+VNG2210G	endA	tRNA intron endonuclease
+VNG2211H	VNG2211H	hypothetical protein
+VNG2213G	brr2	pre-mRNA splicing helicase
+VNG2214G	dinF	DNA damage-inducible protein
+VNG2216G	lip	lipoic acid synthase
+VNG2217G	pdhA2	pyruvate dehydrogenase alpha subunit
+VNG2218G	pdhB	pyruvate dehydrogenase beta subunit
+VNG2219G	dsa	dihydrolipoamide S-acetyltransferase
+VNG2220G	lpdA	dihydrolipoamide dehydrogenase
+VNG2222G	pheA	prephenate dehydratase
+VNG2223G	leuS	leucine-tRNA synthetase
+VNG2224G	ocd1	ornithine cyclodeaminase
+VNG2226G	cctA	thermosome subunit alpha
+VNG2227C	VNG2227C	conserved hypothetical protein
+VNG2230H	VNG2230H	hypothetical protein
+VNG2231C	VNG2231C	conserved hypothetical protein
+VNG2232G	trpS2	tryptophanyl-tRNA synthetase
+VNG2233C	VNG2233C	conserved hypothetical protein
+VNG2234G	eif1a1	translation initiation factor eIF-1A
+VNG2236H	VNG2236H	hypothetical protein
+VNG2237G	tyrS	tyrosyl-tRNA synthetase
+VNG2238C	VNG2238C	conserved hypothetical protein
+VNG2239C	VNG2239C	conserved hypothetical protein
+VNG2240G	rfcC	replication factor C small subunit
+VNG2241H	VNG2241H	hypothetical protein
+VNG2242C	VNG2242C	conserved hypothetical protein
+VNG2243G	tbpE	transcription initiation factor IID
+VNG2244H	VNG2244H	hypothetical protein
+VNG2246H	VNG2246H	hypothetical protein
+VNG2247G	hisG	ATP phosphoribosyltransferase
+VNG2248H	VNG2248H	hypothetical protein
+VNG2249G	trzA	N-ethylammeline chlorohydrolase
+VNG2251G	achY	adenosylhomocysteinase
+VNG2252G	hjr	Holliday junction resolvase
+VNG2253H	VNG2253H	hypothetical protein
+VNG2254C	VNG2254C	conserved hypothetical protein
+VNG2255C	VNG2255C	conserved hypothetical protein
+VNG2256G	pcn	proliferating-cell nuclear antigen
+VNG2257G	nce	Na+/Ca2+-exchanging protein
+VNG2259C	VNG2259C	conserved hypothetical protein
+VNG2260H	VNG2260H	hypothetical protein
+VNG2262H	VNG2262H	hypothetical protein
+VNG2263G	ftsJ	cell division protein
+VNG2264C	VNG2264C	conserved hypothetical protein
+VNG2268H	VNG2268H	hypothetical protein
+VNG2267G	tatC2	protein export
+VNG2269G	tatC1	protein export
+VNG2270G	mutS3	mismatch repair protein
+VNG2271G	orc6	orc / cell division control protein 6
+VNG2272G	rpi	ribose 5-phosphate isomerase
+VNG2273H	VNG2273H	hypothetical protein
+VNG2274C	VNG2274C	conserved hypothetical protein
+VNG2276G	pmm	phosphoglucomutase/phospho-mannomutase
+VNG2277H	VNG2277H	hypothetical protein
+VNG2279H	VNG2279H	hypothetical protein
+VNG2280G	rfcA	replication factor C small subunit
+VNG2281C	VNG2281C	conserved hypothetical protein
+VNG2282C	VNG2282C	conserved hypothetical protein
+VNG2283G	alaS	alanyl-tRNA synthetase
+VNG2284G	hisJ	N1-(5-Phospho-D-ribosyl)-AMP 1,6-hydrolase
+VNG2285C	VNG2285C	conserved hypothetical protein
+VNG2286G	mamA	methylaspartate mutase
+VNG2288G	mamB	methylaspartate mutase
+VNG2289G	mal	methylaspartate ammonia-lyase
+VNG2290G	maoC1	monoamine oxidase regulatory-like
+VNG2291G	cat	4-hydroxybutyrate CoA transferase
+VNG2292H	VNG2292H	hypothetical protein
+VNG2293G	fer2	ferredoxin
+VNG2294G	hisA	phosphoribosylformimino-5-aminoimidazole carboxamide ribotide isomerase
+VNG2295G	hisB	imidazoleglycerol-phosphate dehydratase
+VNG2297H	VNG2297H	hypothetical protein
+VNG2296C	VNG2296C	conserved hypothetical protein
+VNG2298H	VNG2298H	hypothetical protein
+VNG2299H	VNG2299H	hypothetical protein
+VNG2301G	txrB3	thioredoxin reductase
+VNG2302G	yuxL	acylaminoacyl-peptidase
+VNG2304H	VNG2304H	hypothetical protein
+VNG2305C	VNG2305C	conserved hypothetical protein
+VNG2306H	VNG2306H	hypothetical protein
+VNG2307C	VNG2307C	conserved hypothetical protein
+VNG2308G	hlp	hemolysin protein
+VNG2310H	VNG2310H	hypothetical protein
+VNG2311H	VNG2311H	hypothetical protein
+VNG2312C	VNG2312C	conserved hypothetical protein
+VNG2313H	VNG2313H	hypothetical protein
+VNG2314H	VNG2314H	hypothetical protein
+VNG2315H	VNG2315H	hypothetical protein
+VNG2316C	VNG2316C	conserved hypothetical protein
+VNG2317G	cbiO1	cobalt transport ATP-binding protein
+VNG2320G	hdrD	heterodisulfide reductase
+VNG2321G	ydaJ	putative acetyltransferase
+VNG2322G	hem2	porphobilinogen synthase
+VNG2323H	VNG2323H	hypothetical protein
+VNG2324H	VNG2324H	hypothetical protein
+VNG2326G	hemL	glutamate-1-semialdehyde aminotransferase
+VNG2328H	VNG2328H	hypothetical protein
+VNG2329C	VNG2329C	conserved hypothetical protein
+VNG2330G	hem3	porphobilinogen  deaminase
+VNG2331G	uroM	S-adenosyl-L-methionine:uroporphyrinogen III methyltransferase
+VNG2332G	cysG	uroporphyrin-III C-methyltransferase
+VNG2333C	VNG2333C	conserved hypothetical protein
+VNG2334C	VNG2334C	conserved hypothetical protein
+VNG2335H	VNG2335H	hypothetical protein
+VNG2337C	VNG2337C	conserved hypothetical protein
+VNG2338G	polA2	DNA polymerase type II large chain
+VNG2339C	VNG2339C	conserved hypothetical protein
+VNG2340H	VNG2340H	hypothetical protein
+VNG2341H	VNG2341H	hypothetical protein
+VNG2342H	VNG2342H	hypothetical protein
+VNG2343G	ykfD	oligopeptide ABC transporter ATP-binding
+VNG2344G	oppD2	oligopeptide ABC transporter
+VNG2346G	dppC2	dipeptide ABC transporter permease
+VNG2347G	dppB1	dipeptide ABC transporter permease
+VNG2349G	dppA	dipeptide ABC transporter dipeptide-binding
+VNG2351C	VNG2351C	conserved hypothetical protein
+VNG2352G	glyS	glycine-tRNA synthetase
+VNG2353H	VNG2353H	hypothetical protein
+VNG2356G	eif4a	ATP-dependent RNA helicase homolog eIF-4A
+VNG2358G	appA	oligopeptide binding protein
+VNG2359G	appB	oligopeptide ABC permease
+VNG2361G	appC	oligopeptide transport permease protein
+VNG2363G	oppD1	oligopeptide ABC transporter ATP-binding
+VNG2365G	appF	oligopeptide ABC transporter ATP-binding
+VNG2366C	VNG2366C	conserved hypothetical protein
+VNG2367G	mdhA	L-malate dehydrogenase
+VNG2370C	VNG2370C	conserved hypothetical protein
+VNG2368G	rad24b	DNA repair protein
+VNG2369C	VNG2369C	conserved hypothetical protein
+VNG2371C	VNG2371C	conserved hypothetical protein
+VNG2372G	rad24c	DNA repair protein
+VNG2373G	tnaA	tryptophanase
+VNG2374G	lysC	aspartokinase II alpha subunit
+VNG2376H	VNG2376H	hypothetical protein
+VNG2377G	nosY	nitrite/nitrate reduction protein
+VNG2378G	nosF1	copper transport ATP-binding protein
+VNG2379H	VNG2379H	hypothetical protein
+VNG2380H	VNG2380H	hypothetical protein
+VNG2381G	uvrC	excision nuclease chain C
+VNG2383G	nrdA	ribonucleoside reductase small chain
+VNG2384G	nrdB1	ribonucleoside reductase large chain
+VNG2385H	VNG2385H	hypothetical protein
+VNG2386C	VNG2386C	conserved hypothetical protein
+VNG2387H	VNG2387H	hypothetical protein
+VNG2390G	uvrB	excision nuclease chain B
+VNG2392H	VNG2392H	hypothetical protein
+VNG2393G	tssA	probable thiosulfate sulfurtransferase
+VNG2394G	tssB	thiosulfate sulfurtransferase
+VNG2395C	VNG2395C	conserved hypothetical protein
+VNG2396G	cysT1	sulfate transport system permease protein
+VNG2397G	cysA	sulfate transport system ATP-binding protein
+VNG2398G	scm	24-sterol C-methyltransferase
+VNG2399H	VNG2399H	hypothetical protein
+VNG2400H	VNG2400H	hypothetical protein
+VNG2403H	VNG2403H	hypothetical protein
+VNG2402H	VNG2402H	hypothetical protein
+VNG2404G	dip1	DNA damage-inducible protein
+VNG2406C	VNG2406C	conserved hypothetical protein
+VNG2408C	VNG2408C	conserved hypothetical protein
+VNG2410G	gbp3	GTP-binding protein homolog
+VNG2411G	orc7	orc / cell division control protein 6
+VNG2412H	VNG2412H	hypothetical protein
+VNG2413H	VNG2413H	hypothetical protein
+VNG2414H	VNG2414H	hypothetical protein
+VNG2415H	VNG2415H	hypothetical protein
+VNG2416G	sec11	signal sequence peptidase
+VNG2417G	polA1	DNA polymerase type II small chain
+VNG2418G	aspC1	aspartate aminotransferase
+VNG2419C	VNG2419C	conserved hypothetical protein
+VNG2420G	metA	homoserine O-acetyltransferase
+VNG2421G	hal	O-acetyl homoserine
+VNG2422G	glcD	glycolate oxidase subunit
+VNG2423G	serB	phosphoserine phosphatase
+VNG2424G	serA1	phosphoglycerate dehydrogenase
+VNG2426G	act	acyl-CoA thioester hydrolase
+VNG2429G	dld	D-lactate dehydrogenase
+VNG2430G	thrC1	threonine synthase
+VNG2431C	VNG2431C	conserved hypothetical protein
+VNG2432C	VNG2432C	conserved hypothetical protein
+VNG2433H	VNG2433H	hypothetical protein
+VNG2436G	argH	argininosuccinate lyase
+VNG2437G	argG	argininosuccinate synthetase
+VNG2439H	VNG2439H	hypothetical protein
+VNG2440H	VNG2440H	hypothetical protein
+VNG2441G	rad3b	helicase
+VNG2442H	VNG2442H	hypothetical protein
+VNG2443G	dpsA	starvation induced DNA binding protein
+VNG2444C	VNG2444C	conserved hypothetical protein
+VNG2445C	VNG2445C	conserved hypothetical protein
+VNG2446H	VNG2446H	hypothetical protein
+VNG2447G	lta	l-allo-threonine aldolase
+VNG2449G	pepB2	aminopeptidase homolog
+VNG2451H	VNG2451H	hypothetical protein
+VNG2452C	VNG2452C	conserved hypothetical protein
+VNG2454C	VNG2454C	conserved hypothetical protein
+VNG2455C	VNG2455C	conserved hypothetical protein
+VNG2456C	VNG2456C	conserved hypothetical protein
+VNG2458C	VNG2458C	conserved hypothetical protein
+VNG2459G	srp54	signal recognition particle
+VNG2461H	VNG2461H	hypothetical protein
+VNG2462G	dpa	signal recognition particle receptor
+VNG2465C	VNG2465C	conserved hypothetical protein
+VNG2466C	VNG2466C	conserved hypothetical protein
+VNG2467G	rpl31e	50S ribosomal protein L31E
+VNG2469G	rpl39e	50S ribosomal proteins L39E
+VNG2468C	VNG2468C	conserved hypothetical protein
+VNG2470C	VNG2470C	conserved hypothetical protein
+VNG2471G	nifS	NifS protein, class-V aminotransferase
+VNG2472G	nifU	nitrogen fixation protein
+VNG2473G	radA1	DNA repair protein
+VNG2474C	VNG2474C	conserved hypothetical protein
+VNG2475C	VNG2475C	conserved hypothetical protein
+VNG2476C	VNG2476C	conserved hypothetical protein
+VNG2477H	VNG2477H	hypothetical protein
+VNG2480H	VNG2480H	hypothetical protein
+VNG2482G	pstB1	phosphate ABC transporter ATP-binding
+VNG2483G	pstA1	phosphate ABC transporter permease
+VNG2484G	pstC1	phosphate transporter permease
+VNG2486G	yqgG	phosphate ABC transporter binding
+VNG2488C	VNG2488C	conserved hypothetical protein
+VNG2490H	VNG2490H	hypothetical protein
+VNG2493C	VNG2493C	conserved hypothetical protein
+VNG2495H	VNG2495H	hypothetical protein
+VNG2496G	ferB	ferredoxin
+VNG2497H	VNG2497H	hypothetical protein
+VNG2498H	VNG2498H	hypothetical protein
+VNG2499G	gcdH	glutaryl-CoA dehydrogenase
+VNG2501C	VNG2501C	conserved hypothetical protein
+VNG2502C	VNG2502C	conserved hypothetical protein
+VNG2504G	pheS	phenylalanyl-tRNA synthetase subunit alpha
+VNG2505G	pheY	phenylalanyl-tRNA synthetase subunit beta
+VNG2507G	pyrD	dihydroorotate dehydrogenase
+VNG2508C	VNG2508C	conserved hypothetical protein
+VNG2509H	VNG2509H	hypothetical protein
+VNG2510H	VNG2510H	hypothetical protein
+VNG2511H	VNG2511H	hypothetical protein
+VNG2512G	epf1	mRNA 3-end processing factor homolog
+VNG2513G	aldY1	aldehyde dehydrogenase (retinol)
+VNG2514G	rps6e	30S ribosomal protein S6E
+VNG2515H	VNG2515H	hypothetical protein
+VNG2516C	VNG2516C	conserved hypothetical protein
+VNG2518C	VNG2518C	conserved hypothetical protein
+VNG2519H	VNG2519H	hypothetical protein
+VNG2520C	VNG2520C	conserved hypothetical protein
+VNG2521H	VNG2521H	hypothetical protein
+VNG2522C	VNG2522C	conserved hypothetical protein
+VNG2523H	VNG2523H	hypothetical protein
+VNG2524H	VNG2524H	hypothetical protein
+VNG2525H	VNG2525H	hypothetical protein
+VNG2526G	dppF	dipeptide ABC transporter ATP-binding
+VNG2527G	dppD	dipeptide ABC transporter ATP-binding
+VNG2529G	dppB2	dipeptide ABC transporter permease
+VNG2531G	dppC1	dipeptide ABC transporter permease
+VNG2532H	VNG2532H	hypothetical protein
+VNG2533G	pyrC	dihydroorotase
+VNG2536C	VNG2536C	conserved hypothetical protein
+VNG2534C	VNG2534C	conserved hypothetical protein
+VNG2535H	VNG2535H	hypothetical protein
+VNG2537G	entB	isochorismatase
+VNG2539H	VNG2539H	hypothetical protein
+VNG2541C	VNG2541C	conserved hypothetical protein
+VNG2543C	VNG2543C	conserved hypothetical protein
+VNG2544H	VNG2544H	hypothetical protein
+VNG2546G	pepB3	aminopeptidase homolog
+VNG2547G	valS	valyl-tRNA synthetase
+VNG2549C	VNG2549C	conserved hypothetical protein
+VNG2551G	fhuG	ferrichrome ABC transporter permease
+VNG2552G	yfmF	ferrichrome ABC transporter ATP-binding protein
+VNG2553G	yqeC	6-phosphogluconate dehydrogenase
+VNG2554H	VNG2554H	hypothetical protein
+VNG2555C	VNG2555C	conserved hypothetical protein
+VNG2556H	VNG2556H	hypothetical protein
+VNG2558G	fepC	ferric enterobactin transport protein
+VNG2560G	yfmD2	ferrichrome ABC transporter permease protein
+VNG2562H	VNG2562H	hypothetical protein
+VNG2563H	VNG2563H	hypothetical protein
+VNG2565G	trkH3	TRK potassium uptake system protein
+VNG2566H	VNG2566H	hypothetical protein
+VNG2567C	VNG2567C	conserved hypothetical protein
+VNG2569H	VNG2569H	hypothetical protein
+VNG2570G	dcd	deoxycytidine triphosphate deaminase
+VNG2573G	hly	halolysin
+VNG2574G	can	aconitase
+VNG2575G	rimI	Pab N-terminal acetyltransferase
+VNG2576H	VNG2576H	hypothetical protein
+VNG2577C	VNG2577C	conserved hypothetical protein
+VNG2579G	idr1	iron-dependent repressor homolog
+VNG2580C	VNG2580C	conserved hypothetical protein
+VNG2581H	VNG2581H	hypothetical protein
+VNG2582H	VNG2582H	hypothetical protein
+VNG2584C	VNG2584C	conserved hypothetical protein
+VNG2585H	VNG2585H	hypothetical protein
+VNG2586C	VNG2586C	conserved hypothetical protein
+VNG2587C	VNG2587C	conserved hypothetical protein
+VNG2589C	VNG2589C	conserved hypothetical protein
+VNG2591C	VNG2591C	conserved hypothetical protein
+VNG2593H	VNG2593H	hypothetical protein
+VNG2595G	gbp4	GTP-binding protein homolog
+VNG2594C	VNG2594C	conserved hypothetical protein
+VNG2596G	hisI	phosphoribosyl-AMP cyclohydrolase
+VNG2597C	VNG2597C	conserved hypothetical protein
+VNG2598G	hisH1	imidazoleglycerol-phosphate synthase
+VNG2599H	VNG2599H	hypothetical protein
+VNG2600G	trxA2	thioredoxin
+VNG2602G	arsB	arsenite transport protein
+VNG2603H	VNG2603H	hypothetical protein
+VNG2604G	thi1	thiamine biosynthetic enzyme
+VNG2606G	thiD	hydroxymethylpyrimidine phosphate kinase
+VNG2607C	VNG2607C	conserved hypothetical protein
+VNG2608C	VNG2608C	conserved hypothetical protein
+VNG2610C	VNG2610C	conserved hypothetical protein
+VNG2611G	hflX1	GTP-binding protein
+VNG2612G	rli	RNase L inhibitor homolog
+VNG2613H	VNG2613H	hypothetical protein
+VNG2614H	VNG2614H	hypothetical protein
+VNG2615C	VNG2615C	conserved hypothetical protein
+VNG2616G	cxp	probable carboxypeptidase
+VNG2617G	adh2	alcohol dehydrogenase
+VNG2619H	VNG2619H	hypothetical protein
+VNG2620G	uvrD	repair helicase
+VNG2622H	VNG2622H	hypothetical protein
+VNG2624G	ribC	riboflavin synthase alpha subunit
+VNG2625C	VNG2625C	conserved hypothetical protein
+VNG2626H	VNG2626H	hypothetical protein
+VNG2627C	VNG2627C	conserved hypothetical protein
+VNG2628H	VNG2628H	hypothetical protein
+VNG2629G	glcK	glucose kinase
+VNG2631H	VNG2631H	hypothetical protein
+VNG2632G	yusZ2	oxidoreductase
+VNG2633H	VNG2633H	hypothetical protein
+VNG2634H	VNG2634H	hypothetical protein
+VNG2636G	uvrA	excision nuclease chain A
+VNG2637H	VNG2637H	hypothetical protein
+VNG2638G	bchP	geranylgeranyl hydrogenase
+VNG2639G	uae	UDP-N-acetylglucosamine 2-epimerase
+VNG2640G	gcvT2	aminomethyltransferase
+VNG2641H	VNG2641H	hypothetical protein
+VNG2642H	VNG2642H	hypothetical protein
+VNG2643H	VNG2643H	hypothetical protein
+VNG2644C	VNG2644C	conserved hypothetical protein
+VNG2646C	VNG2646C	conserved hypothetical protein
+VNG2645H	VNG2645H	hypothetical protein
+VNG2647G	vacB	ribonuclease II family protein
+VNG2648G	rps10p	30S ribosomal protein S10P
+VNG2649G	eef1a	translation elongation factor eEF-1A subunit alpha
+VNG2650G	hom	homoserine dehydrogenase
+VNG2652H	VNG2652H	hypothetical protein
+VNG2653C	VNG2653C	conserved hypothetical protein
+VNG2654G	eef2	translation elongation factor eEF-2
+VNG2656H	VNG2656H	hypothetical protein
+VNG2657G	rps7p	30S ribosomal protein S7P
+VNG2658G	rps12p	30S ribosomal protein S12P
+VNG2661G	nusA	transcription termination-antitermination factor
+VNG2662G	rpoC	DNA-directed RNA polymerase subunit C
+VNG2664G	rpoA	DNA-directed RNA polymerase subunit A
+VNG2665G	rpoB	DNA-directed RNA polymerase subunit B
+VNG2666G	rpoB	DNA-directed RNA polymerase subunit B
+VNG2668G	rpoH	DNA-directed RNA polymerase subunit H
+VNG2669G	cyo	cytochrome oxidase subunit I homolog
+VNG2673H	VNG2673H	hypothetical protein
+VNG2674H	VNG2674H	hypothetical protein
+VNG2675C	VNG2675C	conserved hypothetical protein
+VNG2677H	VNG2677H	hypothetical protein
+VNG2678H	VNG2678H	hypothetical protein
+VNG2679G	csg	cell surface glycoprotein
+VNG6001H	VNG6001H	hypothetical protein
+VNG6003H	VNG6003H	hypothetical protein
+VNG6005H	VNG6005H	hypothetical protein
+VNG6007H	VNG6007H	hypothetical protein encoded by ISH7
+VNG6008H	VNG6008H	hypothetical protein encoded by ISH7
+VNG6009H	VNG6009H	hypothetical protein encoded by ISH7
+VNG6010G	sojA	Spo0A activation inhibitor
+VNG6011H	VNG6011H	hypothetical protein
+VNG6012H	VNG6012H	hypothetical protein
+VNG6013G	repH	replication protein
+VNG6015H	VNG6015H	hypothetical protein encoded by ISH3
+VNG6016H	VNG6016H	hypothetical protein encoded by ISH8
+VNG6017H	VNG6017H	hypothetical protein
+VNG6019G	gvpM1	GvpM protein, cluster A
+VNG6020G	gvpL1	GvpL protein, cluster A
+VNG6021G	gvpK1	GvpK protein, cluster A
+VNG6022G	gvpJ1	GvpJ protein, cluster A
+VNG6023G	gvpI1	GvpI protein, cluster A
+VNG6024G	gvpH1	GvpH protein, cluster A
+VNG6025G	gvpG1	GvpG protein, cluster A
+VNG6026G	gvpF1	GvpF protein, cluster A
+VNG6027G	gvpE1	GvpE protein, cluster A
+VNG6028G	gvpD1	GvpD protein, cluster A
+VNG6029G	gvpA1	GvpA protein, cluster A
+VNG6031G	gvpC1	GvpC protein, cluster A
+VNG6032G	gvpN1	GvpN protein, cluster A
+VNG6033G	gvpO1	GvpO protein, cluster A
+VNG6034G	sojB	Spo0A activation inhibitor
+VNG6035G	htlD	Htr-like protein
+VNG6036H	VNG6036H	hypothetical protein
+VNG6037G	tbpA	transcription initiation factor IID
+VNG6038H	VNG6038H	hypothetical protein encoded by ISH8
+VNG6039H	VNG6039H	hypothetical protein
+VNG6040H	VNG6040H	hypothetical protein encoded by ISH9
+VNG6042H	VNG6042H	hypothetical protein encoded by ISH5
+VNG6043H	VNG6043H	hypothetical protein encoded by ISH11
+VNG6045H	VNG6045H	hypothetical protein
+VNG6046H	VNG6046H	hypothetical protein
+VNG6047H	VNG6047H	hypothetical protein
+VNG6048H	VNG6048H	hypothetical protein
+VNG6050G	tbpB_1	transcription initiation factor IID
+VNG6051H	VNG6051H	hypothetical protein
+VNG6052H	VNG6052H	hypothetical protein
+VNG6053G	cydA_1	cytochrome d oxidase chain I
+VNG6055G	cydB_1	cytochrome d oxidase chain II
+VNG6057C	VNG6057C	conserved hypothetical protein
+VNG6059C	VNG6059C	conserved hypothetical protein
+VNG6060C	VNG6060C	conserved hypothetical protein
+VNG6061H	VNG6061H	hypothetical protein
+VNG6062H	VNG6062H	hypothetical protein
+VNG6064G	phoT1_1	sodium-dependent phosphate transporter
+VNG6065G	boa3_1	bacterio-opsin activator-like protein
+VNG6066C	VNG6066C	conserved hypothetical protein
+VNG6068C	VNG6068C	conserved hypothetical protein
+VNG6070H	VNG6070H	hypothetical protein
+VNG6071C	VNG6071C	conserved hypothetical protein
+VNG6072C	VNG6072C	conserved hypothetical protein
+VNG6073G	trxA1_1	thioredoxin
+VNG6074G	trxB1_1	thioredoxin reductase
+VNG6075G	trh_1	thioredoxin reductase-like protein
+VNG6076H	VNG6076H	hypothetical protein
+VNG6077H	VNG6077H	hypothetical protein
+VNG6078H	VNG6078H	hypothetical protein
+VNG6079H	VNG6079H	hypothetical protein encoded by ISH8
+VNG6080H	VNG6080H	hypothetical protein
+VNG6081G	crt_1	carotenoid biosynthetic protein
+VNG6082H	VNG6082H	hypothetical protein
+VNG6083H	VNG6083H	hypothetical protein
+VNG6084H	VNG6084H	hypothetical protein encoded by ISH10
+VNG6085H	VNG6085H	hypothetical protein
+VNG6086G	sojC1	Spo0A activation inhibitor
+VNG6087C	VNG6087C	conserved hypothetical protein
+VNG6088C	VNG6088C	conserved hypothetical protein
+VNG6090C	VNG6090C	conserved hypothetical protein
+VNG6091G	orc9	orc / cell division control protein 6
+VNG6093H	VNG6093H	hypothetical protein encoded by ISH2
+VNG6094H	VNG6094H	hypothetical protein
+VNG6095C	VNG6095C	conserved hypothetical protein
+VNG6097C	VNG6097C	conserved hypothetical protein
+VNG6098H	VNG6098H	hypothetical protein encoded by ISH2
+VNG6099H	VNG6099H	hypothetical protein
+VNG6101H	VNG6101H	hypothetical protein
+VNG6102H	VNG6102H	hypothetical protein
+VNG6103H	VNG6103H	hypothetical protein
+VNG6105H	VNG6105H	hypothetical protein
+VNG6106H	VNG6106H	hypothetical protein encoded by ISH8
+VNG6109H	VNG6109H	hypothetical protein
+VNG6111H	VNG6111H	hypothetical protein encoded by ISH3
+VNG6112H	VNG6112H	hypothetical protein
+VNG6113H	VNG6113H	hypothetical protein
+VNG6115H	VNG6115H	hypothetical protein
+VNG6116H	VNG6116H	hypothetical protein
+VNG6117H	VNG6117H	hypothetical protein
+VNG6119H	VNG6119H	hypothetical protein encoded by ISH7
+VNG6120H	VNG6120H	hypothetical protein encoded by ISH7
+VNG6121H	VNG6121H	hypothetical protein
+VNG6123G	sojD	Spo0A activation inhibitor
+VNG6125H	VNG6125H	hypothetical protein
+VNG6126H	VNG6126H	hypothetical protein
+VNG6127H	VNG6127H	hypothetical protein
+VNG6128H	VNG6128H	hypothetical protein
+VNG6129C	VNG6129C	conserved hypothetical protein
+VNG6130G	rad25	DNA repair protein
+VNG6131H	VNG6131H	hypothetical protein
+VNG6132G	repI	replication protein
+VNG6133H	VNG6133H	hypothetical protein
+VNG6134H	VNG6134H	hypothetical protein
+VNG6135C	VNG6135C	conserved hypothetical protein
+VNG6136H	VNG6136H	hypothetical protein
+VNG6139G	hepA	ATP-dependent RNA helicase
+VNG6140G	tbpC	transcription initiation factor IID
+VNG6141H	VNG6141H	hypothetical protein encoded by ISH2
+VNG6142C	VNG6142C	conserved hypothetical protein
+VNG6143H	VNG6143H	hypothetical protein
+VNG6144G	trsE	transfer complex protein
+VNG6145H	VNG6145H	hypothetical protein
+VNG6146H	VNG6146H	hypothetical protein encoded by ISH2
+VNG6147H	VNG6147H	hypothetical protein encoded by ISH8
+VNG6148H	VNG6148H	hypothetical protein encoded by ISH5
+VNG6149H	VNG6149H	hypothetical protein
+VNG6150G	orc1	orc / cell division control protein 6
+VNG6152H	VNG6152H	hypothetical protein
+VNG6153G	sojC2	Spo0A activation inhibitor
+VNG6155H	VNG6155H	hypothetical protein
+VNG6156H	VNG6156H	hypothetical protein
+VNG6157H	VNG6157H	hypothetical protein
+VNG6158H	VNG6158H	hypothetical protein
+VNG6159H	VNG6159H	hypothetical protein
+VNG6160H	VNG6160H	hypothetical protein
+VNG6161H	VNG6161H	hypothetical protein encoded by ISH8
+VNG6162H	VNG6162H	hypothetical protein
+VNG6163H	VNG6163H	hypothetical protein
+VNG6164G	orc2	orc / cell division control protein 6
+VNG6165H	VNG6165H	hypothetical protein
+VNG6166H	VNG6166H	hypothetical protein
+VNG6168H	VNG6168H	hypothetical protein
+VNG6170H	VNG6170H	hypothetical protein
+VNG6171H	VNG6171H	hypothetical protein
+VNG6173C	VNG6173C	conserved hypothetical protein
+VNG6175G	trkA2	TRK potassium uptake system protein
+VNG6176G	kdpA	potassium-transporting ATPase A chain
+VNG6177G	kdpB	potassium-transporting ATPase B chain
+VNG6178G	kdpC	potassium-transporting ATPase C chain
+VNG6179G	cat3	cationic amino acid transporter
+VNG6180H	VNG6180H	hypothetical protein
+VNG6181H	VNG6181H	hypothetical protein
+VNG6182H	VNG6182H	hypothetical protein
+VNG6183C	VNG6183C	conserved hypothetical protein
+VNG6184G	cat4	cationic amino acid transporter
+VNG6185H	VNG6185H	hypothetical protein
+VNG6186H	VNG6186H	hypothetical protein
+VNG6187G	orc3	orc / cell division control protein 6
+VNG6188H	VNG6188H	hypothetical protein
+VNG6189H	VNG6189H	hypothetical protein
+VNG6191H	VNG6191H	hypothetical protein
+VNG6193H	VNG6193H	hypothetical protein
+VNG6194H	VNG6194H	hypothetical protein
+VNG6195H	VNG6195H	hypothetical protein
+VNG6196G	phoT2	sodium-dependent phosphate transporter
+VNG6197H	VNG6197H	hypothetical protein
+VNG6198H	VNG6198H	hypothetical protein
+VNG6199G	cdc48d	cell division cycle protein
+VNG6201G	hsp5	heat shock protease protein
+VNG6203H	VNG6203H	hypothetical protein
+VNG6204H	VNG6204H	hypothetical protein
+VNG6205C	VNG6205C	conserved hypothetical protein
+VNG6206H	VNG6206H	hypothetical protein
+VNG6208C	VNG6208C	conserved hypothetical protein
+VNG6209H	VNG6209H	hypothetical protein
+VNG6210G	gabT	gamma-aminobutyrate aminotransferase
+VNG6211G	bdb	L-2,4-diaminobutyrate decarboxylase
+VNG6212G	iucA	iron transport protein A
+VNG6213G	iucB	iron transport protein B
+VNG6214G	hxyA	monooxygenase
+VNG6216G	iucC	iron transport protein C
+VNG6218G	trkA3	TRK potassium uptake system protein
+VNG6220G	cat2	cationic amino acid transporter
+VNG6221H	VNG6221H	hypothetical protein encoded by ISH12
+VNG6222H	VNG6222H	hypothetical protein encoded by ISH12
+VNG6223C	VNG6223C	conserved hypothetical protein
+VNG6224H	VNG6224H	hypothetical protein
+VNG6225C	VNG6225C	conserved hypothetical protein
+VNG6226H	VNG6226H	hypothetical protein
+VNG6229G	gvpL2	GvpL protein, cluster B
+VNG6230G	gvpK2	GvpK protein, cluster B
+VNG6232G	gvpJ2	GvpJ protein, cluster B
+VNG6233G	gvpI2	GvpI protein, cluster B
+VNG6235G	gvpH2	GvpH protein, cluster B
+VNG6236G	gvpG2	GvpG protein, cluster B
+VNG6237G	gvpF2	GvpF protein, cluster B
+VNG6239G	gvpE2	GvpE protein, cluster B
+VNG6240G	gvpD2	GvpD protein, cluster B
+VNG6241G	gvpA2	GvpA protein, cluster B
+VNG6242G	gvpC2	GvpC protein, cluster B
+VNG6244G	gvpN2	GvpN protein, cluster B
+VNG6246G	gvpO2	GvpO protein, cluster B
+VNG6247G	trkA4	TRK potassium uptake system protein
+VNG6250G	phoT3	sodium-dependent phosphate transporter
+VNG6251H	VNG6251H	hypothetical protein
+VNG6254C	VNG6254C	conserved hypothetical protein
+VNG6255C	VNG6255C	conserved hypothetical protein
+VNG6256G	lipB	lipoate protein ligase
+VNG6258C	VNG6258C	conserved hypothetical protein
+VNG6260G	ftsZ5	cell division protein
+VNG6261G	yocR	sodium-dependent transporter
+VNG6262G	zurM	ABC transporter, permease protein
+VNG6264G	zurA	ABC transporter, ATP-binding protein
+VNG6265G	ycdH	adhesion protein
+VNG6266H	VNG6266H	hypothetical protein
+VNG6268C	VNG6268C	conserved hypothetical protein
+VNG6269C	VNG6269C	conserved hypothetical protein
+VNG6270G	gldA	sn-glycerol-1-phosphate dehydrogenase
+VNG6272G	orc5	orc / cell division control protein 6
+VNG6275H	VNG6275H	hypothetical protein
+VNG6276H	VNG6276H	hypothetical protein
+VNG6277G	ugpB	glycerol-3-phosphate-binding protein precursor
+VNG6279G	ugpA	sn-glycerol-3-phosphate transport system permease
+VNG6280G	ugpE	sn-glycerol-3-phosphate transport system permease
+VNG6281G	ugpC	sn-glycerol-3-phosphate transport system ATP-binding
+VNG6283H	VNG6283H	hypothetical protein
+VNG6284H	VNG6284H	hypothetical protein
+VNG6286H	VNG6286H	hypothetical protein
+VNG6287H	VNG6287H	hypothetical protein
+VNG6288C	VNG6288C	conserved hypothetical protein
+VNG6290H	VNG6290H	hypothetical protein
+VNG6291H	VNG6291H	hypothetical protein
+VNG6292C	VNG6292C	conserved hypothetical protein
+VNG6293C	VNG6293C	conserved hypothetical protein
+VNG6294G	perA	peroxidase / catalase
+VNG6296C	VNG6296C	conserved hypothetical protein
+VNG6297C	VNG6297C	conserved hypothetical protein
+VNG6298C	VNG6298C	conserved hypothetical protein
+VNG6299G	hypE	hydrogenase expression/formation protein
+VNG6301G	aph	alkaline phosphatase
+VNG6302C	VNG6302C	conserved hypothetical protein
+VNG6303G	exsB	succinoglycan biosynthesis
+VNG6305C	VNG6305C	conserved hypothetical protein
+VNG6306C	VNG6306C	conserved hypothetical protein
+VNG6308G	gltP	proton/sodium-glutamate symport protein
+VNG6309G	pyrB	aspartate carbamoyltransferase catalytic subunit
+VNG6311G	pyrI	aspartate carbamoyltransferase regulatory chain
+VNG6312G	argS	arginine-tRNA synthetase
+VNG6313G	nhaC3	Na+/H+ antiporter
+VNG6315G	arcB	ornithine carbamoyltransferase
+VNG6316G	arcC	carbamate kinase
+VNG6317G	arcA	arginine deiminase
+VNG6318G	arcR	transcription regulator
+VNG6319H	VNG6319H	hypothetical protein
+VNG6320C	VNG6320C	conserved hypothetical protein
+VNG6321H	VNG6321H	hypothetical protein
+VNG6322H	VNG6322H	hypothetical protein
+VNG6323H	VNG6323H	hypothetical protein
+VNG6325H	VNG6325H	hypothetical protein
+VNG6326G	trp6	daunorubicin resistance ABC transporter ATP-binding protein
+VNG6327H	VNG6327H	hypothetical protein
+VNG6329H	VNG6329H	hypothetical protein
+VNG6330H	VNG6330H	hypothetical protein
+VNG6331H	VNG6331H	hypothetical protein encoded by ISH8
+VNG6332H	VNG6332H	hypothetical protein encoded by ISH8
+VNG6334H	VNG6334H	hypothetical protein
+VNG6335H	VNG6335H	hypothetical protein
+VNG6337G	sojE	Spo0A activation inhibitor
+VNG6339H	VNG6339H	hypothetical protein
+VNG6340H	VNG6340H	hypothetical protein
+VNG6341H	VNG6341H	hypothetical protein encoded by ISH6
+VNG6343H	VNG6343H	hypothetical protein
+VNG6344H	VNG6344H	hypothetical protein
+VNG6345H	VNG6345H	hypothetical protein encoded by ISH8
+VNG6346H	VNG6346H	hypothetical protein
+VNG6347H	VNG6347H	hypothetical protein
+VNG6348H	VNG6348H	hypothetical protein
+VNG6349C	VNG6349C	conserved hypothetical protein
+VNG6351G	tfbC	transcription initiation factor IIB
+VNG6353H	VNG6353H	hypothetical protein
+VNG6354G	comA	competence-like protein
+VNG6355H	VNG6355H	hypothetical protein
+VNG6357H	VNG6357H	hypothetical protein
+VNG6359H	VNG6359H	hypothetical protein
+VNG6361G	npa	neutral proteinase
+VNG6362G	polB2	DNA polymerase B2
+VNG6363G	orc4	orc / cell division control protein 6
+VNG6364H	VNG6364H	hypothetical protein
+VNG6365H	VNG6365H	hypothetical protein
+VNG6366H	VNG6366H	hypothetical protein
+VNG6367H	VNG6367H	hypothetical protein
+VNG6368H	VNG6368H	hypothetical protein
+VNG6370H	VNG6370H	hypothetical protein
+VNG6371G	mrr	Mrr restriction system protein homolog
+VNG6372H	VNG6372H	hypothetical protein
+VNG6373G	phrH	PhiH1 repressor homolog
+VNG6375H	VNG6375H	hypothetical protein
+VNG6377H	VNG6377H	hypothetical protein
+VNG6378H	VNG6378H	hypothetical protein
+VNG6379C	VNG6379C	conserved hypothetical protein
+VNG6381H	VNG6381H	hypothetical protein
+VNG6383G	lctP	L-lactate permease
+VNG6384H	VNG6384H	hypothetical protein
+VNG6385H	VNG6385H	hypothetical protein
+VNG6387H	VNG6387H	hypothetical protein
+VNG6389G	tfbE	transcription initiation factor IIB
+VNG6390H	VNG6390H	hypothetical protein
+VNG6391H	VNG6391H	hypothetical protein encoded by ISH2
+VNG6393H	VNG6393H	hypothetical protein
+VNG6395H	VNG6395H	hypothetical protein encoded by ISH8
+VNG6396H	VNG6396H	hypothetical protein
+VNG6397H	VNG6397H	hypothetical protein
+VNG6400H	VNG6400H	hypothetical protein
+VNG6401H	VNG6401H	hypothetical protein
+VNG6402H	VNG6402H	hypothetical protein
+VNG6403H	VNG6403H	hypothetical protein
+VNG6404H	VNG6404H	hypothetical protein
+VNG6406H	VNG6406H	hypothetical protein
+VNG6407H	VNG6407H	hypothetical protein
+VNG6408G	phzF	phenazine biosynthetic protein
+VNG6409H	VNG6409H	hypothetical protein
+VNG6411H	VNG6411H	hypothetical protein
+VNG6412H	VNG6412H	hypothetical protein
+VNG6413H	VNG6413H	hypothetical protein
+VNG6416H	VNG6416H	hypothetical protein
+VNG6418H	VNG6418H	hypothetical protein
+VNG6419H	VNG6419H	hypothetical protein
+VNG6420H	VNG6420H	hypothetical protein
+VNG6421H	VNG6421H	hypothetical protein encoded by ISH11
+VNG6424H	VNG6424H	hypothetical protein
+VNG6427H	VNG6427H	hypothetical protein
+VNG6429H	VNG6429H	hypothetical protein
+VNG6430C	VNG6430C	conserved hypothetical protein
+VNG6431H	VNG6431H	hypothetical protein
+VNG6432H	VNG6432H	hypothetical protein
+VNG6434H	VNG6434H	hypothetical protein
+VNG6437C	VNG6437C	conserved hypothetical protein
+VNG6438G	tbpF	transcription initiation factor IID
+VNG6439H	VNG6439H	hypothetical protein
+VNG6441H	VNG6441H	hypothetical protein
+VNG6442H	VNG6442H	hypothetical protein encoded by ISH10
+VNG6443H	VNG6443H	hypothetical protein
+VNG6444H	VNG6444H	hypothetical protein
+VNG6445G	crt_2	carotenoid biosynthetic protein
+VNG6446H	VNG6446H	hypothetical protein
+VNG6447H	VNG6447H	hypothetical protein encoded by ISH8
+VNG6448H	VNG6448H	hypothetical protein
+VNG6449H	VNG6449H	hypothetical protein
+VNG6450H	VNG6450H	hypothetical protein
+VNG6451G	trh_2	thioredoxin reductase-like protein
+VNG6452G	trxB1_2	thioredoxin reductase
+VNG6453G	trxA1_2	thioredoxin
+VNG6454C	VNG6454C	conserved hypothetical protein
+VNG6455C	VNG6455C	conserved hypothetical protein
+VNG6456H	VNG6456H	hypothetical protein
+VNG6457C	VNG6457C	conserved hypothetical protein
+VNG6460C	VNG6460C	conserved hypothetical protein
+VNG6461G	boa3_2	bacterio-opsin activator-like protein
+VNG6462G	phoT1_2	sodium-dependent phosphate transporter
+VNG6464H	VNG6464H	hypothetical protein
+VNG6465H	VNG6465H	hypothetical protein
+VNG6466C	VNG6466C	conserved hypothetical protein
+VNG6467C	VNG6467C	conserved hypothetical protein
+VNG6469C	VNG6469C	conserved hypothetical protein
+VNG6471G	cydB_2	cytochrome d oxidase chain II
+VNG6473G	cydA_2	cytochrome d oxidase chain I
+VNG6474H	VNG6474H	hypothetical protein
+VNG6475H	VNG6475H	hypothetical protein
+VNG6476G	tbpB_2	transcription initiation factor IID
+VNG6478H	VNG6478H	hypothetical protein
+VNG6479H	VNG6479H	hypothetical protein
+VNG6480H	VNG6480H	hypothetical protein
+VNG6481H	VNG6481H	hypothetical protein
+VNG6483H	VNG6483H	hypothetical protein encoded by ISH11
+VNG6484H	VNG6484H	hypothetical protein encoded by ISH5
+VNG6486H	VNG6486H	hypothetical protein encoded by ISH9
+VNG6487H	VNG6487H	hypothetical protein
