@@ -8,12 +8,12 @@
 	<mx:TabNavigator id="tabNavigator" x="119" y="99" width="948" height="649" change="onTabChanged()" creationPolicy="all">
 		<mx:Canvas id="ratiosCanvas" label="ratios" width="100%" height="100%">
 			<mx:DataGrid id="ratiosGrid" x="10" y="10" width="917" height="585" dataProvider="{ratiosData}" allowMultipleSelection="true"
-				itemClick="gridClick(event)" change="dmvSelectionChanged(event)" headerRelease="dmvSelectionChanged(event)" headerShift="dmvSelectionChanged(event)">
+				itemClick="gridClick(event)" change="dmvSelectionChanged(event)" headerRelease="dmvSelectionChanged(event)" headerShift="headerShift(event)">
 			</mx:DataGrid>
 		</mx:Canvas>
 		<mx:Canvas id="lambdasCanvas" label="lambdas" width="100%" height="100%">
 			<mx:DataGrid id="lambdasGrid" x="10" y="10" width="917" height="585" dataProvider="{lambdasData}" allowMultipleSelection="true"
-				itemClick="gridClick(event)" change="dmvSelectionChanged(event)"  headerRelease="dmvSelectionChanged(event)" headerShift="dmvSelectionChanged(event)">
+				itemClick="gridClick(event)" change="dmvSelectionChanged(event)"  headerRelease="dmvSelectionChanged(event)" headerShift="headerShift(event)">
 			</mx:DataGrid>
 		</mx:Canvas>
 	</mx:TabNavigator>
@@ -35,6 +35,8 @@
 	
 		
 		<![CDATA[
+			import mx.events.CollectionEvent;
+			import mx.events.IndexChangedEvent;
 			import mx.collections.SortField;
 			import mx.collections.Sort;
 			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
@@ -71,6 +73,11 @@
 
 
 			protected var tabs:Array = new Array();
+			
+			
+			protected var originalColumnOrder:Array;
+			protected var previousColumnOrder:Array;
+			
 			private var bm:IBrowserManager;
 			
 			private var groupId:String;
@@ -198,7 +205,19 @@
 			protected function getNameForCurrentTab():String {
 				return tabs[tabNavigator.selectedIndex]['name'];
 			}
+			
+			protected function getIndexForCurrentTab():int {
+				return tabNavigator.selectedIndex;
+			}
 
+
+			protected function getPreviousColumnOrderForCurrentTab():Array {
+				return null; //todo implement
+			}
+			
+			protected function getOriginalColumnOrderForCurrentTab():Array {
+				return originalColumnOrder[getIndexForCurrentTab()];
+			}
 			
 			
 			//todo modify this to work with canonical and locus tag names, no matter what is displayed
@@ -259,6 +278,15 @@
 			// todo also fire event if column order is changed
 			// todo - only fire event if we know we are running firefox(+firegoose)
 			protected function dmvSelectionChanged(event:Event):void {
+				
+				
+				for (var z:int = 0; z < getGridForCurrentTab().columnCount; z++) {
+					var dgtc:DataGridToolTipColumn = getGridForCurrentTab().columns[z] as DataGridToolTipColumn;
+					
+					trace("column " + z + " = " + dgtc.headerText);
+				}
+				
+				
 				gaggleStatus.text = "";
 				trace("in dmvSelectionChanged, # rows selected is " + getGridForCurrentTab().selectedIndices.length);
 				numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
@@ -350,7 +378,7 @@
 
 
 				var columns:Array = rawObj['columns'];
-				addDataGridColumn('gene','Gene');
+				addDataGridColumn('gene','Gene', false);
 				var colHash:Dictionary = new Dictionary();
 				for (var c:int = 0; c < columns.length; c++) {
 					addDataGridColumn(columns[c],columns[c]);
@@ -385,6 +413,20 @@
 				}
 				loadingLabel.text = "";
 				setDataForCurrentTab(tmpAC);
+				
+				
+				var colOrder:Array = new Array();
+				for (var x:int = 0; x < getGridForCurrentTab().columnCount; x++) {
+					var dgtc:DataGridToolTipColumn = getGridForCurrentTab().columns[x] as DataGridToolTipColumn;
+					colOrder.push(dgtc.headerText);
+				}
+				/*
+				todo dante fix
+				originalColumnOrder[getIndexForCurrentTab()] = colOrder;
+				previousColumnOrder[getIndexForCurrentTab()] = colOrder;
+				*/
+
+				
 				tmpAC = null;
 				
 				tmpAC = new ArrayCollection();
@@ -408,13 +450,15 @@
 			}
 			
 			
-			 private function addDataGridColumn(dataField:String, headerText:String):void {
+			 private function addDataGridColumn(dataField:String, headerText:String, draggable:Boolean = true):void {
 			 	//var dgc:DataGridColumn = new DataGridColumn(dataField);
 			 	var dgc:DataGridToolTipColumn = new DataGridToolTipColumn(dataField);
 			 	dgc.headerText = headerText;
 			 	dgc.headerToolTip = headerText;
 			 	dgc.dataTipField = headerText;
 			 	dgc.showDataTips = true;
+			 	dgc.draggable = draggable;
+			 	
 			 	
                 //var dgc:CheckBoxHeaderColumn = new CheckBoxHeaderColumn(dataField);
                 //dgc.itemRenderer=  new ClassFactory(CheckBoxItemRenderer);
@@ -426,7 +470,7 @@
                 getGridForCurrentTab().columns = cols;
             }
             
-            
+            // todo - this is broken is column order is changed by dragging columns
             protected function showPlot():void {
             	if (getGridForCurrentTab().selectedItems.length == 0) {
             		Alert.show("No Rows Selected");
@@ -456,8 +500,10 @@
             	}
             	
             	
-            	for (var i:int = 0; i < getGridForCurrentTab().columnCount; i++) {
-            		var key:String = getGridForCurrentTab().columns[i].toString();
+            	for (var i:int = 1; i < getGridForCurrentTab().columnCount; i++) {
+            		var dgtc:DataGridToolTipColumn = getGridForCurrentTab().columns[i] as DataGridToolTipColumn;
+            		var key:String = dgtc.headerText;
+            		trace("key = " + key);
 					var row:Object = new Object();
 					row['condition'] = key;
 					var ary:Array = conditionHash[key] as Array;
@@ -469,8 +515,6 @@
 					stuffToPlot.push(row);
             	}
             	
-				//for (var key:String in conditionHash) {
-				//}            	
             	
             	var plotDialog:PlotDialog = PlotDialog(PopUpManager.createPopUp(this, PlotDialog, true));
             	
@@ -545,7 +589,99 @@
 				}	
 				getGridForCurrentTab().selectedIndices = indicesToSelect;
 				dmvSelectionChanged(null);
-			}            
+			}        
+			
+			
+			protected function inferPreviousState(presentState:Array, oldIndex:int, newIndex:int):Array {
+				/*
+				 *
+				 given a presentState like this:
+				 0 C
+				 1 A
+				 2 B
+				 3 D
+				
+				and oldIndex  = 2 and newIndex = 0
+				
+				this function should return:
+				
+				0 A
+				1 B 
+				2 C
+				3 D
+				
+				so right away we can do this:
+				ret = 
+				0 A (because A is always supposed to be in position 0)
+				1
+				2 C (because oldIndex = 2, and whatever is now in 0 was previously in oldIndex)
+				3
+				
+				now we just need to fill in the remaining empty spots in ret
+				we know what it should be but how do we calculate it?
+				
+				so maybe here's how to do it
+				take out what we know about (0 and 2)
+				we are left with a new array (call it foo)
+				0 B
+				1 D
+				
+				now we create the output array:
+				0 A
+				1 foo.shift()
+				2 C
+				3 foo.shift() 
+				
+				
+				
+				 *
+				 */
+				 return null;
+			}    
+			
+			protected function headerShift(event:IndexChangedEvent):void {
+				//trace("old index = " + event.oldIndex + ", new index = " + event.newIndex);
+				if ( event.newIndex == 0) {
+					trace("you are trying to do a bad thing!");
+					
+					var tmp:Array = new Array();
+					
+					var geneColumn:int;
+					for (var v:int= 0; v < getGridForCurrentTab().columnCount; v++) {
+						var d:DataGridToolTipColumn = getGridForCurrentTab().columns[v] as DataGridToolTipColumn;
+						
+						if (v > 1) {
+							//trace("adding " + d.headerText + " to temp array, v = " + v);
+							tmp.push(d);
+						}
+						
+						if (d.headerText == "Gene") {
+							geneColumn = v;
+						}
+						//trace("after shift, column at position " + v + " is " + d.headerText);
+					}
+					
+					//trace("geneColumn = " + geneColumn);
+					
+					var newcols:Array = new Array();
+					newcols.push(getGridForCurrentTab().columns[geneColumn] as DataGridToolTipColumn);
+					newcols[event.oldIndex] = getGridForCurrentTab().columns[0] as DataGridToolTipColumn;				
+					for (var i:int = 1; i < getGridForCurrentTab().columnCount; i++ ) {
+						//trace("i = " + i);
+						if (newcols[i] == undefined) {
+							var dgtc:DataGridToolTipColumn = tmp.shift();
+							//trace("assigning " + dgtc.headerText + " to slot " + i);
+							newcols[i] = dgtc;
+						}
+					}
+					getGridForCurrentTab().columns = newcols;
+					getGridForCurrentTab().invalidateList();
+					
+					
+				} else {
+					dmvSelectionChanged(event);
+				}
+			}
 
 		]]>
 	</mx:Script>

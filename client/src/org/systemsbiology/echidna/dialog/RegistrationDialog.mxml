@@ -66,6 +66,12 @@
 					return;					
 				}
 				
+				if (emailText.text.toLowerCase().indexOf("@systemsbiology.org") == -1) {
+					Alert.show("Echidna is currently restricted to users with a systemsbiology.org email address.");
+					return;
+				}
+				
+				
 				Util.ajax("main/is_duplicate_email", {"email": emailText.text}, function(event:ResultEvent):void {
 					var result:String = event.result.toString();
 					if (result == "yes") {

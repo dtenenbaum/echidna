@@ -12,6 +12,12 @@
 			</mx:AddChild>
 			<mx:RemoveChild target="{showAllGroupsButton}"/>
 			<mx:AddChild relativeTo="{relateButton}" position="before" target="{showAllGroupsButton}"/>
+			<mx:AddChild>
+				<mx:TextArea x="219" y="710" width="462" id="groupStatsTextArea"/>
+			</mx:AddChild>
+		</mx:State>
+		<mx:State name="">
+			<mx:RemoveChild target="{groupStatsTextArea}"/>
 		</mx:State>
 	</mx:states>
 	
@@ -55,7 +61,7 @@
         </category>
     </mx:XMLList>
 	
-	<mx:Panel x="5" y="-10" width="100%" height="100%" layout="absolute" borderStyle="solid" id="mainPanel">
+	<mx:Panel x="5" y="-10" width="1476" height="893" layout="absolute" borderStyle="solid" id="mainPanel">
 
 		<mx:Text x="10" y="0" text="Echidna" width="61" height="21"/>
 
@@ -97,7 +103,7 @@
 
 			
 		
-			<mx:ViewStack x="209" y="19" height="100%" width="100%" id="viewStack">
+			<mx:ViewStack x="209" y="19" height="738" width="1196" id="viewStack">
 			<!-- whichever child is *first* will show up in design mode  after the reload button is hit -->
 				
 			<mx:Canvas id="groupView">
@@ -152,7 +158,7 @@
 					<mx:HBox>
 						<mx:Label text="Groups shown:"></mx:Label>
 						<mx:Text text="{groupsAC.length}"></mx:Text>
-						<mx:Label text="Selected Rows"/>
+						<mx:Label text="Selected Groups:" width="103"/>
 						<mx:Text text="{groupsGrid.selectedItems.length}"/>
 					</mx:HBox>
 				</mx:VBox>
