@@ -590,52 +590,6 @@
 			}        
 			
 			
-			protected function inferPreviousState(presentState:Array, oldIndex:int, newIndex:int):Array {
-				/*
-				 *
-				 given a presentState like this:
-				 0 C
-				 1 A
-				 2 B
-				 3 D
-				
-				and oldIndex  = 2 and newIndex = 0
-				
-				this function should return:
-				
-				0 A
-				1 B 
-				2 C
-				3 D
-				
-				so right away we can do this:
-				ret = 
-				0 A (because A is always supposed to be in position 0)
-				1
-				2 C (because oldIndex = 2, and whatever is now in 0 was previously in oldIndex)
-				3
-				
-				now we just need to fill in the remaining empty spots in ret
-				we know what it should be but how do we calculate it?
-				
-				so maybe here's how to do it
-				take out what we know about (0 and 2)
-				we are left with a new array (call it foo)
-				0 B
-				1 D
-				
-				now we create the output array:
-				0 A
-				1 foo.shift()
-				2 C
-				3 foo.shift() 
-				
-				
-				
-				 *
-				 */
-				 return null;
-			}    
 			
 			protected function headerShift(event:IndexChangedEvent):void {
 				//trace("old index = " + event.oldIndex + ", new index = " + event.newIndex);
@@ -646,10 +600,10 @@
 					
 					var geneColumn:int;
 					for (var v:int= 0; v < getGridForCurrentTab().columnCount; v++) {
-						var d:DataGridToolTipColumn = getGridForCurrentTab().columns[v] as DataGridToolTipColumn;
 						
 						if (v > 1) {
 							//trace("adding " + d.headerText + " to temp array, v = " + v);
+							var d:DataGridToolTipColumn = getGridForCurrentTab().columns[v] as DataGridToolTipColumn;
 							tmp.push(d);
 						}
 						
@@ -664,7 +618,7 @@
 					var newcols:Array = new Array();
 					newcols.push(getGridForCurrentTab().columns[geneColumn] as DataGridToolTipColumn);
 					newcols[event.oldIndex] = getGridForCurrentTab().columns[0] as DataGridToolTipColumn;				
-					for (var i:int = 1; i < getGridForCurrentTab().columnCount; i++ ) {
+					for (var i:int = 1; i < getGridForCurrentTab().columnCount; i++) {
 						//trace("i = " + i);
 						if (newcols[i] == undefined) {
 							var dgtc:DataGridToolTipColumn = tmp.shift();

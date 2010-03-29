@@ -23,7 +23,6 @@
 			[Bindable]
 			protected var _plotData:ArrayCollection = new ArrayCollection();
 			
-			protected var gridData:Array;
 			public var geneOrder:Array;
 			
 			public function init():void {

@@ -15,6 +15,7 @@
 			<mx:AddChild>
 				<mx:TextArea x="219" y="710" width="462" id="groupStatsTextArea"/>
 			</mx:AddChild>
+			<mx:SetProperty target="{smallConditionGrid}" name="width" value="290"/>
 		</mx:State>
 		<mx:State name="">
 			<mx:RemoveChild target="{groupStatsTextArea}"/>
@@ -109,8 +110,8 @@
 			<mx:Canvas id="groupView">
 				<mx:VBox>
 					<mx:HDividedBox x="0" y="0" width="725" height="100%">
-						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  itemClick="groupClick(event)"  change="onGroupsGridChange(event)"
-							allowMultipleSelection="true">
+						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  itemClick="groupClick(event)"  change="groupClick(event)"
+							allowMultipleSelection="true" dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragComplete="groupsGridDragComplete(event)">
 							<mx:columns>
 								<mx:DataGridColumn headerText="Name" dataField="name"/>
 								<mx:DataGridColumn headerText="# of Conditions" dataField="num_results"/>
@@ -132,7 +133,7 @@
 									allowMultipleSelection="true">
 									<mx:columns>
 										<mx:DataGridColumn headerText="Name" dataField="name" />
-										<mx:DataGridColumn headerText="ID" dataField="description"/>
+										<!--<mx:DataGridColumn headerText="ID" dataField="description"/>-->
 									</mx:columns>
 								</mx:DataGrid>
 								<mx:Label id="smallConditionsGridStatus"></mx:Label>
@@ -177,7 +178,8 @@
 						<mx:HDividedBox width="100%" height="449">
 							<mx:Canvas width="547" height="439" borderStyle="solid">
 								<mx:DataGrid x="10" y="10" id="conditionGrid"  width="535" height="427" dataProvider="{conditionsAC}"
-									allowMultipleSelection="true" itemClick="conditionGridItemClick(event)" change="conditionGridChange(event)">
+									allowMultipleSelection="true" itemClick="conditionGridItemClick(event)" change="conditionGridChange(event)"
+									dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragComplete="conditionGridDragComplete(event)">
 									<mx:columns>
 										<ui:DataGridToolTipColumn headerText="#"
 										 headerToolTip="Number of groups this condition appears in"  dataField="num_groups" width="20"/>
@@ -476,6 +478,23 @@
 			*/
 		}
 		
+		protected function groupsGridDragComplete(event:DragEvent):void {
+			/*
+			trace("group grid drag complete, first few items are:");
+			for (var i:int = 0; i < 6; i++) {
+				trace(groupsAC.getItemAt(i)['name']);
+			}
+			*/
+			fireGaggleEvent();
+		}
+		
+		protected function conditionGridDragComplete(event:DragEvent):void {
+			fireGaggleEvent();
+		}
+		
+		protected function fireGaggleEvent():void {
+			trace("in fireGaggleEvent()");
+		}
 		
 		public static function focusThisSwf():void {
             if(!ExternalInterface.available) {
@@ -768,6 +787,11 @@
 		
 		protected function groupClick(event:ListEvent):void {
 			trace("in groupClick()");
+			
+			calculateSelectedConditions();
+			calculateTotalConditions();
+			
+			smallConditionsAC = new ArrayCollection();
 			removeConditionsButton.enabled = false;
 			if (groupsGrid.selectedIndices.length == 1) {
 				onGroupRowSelected(event.rowIndex);
@@ -1083,9 +1107,11 @@
 				url += "?groupId=" + groupsGrid.selectedItem['id'];
 				//url += "&groupName=" + groupsGrid.selectedItem['name'];
 			} else {
+				groupsGrid.invalidateList();
 				var ids:Array = new Array();
-				for (var i:int = 0; i < groupsGrid.selectedItems.length; i++) {
-					ids.push(groupsGrid.selectedItems[i]['id']);
+				var items:Array = getSelectedItemsInCorrectOrder(groupsGrid, groupsAC);
+				for (var i:int = 0; i < items.length; i++) {
+					ids.push(items[i]['id']);
 				}
 				url += "?groupIds=" + ids.join(",");
 			}
@@ -1163,8 +1189,10 @@
 			var originalUrl:String = bm.url;
 			var url:String = URLUtil.getFullURL(originalUrl, "/DMV.html");
 			var ids:Array = new Array();
-			for (var i:int = 0; i < conditionGrid.selectedItems.length; i++) {
-				ids.push(conditionGrid.selectedItems[i]['id']);
+			var items:Array = getSelectedItemsInCorrectOrder(conditionGrid,conditionsAC);
+			
+			for (var i:int = 0; i < items.length; i++) {
+				ids.push(items[i]['id']);
 			}
 			url += "?conditionIds=" + ids.join(",");
 			newWin(url); 			
@@ -1264,10 +1292,24 @@
 			selectedConditionsText.text = "" + numSelected;
 		}
 		
-		protected function onGroupsGridChange(event:ListEvent):void {
-			calculateSelectedConditions();
-			calculateTotalConditions();
+		protected function getSelectedItemsInCorrectOrder(grid:DataGrid, dataSource:ArrayCollection, nameProperty:String="name"):Array {
+			var selHash:Object = new Object();
+			var results:Array = new Array();
+			//todo use id instead of name as hash key?
+			for (var x:int = 0; x < grid.selectedItems.length; x++) {
+				var item:Object = grid.selectedItems[x];
+				selHash[item[nameProperty]] = 1;
+			}
+			for (var i:int = 0; i < dataSource.length; i++) {
+				if (selHash[dataSource[i][nameProperty]] == 1) {
+					trace("found a match: " + dataSource[i][nameProperty]);
+					results.push(dataSource[i]);
+				}	
+			}
+			trace("'correct' selected items length: " + results.length);
+			return results;
 		}
+		
 		
 		]]>
 	</mx:Script>
