@@ -455,7 +455,9 @@
             		}
             	}
             	
-				for (var key:String in conditionHash) {
+            	
+            	for (var i:int = 0; i < getGridForCurrentTab().columnCount; i++) {
+            		var key:String = getGridForCurrentTab().columns[i].toString();
 					var row:Object = new Object();
 					row['condition'] = key;
 					var ary:Array = conditionHash[key] as Array;
@@ -465,7 +467,10 @@
 					//var json:String = JSON.encode(row);
 					//trace("row:\n" + json);
 					stuffToPlot.push(row);
-				}            	
+            	}
+            	
+				//for (var key:String in conditionHash) {
+				//}            	
             	
             	var plotDialog:PlotDialog = PlotDialog(PopUpManager.createPopUp(this, PlotDialog, true));
             	
