@@ -29,7 +29,7 @@
 	</hc:AutoComplete>
 	<mx:Button x="375" y="34" label="Select Genes" id="selectGenesButton" click="selectGenes()"/>
 	<mx:Button x="739" y="755" label="Toggle Names" id="toggleNamesButton" click="toggleNames()"/>
-
+	<mx:Button x="852" y="755" label="Restore Columns" id="restoreOriginalColumnOrderButton" toolTip="Restore Original Column Order" click="restoreOriginalColumnOrder()"/>
 
 	<mx:Script>
 	
@@ -75,8 +75,8 @@
 			protected var tabs:Array = new Array();
 			
 			
-			protected var originalColumnOrder:Array;
-			protected var previousColumnOrder:Array;
+			protected var originalColumnOrder:Array = new Array();
+			protected var previousColumnOrder:Array = new Array();
 			
 			private var bm:IBrowserManager;
 			
@@ -418,13 +418,11 @@
 				var colOrder:Array = new Array();
 				for (var x:int = 0; x < getGridForCurrentTab().columnCount; x++) {
 					var dgtc:DataGridToolTipColumn = getGridForCurrentTab().columns[x] as DataGridToolTipColumn;
-					colOrder.push(dgtc.headerText);
+					colOrder.push(dgtc);
 				}
-				/*
-				todo dante fix
+
 				originalColumnOrder[getIndexForCurrentTab()] = colOrder;
 				previousColumnOrder[getIndexForCurrentTab()] = colOrder;
-				*/
 
 				
 				tmpAC = null;
@@ -683,7 +681,36 @@
 				}
 			}
 
+
+			protected function restoreOriginalColumnOrder():void {
+				
+				if (compareColumnArrays(getGridForCurrentTab().columns, originalColumnOrder[getIndexForCurrentTab()])) {
+					trace("column order has not changed");
+				} else {
+					trace("restoring original column order");
+					getGridForCurrentTab().columns = originalColumnOrder[getIndexForCurrentTab()];
+					getGridForCurrentTab().invalidateList();
+					dmvSelectionChanged(null);
+				}
+				
+			}
+			
+			
+			protected function compareColumnArrays(arr1:Array,arr2:Array):Boolean {
+				if (arr1.length != arr2.length) return false; // shouldn't happen, but....
+				for (var i:int = 0; i < arr1.length; i++) {
+					
+					var d1:DataGridToolTipColumn = arr1[i];
+					var d2:DataGridToolTipColumn = arr2[i];
+					//trace("i = " + i + ", d1 = " + d1.headerText + ", d2 = " + d2.headerText);
+					if (d1.headerText != d2.headerText) return false;
+				}
+				return true;
+			}				
+				
+
 		]]>
 	</mx:Script>
+	
 	
 </mx:Application>
