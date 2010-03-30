@@ -2,8 +2,13 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" color="#000000" backgroundColor="#FFFFFF" pageTitle="Echidna" xmlns:local="*"
 	xmlns:ui="flex.utils.ui.*" 	xmlns:hc="com.hillelcoren.components.*"
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
+	xmlns:bridge="bridge.*"
 
 	applicationComplete="init()" height="100%" width="100%" creationComplete="creationComplete()">
+	
+<!--	<bridge:FABridge bridgeName="flex"/> --> 
+	
+	
 	
 	<mx:states>
 		<mx:State name="groupState" id="groupState">
@@ -178,7 +183,7 @@
 						<mx:HDividedBox width="100%" height="449">
 							<mx:Canvas width="547" height="439" borderStyle="solid">
 								<mx:DataGrid x="10" y="10" id="conditionGrid"  width="535" height="427" dataProvider="{conditionsAC}"
-									allowMultipleSelection="true" itemClick="conditionGridItemClick(event)" change="conditionGridChange(event)"
+									allowMultipleSelection="true" itemClick="conditionGridItemClick(event)" change="conditionGridItemClick(event)"
 									dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragComplete="conditionGridDragComplete(event)">
 									<mx:columns>
 										<ui:DataGridToolTipColumn headerText="#"
@@ -286,6 +291,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.EchidnaSelectionChangedEvent;
 			import com.adobe.serialization.json.JSON;
 			
 			import flash.utils.setInterval;
@@ -494,6 +500,21 @@
 		
 		protected function fireGaggleEvent():void {
 			trace("in fireGaggleEvent()");
+			var event:EchidnaSelectionChangedEvent = new EchidnaSelectionChangedEvent(EchidnaSelectionChangedEvent.ECHIDNA_SELECTION_CHANGED_EVENT);
+			event.species = "Halobacterium sp. NRC-1"; //todo unhardcode
+			
+			var originalUrl:String = bm.url;
+			var url:String = URLUtil.getFullURL(originalUrl, "/main/get_matrices_for_firegoose"); // this could break on some configs (non-virtualname)
+
+			
+			
+			if (currentState == 'groupState') {
+				url += "group_ids=";
+			} else {
+				url += "condition_ids=";
+			}
+			
+			////dispatchEvent(event);
 		}
 		
 		public static function focusThisSwf():void {
@@ -548,6 +569,8 @@
 		}
 		
 		protected function conditionGridItemClick(event:ListEvent):void {
+			conditionDmvButton.enabled = (conditionGrid.selectedIndices.length > 0);
+			
 			if (conditionGrid.selectedItems.length > 1) {
 				descriptionText.text = '';
 				groupedInAC = new ArrayCollection();
@@ -808,6 +831,7 @@
 			removeConditionsButton.enabled = false;
 			onGroupRowSelected(event.rowIndex);
 			*/
+			fireGaggleEvent();
 		}
 		
 		protected function createSCGTooltip(event:ListEvent):void {
@@ -1181,9 +1205,6 @@
 			populateEmailAddress(null);
 		}
 		
-		protected function conditionGridChange(event:ListEvent):void {
-			conditionDmvButton.enabled = (conditionGrid.selectedIndices.length > 0);
-		}
 		
 		protected function showConditionsInDmv():void {
 			var originalUrl:String = bm.url;

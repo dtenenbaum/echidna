@@ -71,6 +71,7 @@ function logAjaxEvent(element, event, request, settings, status) {
 // global variable, holds reference to the Flex application
 var flexApp;  
 var DMV_SELECTION_CHANGED_EVENT = "dmvSelectionChangedEvent";
+var ECHIDNA_SELECTION_CHANGED_EVENT = "echidnaSelectionChangedEvent";
 
 var gaggleActivated = false;
   
@@ -79,7 +80,8 @@ var initCallback = function() {
    log("Flex called us back!");
    flexApp = FABridge.flex.root();  
    
-   flexApp.addEventListener(DMV_SELECTION_CHANGED_EVENT, dmvSelectionChangedCallback)
+   flexApp.addEventListener(DMV_SELECTION_CHANGED_EVENT, dmvSelectionChangedCallback);
+   flexApp.addEventListener(ECHIDNA_SELECTION_CHANGED_EVENT, echidnaSelectionChangedCallback)
    
 //   document.getElementById("echidna").focus();
    
@@ -101,6 +103,10 @@ var dmvSelectionChangedCallback = function(event) {
     }
     updateGaggleDivs(event);
     FG_fireDataEvent();
+}
+
+var echidnaSelectionChangedCallback = function(event) {
+    log("in echidnaSelectionChangedCallback!!!!");
 }
 
 var updateGaggleDivs = function(event) {
