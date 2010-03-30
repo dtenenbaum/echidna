@@ -50,6 +50,26 @@ var requiredRevision = 124;
 <body scroll="no">
 
 
+   <div style="display: none;">
+  	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="echidna" width="0" height="0"
+			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
+			<param name="movie" value="dummy.swf" />
+			<param name="quality" value="high" />
+			<embed src="dummy.swf" quality="high" 
+				width="0" height="0" name="dummy" align="middle"
+				play="true"
+				loop="false"
+				quality="high"
+				allowScriptAccess="sameDomain"
+				type="application/x-shockwave-flash"
+				pluginspage="http://www.adobe.com/go/getflashplayer">
+			</embed>
+	</object>
+   </div>
+
+
+
 
 <div>
 <script language="JavaScript" type="text/javascript">
@@ -128,6 +148,9 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	</object>
    </div>
 </noscript>
+
+
+
 
 <script src="javascripts/FABridge.js"></script>
 <script src="javascripts/echidna.js"></script>

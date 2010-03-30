@@ -130,12 +130,7 @@ var echidnaSelectionChangedCallback = function(event) {
         str = str.replace(/species="[^"]*"/, "species=\"" + event.getSpecies() + "\"");
         str = str.replace(/size="[^"]*"/, "size=\"" + event.getSize() + "\"");
         jQuery(selector).html(str);
-        /*
-        var url = jQuery(innerSelector).attr("url");
-        url = url.replace("&", "phloz");
-        jQuery(innerSelector).attr("url", url);
-        */
-        log(selector + ": now html is:\n" + jQuery(selector).html());
+        //log(selector + ": now html is:\n" + jQuery(selector).html());
     }
     
     //jQuery(".datamatrix").attr("url", "foo");

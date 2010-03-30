@@ -15,8 +15,8 @@
 <application path="TagCloud.mxml"/>
 <application path="echidna.mxml"/>
 <application path="DMV.mxml"/>
+<application path="dummy.mxml"/>
 </applications>
 <modules/>
 <buildCSSFiles/>
 </actionScriptProperties>
-
