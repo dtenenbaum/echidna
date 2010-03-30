@@ -18,7 +18,19 @@ class MainController < ApplicationController
     #render :text => "#{url}/index.html"
   end
   
+  
+  # todo - in future, don't store email address in cookie, makes it too easy to fake a cookie.
+  # instead, store some secure token
   def get_logged_in_user
+    
+    
+    for v in cookies.values
+      if v.to_s =~ /echidna_cookie/
+        cookies[:echidna_cookie] = {:value => v.value, :expires => 1000.days.from_now}
+        session[:user] = v.value
+      end
+    end
+    
     if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
       render :text => 'not logged in' and return false
     end
@@ -37,6 +49,7 @@ class MainController < ApplicationController
   
   def do_login(user)
     return "invalid user" unless user
+    puts "in do_login, params[:email] is #{params[:email]}"
     user.last_login_date = Time.now
     user.save
     cookies[:echidna_cookie] = {:value => params[:email],

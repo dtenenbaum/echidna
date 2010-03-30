@@ -1035,8 +1035,10 @@
 			var email:String;
 			var resetPassword:Boolean = false;
 			var fragObj:Object = new Object();
+			trace("is event null? " + (event == null));
 			if (event != null) {
 				email = event.result as String;
+				trace("email = " + email);
 			} 
 			if (event == null || email == 'not logged in' || email == '') {
 				var url:String = bm.url;
@@ -1095,11 +1097,9 @@
 			    });
 				importExperimentDialog.checkForPriorImport();
 								
-				//when done, run getConditions()
 			} else {
 				mainPanel.enabled = true;
 				emailAddressTextBox.text = email;
-				//getConditions();
 				setCurrentState('groupState');
 				populateGroupGrid(null);
 			}
