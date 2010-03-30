@@ -35,6 +35,8 @@
 	
 		
 		<![CDATA[
+			import org.systemsbiology.echidna.events.StopProgressBarEvent;
+			import org.systemsbiology.echidna.dialog.ProgressBarDialog;
 			import mx.events.CollectionEvent;
 			import mx.events.IndexChangedEvent;
 			import mx.collections.SortField;
@@ -93,9 +95,19 @@
 			private var aliasToVngMap:Object = new Object();	
 			private var geneList:Object = new Object();		
 			
+			
+			protected var progressDialog:ProgressBarDialog;
+			protected var app:DisplayObject;
+			
+			
 
 			protected function init():void {
 				ajaxFault = new EchidnaAjaxFault();
+				ajaxFault.addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
+					stopProgressBar();
+					tabNavigator.enabled = true;
+				});
+				app = root;
 				var _mwSupport:ExternalMouseWheelSupport = ExternalMouseWheelSupport.getInstance(stage); 
 				bm = BrowserManager.getInstance();
 				bm.init("","DMV - ratios");
@@ -123,6 +135,8 @@
 					loadingLabel.text = "Loading data...";
 					var params:Object = getParamsObject();
 					Util.ajax(params['url'],params, onGotData, ajaxFault.ajaxFault);
+					tabNavigator.enabled = false;
+					startProgressBar();
 				
 				} else {
 					loadingLabel.text = "No data selected.";
@@ -372,7 +386,9 @@
 				trace("length of columns: " + rawObj['columns'].length);
 				if (/*rawObj['rows'].length == 0 &&*/ rawObj['columns'].length == 0) {
 					Alert.show("No data matches your query.");
+					stopProgressBar();
 					loadingLabel.text = "";
+					tabNavigator.enabled = true;
 					return;
 				}
 
@@ -444,6 +460,8 @@
 				genesAC = tmpAC;
 				tmpAC = null;
 				
+				stopProgressBar();
+				tabNavigator.enabled = true;
 				trace("current tab data size = " + getDataForCurrentTab().length);
 			}
 			
@@ -529,6 +547,8 @@
             	numSelectedRowsText.text =  "" + getGridForCurrentTab().selectedIndices.length;
             	
             	if (tabNavigator.selectedIndex == 1 && dataProvided && lambdasData.length == 0) {
+            		startProgressBar();
+            		tabNavigator.enabled = false;
             		loadingLabel.text = "Loading data...";
             		var params:Object = getParamsObject(false);
 					Util.ajax(params['url'],params, onGotData, ajaxFault.ajaxFault);
@@ -660,7 +680,18 @@
 					if (d1.headerText != d2.headerText) return false;
 				}
 				return true;
-			}				
+			}	
+			
+			
+			protected function startProgressBar():void {
+				progressDialog = ProgressBarDialog(PopUpManager.createPopUp(app, ProgressBarDialog, true));
+				PopUpManager.centerPopUp(progressDialog);
+			}
+			
+			protected function stopProgressBar():void {
+				PopUpManager.removePopUp(progressDialog);
+			}
+			
 				
 
 		]]>
