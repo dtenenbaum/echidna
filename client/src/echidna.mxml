@@ -6,7 +6,7 @@
 
 	applicationComplete="init()" height="100%" width="100%" creationComplete="creationComplete()">
 	
-<!--	<bridge:FABridge bridgeName="flex"/> --> 
+	<bridge:FABridge bridgeName="flex"/> 
 	
 	
 	
@@ -115,7 +115,7 @@
 			<mx:Canvas id="groupView">
 				<mx:VBox>
 					<mx:HDividedBox x="0" y="0" width="725" height="100%">
-						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  itemClick="groupClick(event)"  change="groupClick(event)"
+						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  change="groupClick(event)"
 							allowMultipleSelection="true" dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragComplete="groupsGridDragComplete(event)">
 							<mx:columns>
 								<mx:DataGridColumn headerText="Name" dataField="name"/>
@@ -491,10 +491,12 @@
 				trace(groupsAC.getItemAt(i)['name']);
 			}
 			*/
+			trace("firing gaggle event from groupsGridDragComplete()");
 			fireGaggleEvent();
 		}
 		
 		protected function conditionGridDragComplete(event:DragEvent):void {
+			trace("firing gaggle event from conditionGridDragComplete");
 			fireGaggleEvent();
 		}
 		
@@ -504,17 +506,47 @@
 			event.species = "Halobacterium sp. NRC-1"; //todo unhardcode
 			
 			var originalUrl:String = bm.url;
-			var url:String = URLUtil.getFullURL(originalUrl, "/main/get_matrices_for_firegoose"); // this could break on some configs (non-virtualname)
+			var url:String = URLUtil.getFullURL(originalUrl, "/main/get_matrices_for_firegoose?"); // this could break on some configs (non-virtualname)
 
+			
+			var ids:Array = new Array(); 
+			var items:Array = new Array();
 			
 			
 			if (currentState == 'groupState') {
 				url += "group_ids=";
+				items = getSelectedItemsInCorrectOrder(groupsGrid,groupsAC);
+				event.size = "" + items.length + " group";
 			} else {
+				items = getSelectedItemsInCorrectOrder(conditionGrid,conditionsAC);
 				url += "condition_ids=";
+				event.size = "" + items.length + " condition";
 			}
 			
-			////dispatchEvent(event);
+			event.size += (items.length == 1) ? "" : "s";
+			
+			for (var i:int = 0;i < items.length; i++) {
+				ids.push(items[i]['id']);
+			}
+			url += ids.join(",");
+			
+			url += "&data_type=";
+			
+			var url2:String = url;
+			
+			url += "ratio";
+			url2 += "lambda";
+			
+			event.url = url;
+			event.url2 = url2;
+			
+			if (items.length == 0) {
+				event.url = "";
+				event.url2 = "";
+			}
+			
+			
+			dispatchEvent(event);
 		}
 		
 		public static function focusThisSwf():void {
@@ -831,6 +863,7 @@
 			removeConditionsButton.enabled = false;
 			onGroupRowSelected(event.rowIndex);
 			*/
+			trace("firing gaggle event from groupClick");
 			fireGaggleEvent();
 		}
 		
@@ -1035,7 +1068,6 @@
 			var email:String;
 			var resetPassword:Boolean = false;
 			var fragObj:Object = new Object();
-			trace("is event null? " + (event == null));
 			if (event != null) {
 				email = event.result as String;
 				trace("email = " + email);

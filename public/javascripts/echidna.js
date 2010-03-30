@@ -74,6 +74,10 @@ var DMV_SELECTION_CHANGED_EVENT = "dmvSelectionChangedEvent";
 var ECHIDNA_SELECTION_CHANGED_EVENT = "echidnaSelectionChangedEvent";
 
 var gaggleActivated = false;
+var echidnaGaggleActivated = false;
+var selectors = ["#indirect_matrix_wrapper_ratios", "#indirect_matrix_wrapper_lambdas"];
+var outerSelectors = ["#gaggle_indirect_matrix_outer_ratios", "#gaggle_indirect_matrix_outer_lambdas"];
+var innerSelectors = ["#indirect_matrix_ratios", "#indirect_matrix_lambdas"];
   
 // flex calls this function when it has everything ready on its side
 var initCallback = function() {  
@@ -107,7 +111,49 @@ var dmvSelectionChangedCallback = function(event) {
 
 var echidnaSelectionChangedCallback = function(event) {
     log("in echidnaSelectionChangedCallback!!!!");
+    if (!echidnaGaggleActivated) {
+        activateEchidnaGaggle();
+    }
+    
+    log("url = " + event.getUrl());
+    
+    
+    //var quote = /"[^"]*"/;
+    
+    for (i = 0; i < selectors.length; i++) {
+        var selector = selectors[i];
+        var innerSelector = innerSelectors[i];
+        var str = jQuery(selector).html();
+        var url = (i == 0) ? event.getUrl() : event.getUrl2();
+        jQuery(selector).html(str.replace(/url="[^"]*"/, "url=\"" + url + "\""));
+        str = jQuery(selector).html();
+        str = str.replace(/species="[^"]*"/, "species=\"" + event.getSpecies() + "\"");
+        str = str.replace(/size="[^"]*"/, "size=\"" + event.getSize() + "\"");
+        jQuery(selector).html(str);
+        /*
+        var url = jQuery(innerSelector).attr("url");
+        url = url.replace("&", "phloz");
+        jQuery(innerSelector).attr("url", url);
+        */
+        log(selector + ": now html is:\n" + jQuery(selector).html());
+    }
+    
+    //jQuery(".datamatrix").attr("url", "foo");
+    
+    
+    
+    FG_fireDataEvent();
 }
+
+var activateEchidnaGaggle = function() {
+    log("in activateEchidnaGaggle")
+    echidnaGaggleActivated = true;
+    for (i = 0; i < outerSelectors.length; i++) {
+        var outerSelector = outerSelectors[i];
+        var str = jQuery(outerSelector).html();
+        jQuery(outerSelector).html(str.replace("gaggledatanot","gaggleData"));
+    }
+} 
 
 var updateGaggleDivs = function(event) {
     jQuery(".gaggle-species").html(event.getSpecies());

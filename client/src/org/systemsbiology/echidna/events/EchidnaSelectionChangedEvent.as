@@ -5,6 +5,8 @@ package org.systemsbiology.echidna.events
 		public static const ECHIDNA_SELECTION_CHANGED_EVENT:String = "echidnaSelectionChangedEvent";
 		
 		public var url:String;
+		public var url2:String;
+		public var size:String;
 		
 		
 		

@@ -601,4 +601,42 @@ class MainController < ApplicationController
     conds = Condition.find_by_sql(["select * from conditions where id in (?)",ids])
     render :text => conds.to_json
   end
+  
+  
+  def get_matrices_for_firegoose
+    #qs = query_string.gsub(/&amp;/,"&")
+    data_type = ""
+    if (params["amp;data_type"])
+      data_type = params["amp;data_type"]
+    elsif (params["data_type"])
+      data_type = params["data_type"]
+    end
+
+
+    
+    
+    cond_ids = []
+    data = ''
+    if (params[:group_ids])
+      group_ids = params[:group_ids].split(",")
+      cond_ids = []
+      conds = []
+      for group_id in group_ids
+        conds += ConditionGrouping.find_by_sql(["select condition_id from condition_groupings where condition_group_id = ? order by sequence",group_id])
+      end
+      cond_ids = conds.map{|i|i.condition_id}
+    elsif (params[:condition_ids])
+      cond_ids = params[:condition_ids].split(",")
+    end
+
+    #render :text => "ok" and return false if true
+
+
+    data = get_matrix_data(cond_ids,data_type)
+
+    headers['Content-type'] = 'text/plain'
+    
+    render :text => as_matrix(data)
+  end
+  
 end
