@@ -6,8 +6,8 @@
 		
 		
 		<mx:VBox x="24" y="0">
-			<mx:Label text="Free text search:"/>
-			<hc:AutoComplete id="autoComplete" label="Search" dataProvider="{searchItems}" 
+			<mx:Label text="Free text search: (wildcards such as tfb* are supported)"/>
+			<hc:AutoComplete id="autoComplete" label="Search" dataProvider="{searchItems}" allowNewValues="true"
 				matchType="anyPart" labelField="name" allowMultipleSelection="true" prompt="Search"
 				change="autoCompleteChange(event)" searchChange="autoCompleteSearchChange(event)"
 				valueCommit="autoCompleteValueCommit(event)" height="24" width="828">
@@ -36,6 +36,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.utils.StringUtil;
 			import org.systemsbiology.echidna.common.SearchTerms;
 			import org.systemsbiology.echidna.common.SubSearch;
 			import org.systemsbiology.echidna.common.CurrentlyActiveSearch;
@@ -231,7 +232,12 @@
 				trace("num items selected:" +  autoComplete.selectedItems.length);
 				searchArr = new Array();
 				for(var i:int = 0; i < autoComplete.selectedItems.length; i++) {
-					searchArr.push(autoComplete.selectedItems[i]['name']);
+					trace("item = " + autoComplete.selectedItems[i]);
+					if (autoComplete.selectedItems[i].hasOwnProperty('name')) {
+						searchArr.push(autoComplete.selectedItems[i]['name']);
+					} else {
+						searchArr.push(StringUtil.trim(autoComplete.selectedItems[i]));
+					}
 				}
 				
 				if (searchArr.length == 0) {

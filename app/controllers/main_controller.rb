@@ -171,7 +171,20 @@ class MainController < ApplicationController
     #return false if true
     puts "in main/search_conditions"
     search = ActiveSupport::JSON.decode(params[:search])
+    wildcards = []
+    for item in search
+      if item =~ /\*/
+        wildcards << item.gsub("*","%")
+        search.delete item
+      end
+    end
     ids = Condition.find_by_sql(["select distinct condition_id from search_terms where word in (?)", search]).map{|i|i.condition_id}
+    #wildcard_ids = Condition.find_by_sql(["select distinct condition_id from search_terms where word in (?)", search]).map{|i|i.condition_id}
+    for wildcard in wildcards
+      ids += Condition.find_by_sql(["select distinct condition_id from search_terms where word like ?", wildcard]).map{|i|i.condition_id}
+    end
+    
+    
     results = Condition.find_by_sql(["select * from conditions where id in (?)",ids])
     
     groups = get_groups_for_conditions(results)
