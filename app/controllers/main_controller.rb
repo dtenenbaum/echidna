@@ -26,7 +26,7 @@ class MainController < ApplicationController
     email = ''
     logger.info "cookies:"
     for v in cookies.values
-      logger.info "\t#{v}"
+      logger.info "\t#{v}, #{v.value}"
       if v.to_s =~ /echidna_cookie/
         logger.info "setting cookie..."
         cookies[:echidna_cookie] = {:value => v.value, :expires => 1000.days.from_now}
