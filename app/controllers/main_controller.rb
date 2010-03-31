@@ -17,28 +17,24 @@ class MainController < ApplicationController
     #render :text => request.url
     #render :text => "#{url}/index.html"
   end
+
+  def test
+    logger.info cookies
+    render :text => "ok"
+  end
   
   
-  # todo - in future, don't store email address in cookie, makes it too easy to fake a cookie.
-  # instead, store some secure token
+  # todo - store secure token in cookie
   def get_logged_in_user
     
-    email = ''
-    logger.info "cookies:"
-    for v in cookies.values
-      logger.info "\t#{v}, #{v.to_s}"
-      if v.to_s =~ /echidna_cookie/
-        logger.info "setting cookie..."
-        cookies[:echidna_cookie] = {:value => v.value, :expires => 1000.days.from_now}
-        session[:user] = v.value
-        email = v.value
-      end
-    end
     
-    if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
-      logger.info "cookie is nil or empty"
-      render :text => 'not logged in' and return false
-    end
+    
+    # remove:
+    ##session['user'] = 'dtenenbaum@systemsbiology.org'
+    # remove ^^
+
+    #render :text => session['user'] and return false if true
+
     if session['user'].nil?
       begin
         session['user'] = cookies['echidna_cookie']['value']
@@ -48,9 +44,21 @@ class MainController < ApplicationController
         logger.info "problem setting session user"
         render :text => "not logged in" and return false
       end
+    else
+      cookies[:echidna_cookie] = {:value => session['user'], :expires => 1000.days.from_now}
     end
-    logger.info "returning #{email}"
-    render :text => email
+
+    
+    
+    if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
+      logger.info "cookie is nil or empty"
+      render :text => 'not logged in' and return false
+    end
+    
+    
+    
+    logger.info "returning #{session['user']}"
+    render :text => session['user']
   end
   
   # todo make more secure
@@ -580,9 +588,6 @@ class MainController < ApplicationController
     render :text => "ok"
   end
   
-  def test
-    render :text => "ok"
-  end
   
   def get_timestamp_from_search_terms
     render :text => SearchTerm.find_by_sql("select max(int_timestamp) as result from search_terms").first.result
