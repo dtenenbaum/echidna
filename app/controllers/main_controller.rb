@@ -41,6 +41,8 @@ class MainController < ApplicationController
       begin
         session[:user] = cookies[:echidna_cookie][:value]
       rescue Exception => ex
+        logger.info ex.message
+        logger.info ex.backtrace
         logger.info "problem setting session user"
         render :text => "not logged in" and return false
       end
