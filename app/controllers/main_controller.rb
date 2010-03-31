@@ -23,6 +23,7 @@ class MainController < ApplicationController
   # instead, store some secure token
   def get_logged_in_user
     
+    email = ''
     logger.info "cookies:"
     for v in cookies.values
       logger.info "\t#{v}"
@@ -30,6 +31,7 @@ class MainController < ApplicationController
         logger.info "setting cookie..."
         cookies[:echidna_cookie] = {:value => v.value, :expires => 1000.days.from_now}
         session[:user] = v.value
+        email = v.value
       end
     end
     
@@ -37,7 +39,7 @@ class MainController < ApplicationController
       logger.info "cookie is nil or empty"
       render :text => 'not logged in' and return false
     end
-    if session[:user].nil?
+    if session['user'].nil?
       begin
         session['user'] = cookies['echidna_cookie']['value']
       rescue Exception => ex
@@ -47,8 +49,8 @@ class MainController < ApplicationController
         render :text => "not logged in" and return false
       end
     end
-    logger.info "returning #{session['user']}"
-    render :text => session['user']
+    logger.info "returning #{email}"
+    render :text => email
   end
   
   # todo make more secure
