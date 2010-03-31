@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV -- ratios"
 	applicationComplete="init()" xmlns:bridge="bridge.*" xmlns:ui="flex.utils.ui.*"  width="1595" height="1372" xmlns:hc="com.hillelcoren.components.*">
 	<bridge:FABridge bridgeName="flex"/>
@@ -105,7 +104,6 @@
 				ajaxFault = new EchidnaAjaxFault();
 				ajaxFault.addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
 					stopProgressBar();
-					tabNavigator.enabled = true;
 				});
 				app = root;
 				var _mwSupport:ExternalMouseWheelSupport = ExternalMouseWheelSupport.getInstance(stage); 
@@ -135,7 +133,6 @@
 					loadingLabel.text = "Loading data...";
 					var params:Object = getParamsObject();
 					Util.ajax(params['url'],params, onGotData, ajaxFault.ajaxFault);
-					tabNavigator.enabled = false;
 					startProgressBar();
 				
 				} else {
@@ -388,7 +385,6 @@
 					Alert.show("No data matches your query.");
 					stopProgressBar();
 					loadingLabel.text = "";
-					tabNavigator.enabled = true;
 					return;
 				}
 
@@ -461,7 +457,6 @@
 				tmpAC = null;
 				
 				stopProgressBar();
-				tabNavigator.enabled = true;
 				trace("current tab data size = " + getDataForCurrentTab().length);
 			}
 			
@@ -548,7 +543,6 @@
             	
             	if (tabNavigator.selectedIndex == 1 && dataProvided && lambdasData.length == 0) {
             		startProgressBar();
-            		tabNavigator.enabled = false;
             		loadingLabel.text = "Loading data...";
             		var params:Object = getParamsObject(false);
 					Util.ajax(params['url'],params, onGotData, ajaxFault.ajaxFault);

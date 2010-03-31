@@ -32,15 +32,18 @@ class MainController < ApplicationController
     end
     
     if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
+      puts "cookie is nil or empty"
       render :text => 'not logged in' and return false
     end
     if session[:user].nil?
       begin
         session[:user] = cookies[:echidna_cookie][:value]
       rescue Exception => ex
+        puts "problem setting session user"
         render :text => "not logged in" and return false
       end
     end
+    puts "returning #{session[:user]}"
     render :text => session[:user]
   end
   
