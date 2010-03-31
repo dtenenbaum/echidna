@@ -23,7 +23,6 @@ class MainController < ApplicationController
   # instead, store some secure token
   def get_logged_in_user
     
-    
     for v in cookies.values
       if v.to_s =~ /echidna_cookie/
         cookies[:echidna_cookie] = {:value => v.value, :expires => 1000.days.from_now}
@@ -32,18 +31,18 @@ class MainController < ApplicationController
     end
     
     if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
-      puts "cookie is nil or empty"
+      logger.info "cookie is nil or empty"
       render :text => 'not logged in' and return false
     end
     if session[:user].nil?
       begin
         session[:user] = cookies[:echidna_cookie][:value]
       rescue Exception => ex
-        puts "problem setting session user"
+        logger.info "problem setting session user"
         render :text => "not logged in" and return false
       end
     end
-    puts "returning #{session[:user]}"
+    logger.info "returning #{session[:user]}"
     render :text => session[:user]
   end
   
