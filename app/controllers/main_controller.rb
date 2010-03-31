@@ -39,7 +39,7 @@ class MainController < ApplicationController
     end
     if session[:user].nil?
       begin
-        session[:user] = cookies[:echidna_cookie][:value]
+        session['user'] = cookies['echidna_cookie']['value']
       rescue Exception => ex
         logger.info ex.message
         logger.info ex.backtrace
