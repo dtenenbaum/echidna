@@ -47,8 +47,8 @@ class MainController < ApplicationController
         render :text => "not logged in" and return false
       end
     end
-    logger.info "returning #{session[:user]}"
-    render :text => session[:user]
+    logger.info "returning #{session['user']}"
+    render :text => session['user']
   end
   
   # todo make more secure
