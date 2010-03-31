@@ -27,7 +27,17 @@ class MainController < ApplicationController
   # todo - store secure token in cookie
   def get_logged_in_user
     
-    
+    logger.info 'cookies:'
+    for cookie in cookies
+      #logger.info "key = #{cookie.key}, value = #{cookie.value}"
+      logger.info cookie.join("~~")
+      if cookie.first =~ /echidna_cookie/
+        logger.info 'wuju'
+        logger.info "email = #{cookie.last.join('~~').to_s}"
+        session['user'] = cookie.last.join("~~").to_s unless session[:user]
+        cookies[:echidna_cookie] = {:value => session['user'], :expires => 1000.days.from_now}
+      end
+    end
     
     # remove:
     ##session['user'] = 'dtenenbaum@systemsbiology.org'
