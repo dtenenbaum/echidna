@@ -33,8 +33,8 @@ class MainController < ApplicationController
       logger.info cookie.join("~~")
       if cookie.first =~ /echidna_cookie/
         logger.info 'wuju'
-        logger.info "email = #{cookie.last.join('~~').to_s}"
-        session['user'] = cookie.last.join("~~").to_s unless session[:user]
+        logger.info "email = #{cookie.last}"
+        session['user'] = cookie.last unless session[:user]
         cookies[:echidna_cookie] = {:value => session['user'], :expires => 1000.days.from_now}
       end
     end
