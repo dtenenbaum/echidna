@@ -23,8 +23,11 @@ class MainController < ApplicationController
   # instead, store some secure token
   def get_logged_in_user
     
+    logger.info "cookies:"
     for v in cookies.values
+      logger.info "\t#{v}"
       if v.to_s =~ /echidna_cookie/
+        logger.info "setting cookie..."
         cookies[:echidna_cookie] = {:value => v.value, :expires => 1000.days.from_now}
         session[:user] = v.value
       end
