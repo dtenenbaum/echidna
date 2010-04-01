@@ -29,8 +29,22 @@ class MainController < ApplicationController
     
     for cookie in cookies
       if cookie.first =~ /echidna_cookie/
-        session['user'] = cookie.last unless session[:user]
-        cookies[:echidna_cookie] = {:value => session['user'], :expires => 1000.days.from_now}
+        unless session['user']
+          puts "wadata"
+          email = cookie.last.gsub(/echidna_cookie=/,"").gsub("%40","@")
+          value = cookie.last.value
+          puts "email = #{email}"
+          session['user'] = email
+        end
+        puts "hack setting cookie"
+        if (session['user']).respond_to?(:value)
+          session['user'] = session['user'].value
+        else
+          email = session['user']
+        end
+        puts "e = #{email}"
+        
+        cookies[:echidna_cookie] = {:value => email, :expires => 1000.days.from_now}
       end
     end
     
@@ -356,7 +370,7 @@ class MainController < ApplicationController
     for group_id in group_ids
       cond_ids += ConditionGrouping.find_by_sql(["select condition_id from condition_groupings where condition_group_id = ? order by sequence",group_id])
     end
-    data = get_matrix_data(cond_ids.map{|i|i.condition_id},params[:data_type])
+    data = get_matrix_data(cond_ids.map{|i|i.condition_id}.uniq,params[:data_type])
     render :text => as_json(data)
   end
   
