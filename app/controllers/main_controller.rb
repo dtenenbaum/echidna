@@ -370,6 +370,7 @@ class MainController < ApplicationController
     for group_id in group_ids
       cond_ids += ConditionGrouping.find_by_sql(["select condition_id from condition_groupings where condition_group_id = ? order by sequence",group_id])
     end
+    # silently removes redundant groups--we may not want to do it this way:
     data = get_matrix_data(cond_ids.map{|i|i.condition_id}.uniq,params[:data_type])
     render :text => as_json(data)
   end

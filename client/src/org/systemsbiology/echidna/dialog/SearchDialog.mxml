@@ -22,10 +22,10 @@
 	<mx:Text x="406" y="55" width="101" id="loadingLabel"/>
 	<mx:Label x="24" y="132" text="Structured Search:"/>
 	<mx:Label x="41" y="159" text="Gene"/>
-	<hc:AutoComplete id="knockoutsAutoComplete" x="40" y="185" dataProvider="{knockouts}" allowMultipleSelection="false"
+	<hc:AutoComplete id="knockoutsAutoComplete" x="40" y="185" dataProvider="{knockouts}" allowMultipleSelection="true"
 		matchType="anyPart" prompt="None" width="812"/>
 	<mx:Label x="39" y="225" text="Environment:"/>
-	<hc:AutoComplete x="41" y="265" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="false"
+	<hc:AutoComplete x="41" y="265" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="true"
 		matchType="anyPart" prompt="None" width="812"/>
 	<mx:CheckBox id="includeRelatedResultsCheckBox" x="31" y="309" label="Include related results (controls, etc)" enabled="true"/>
 	<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="31" y="358" label="Refine currently displayed results?"/>
@@ -220,6 +220,24 @@
 			
 			protected function autoCompleteValueCommit(event:Event):void {
 				trace("autoCompleteValueCommit()");
+			}
+			
+			protected function getAutoCompleteContents(ac:AutoComplete):String {
+				var tmp:Array = new Array();
+				for(var i:int = 0; i < autoComplete.selectedItems.length; i++) {
+					trace("item = " + autoComplete.selectedItems[i]);
+					if (autoComplete.selectedItems[i].hasOwnProperty('name')) {
+						tmp.push(autoComplete.selectedItems[i]['name']);
+					} else {
+						tmp.push(StringUtil.trim(autoComplete.selectedItems[i])) ;
+					}
+				}
+				
+				if (tmp.length == 0) {
+					tmp.push(autoComplete.searchText);
+				}
+				return JSON.encode(searchArr);
+
 			}
 
 			protected function search():void {

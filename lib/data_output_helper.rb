@@ -6,18 +6,35 @@ module DataOutputHelper
       data_types = DataType.find :all
 
       data_type = data_types.detect{|i|i.name.downcase =~ /#{data_type_str}/}.id
+      
+      tmp_table_name = "tmp_table_#{Time.now.to_i}"
 
-
-      query = <<"EOF" # for now this query hardcodes some of the options above
-        select f.*, g.name as gene_name, c.name as condition_name from features f, genes g, conditions c
-        where g.id = f.gene_id                                           
-        and c.id = f.condition_id
-        and f.condition_id in (?)
-        and f.data_type = ?
-        order by g.name, f.condition_id
+    query = <<"EOF"
+    select f.value, g.name as gene_name, c.name as condition_name from features f, genes g, conditions c, #{tmp_table_name} t
+    where g.id = f.gene_id                                           
+    and c.id = f.condition_id
+    and f.condition_id = t.cid
+    and f.data_type = ?
+    order by g.name, t.cid
 EOF
+
+      begin
+        Condition.transaction do
+          Condition.connection.execute("create table #{tmp_table_name} (cid int)")
+          Condition.connection.execute("CREATE INDEX cid_index USING BTREE ON #{tmp_table_name} (cid)")
+          for cond_id in cond_ids
+            Condition.connection.execute("insert into #{tmp_table_name} values (#{cond_id})")
+          end
+          data = Feature.find_by_sql([query,data_type])
+          Condition.connection.execute("drop table #{tmp_table_name}")
+          return data
+        end
+        
+      rescue Exception => ex
+      end
+
       #unsorted_data = Feature.find_by_sql([query,cond_ids,data_type])
-      sort_by_condition_group_sequence(Feature.find_by_sql([query,cond_ids,data_type]),cond_ids)
+      #sort_by_condition_group_sequence(Feature.find_by_sql([query,cond_ids,data_type]),cond_ids)
   end
   
   def get_matrix_data_for_group(group_id, data_type_str)
