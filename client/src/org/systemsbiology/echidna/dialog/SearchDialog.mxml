@@ -236,7 +236,7 @@
 					if (autoComplete.selectedItems[i].hasOwnProperty('name')) {
 						searchArr.push(autoComplete.selectedItems[i]['name']);
 					} else {
-						searchArr.push(StringUtil.trim(autoComplete.selectedItems[i]));
+						searchArr.push(StringUtil.trim(autoComplete.selectedItems[i])) ;
 					}
 				}
 				
