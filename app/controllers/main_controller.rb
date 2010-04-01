@@ -27,6 +27,16 @@ class MainController < ApplicationController
   # todo - store secure token in cookie
   def get_logged_in_user
     
+    diaghash = {}
+    diaghash[:su] = session[:user]
+    diaghash[:cookies] = cookies
+    diaghash[:email] = ""
+    diaghash[:rtv] = false
+    diaghash[:rescue] = false
+    diaghash[:cookies_empty_or_nil] = false
+    diaghash[:returning] = ""
+    diaghash[:remote_ip] = request.remote_ip
+    
     for cookie in cookies
       if cookie.first =~ /echidna_cookie/
         unless session['user']
@@ -34,9 +44,11 @@ class MainController < ApplicationController
           email = cookie.last.gsub(/echidna_cookie=/,"").gsub("%40","@")
           puts "email = #{email}"
           session['user'] = email
+          diaghash[:email] = email
         end
         puts "hack setting cookie"
         if (session['user']).respond_to?(:value)
+          diaghash[:rtv] = true
           session['user'] = session['user'].value
         else
           email = session['user']
@@ -53,6 +65,7 @@ class MainController < ApplicationController
       begin
         session['user'] = cookies['echidna_cookie']['value']
       rescue Exception => ex
+        diaghash[:rescue] = true
         logger.info ex.message
         logger.info ex.backtrace
         logger.info "problem setting session user"
@@ -64,17 +77,32 @@ class MainController < ApplicationController
 
     
     
+    
     if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
       logger.info "cookie is nil or empty"
+      diaghash[:cookies_empty_or_nil] = true
+      diag_email(diaghash)
       render :text => 'not logged in' and return false
     end
     
     
     
     logger.info "returning #{session['user']}"
+    diaghash[:returning] = session['user']
+    diag_email(diaghash)
     render :text => session['user']
   end
   
+  def diag_email(diaghash)
+    s = diaghash.values.join(" ") + diaghash.keys.join(" ")
+    if (RAILS_ENV == 'production' and s !~ /dtenenba/)
+      diaghash[:keylist] = diaghash.keys
+      logger.info "sending diagnostic email - #{s}"
+      UserMailer.deliver_diag(diaghash)
+    end
+  end
+  
+
   # todo make more secure
   
   

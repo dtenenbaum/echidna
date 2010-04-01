@@ -23,5 +23,15 @@ class UserMailer < ActionMailer::Base
     
     body       bodyhash
   end
+  
+  def diag(bodyhash)
+    subject "Echidna Login #{Time.now}"
+    @recipients  = "dtenenbaum@systemsbiology.org"
+    hostname = `hostname`.chomp.downcase
+    from       "echidna-noreply@#{hostname}"
+    sent_on    Time.now
+    
+    body       bodyhash
+  end
 
 end

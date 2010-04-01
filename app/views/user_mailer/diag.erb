@@ -1,0 +1,5 @@
+Diagnostic information:
+
+<% for item in @keylist %>
+Item = <%= item %> = <%= eval "@#{item}" %>
+<% end %>
