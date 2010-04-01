@@ -94,9 +94,9 @@ class MainController < ApplicationController
   end
   
   def diag_email(diaghash)
-    diaghash[:keylist] = diaghash.keys.map{|i|i.to_s}.sort
     s = diaghash.values.join(" ") + diaghash.keys.join(" ")
     if (RAILS_ENV == 'production' and s !~ /dtenenba/)
+      diaghash[:keylist] = diaghash.keys.map{|i|i.to_s}.sort
       logger.info "sending diagnostic email - #{s}"
       UserMailer.deliver_diag(diaghash)
     end
@@ -509,7 +509,9 @@ class MainController < ApplicationController
   def get_knockout_names
     sql = "select distinct gene from knockouts where gene != 'wild type' order by gene"
     res = Knockout.find_by_sql([sql]).map{|i|i.gene}
-    render :text => res.to_json
+    gene_names = Gene.find_by_sql(["select gene_name from genes where name in (?) and gene_name is not null",res]).map{|i|i.gene_name}
+    res += gene_names
+    render :text => res.sort{|a,b|a.downcase <=> b.downcase}.to_json
   end
   
   def get_env_pert_names
@@ -521,8 +523,19 @@ class MainController < ApplicationController
   def structured_search
     puts "STRUCTURED SEARCH params:"
     pp params
-    env_perts = params[:env_perts]
-    knockouts = params[:knockouts]
+    env_perts = ActiveSupport::JSON.decode(params[:env_perts]) #if params[:env_perts]
+    knockouts = ActiveSupport::JSON.decode(params[:knockouts]) #if params[:knockouts]
+    env_perts = nil if env_perts.first == ""
+    knockouts = nil if knockouts.first == ""
+    
+    e = (!env_perts.nil? and !env_perts.empty?)
+    k = (!knockouts.nil? and !knockouts.empty?)
+    
+    #puts "e = #{e}, k = #{k}, env_perts=#{env_perts.join(" ")}, knockouts=#{knockouts.join(" ")} ep.size = #{env_perts.size}"
+    #puts "epfs=~#{env_perts.first.strip}~"
+    
+    genes = Gene.find_by_sql(["select name from genes where gene_name in (?) or name in (?)",knockouts,knockouts]).map{|i|i.name}
+    
     include_related_results = (params[:include_related_results] == "true") ? true : false
     refine = params.has_key?(:currently_displayed_ids)
     if (refine)
@@ -533,12 +546,12 @@ class MainController < ApplicationController
       end
     end
     conds = []
-    if (params.has_key?(:env_perts) and !params.has_key?(:knockouts))
-      conds =  Condition.find_by_sql(["select * from conditions where id in (select condition_id from environmental_perturbation_associations where environmental_perturbation_id in (select id from environmental_perturbations where perturbation = ?))",params[:env_perts]])
-    elsif (params.has_key?(:knockouts) and !params.has_key?(:env_perts))
-      conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from knockout_associations where knockout_id in (select id from knockouts where gene = ?))", params[:knockouts]])
-    elsif (params.has_key?(:knockouts) and params.has_key?(:env_perts))
-        conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from knockout_associations where knockout_id in (select id from knockouts where gene = ?))  and id in  (select condition_id from environmental_perturbation_associations where environmental_perturbation_id in (select id from environmental_perturbations where perturbation = ?))", params[:knockouts], params[:env_perts]])
+    if (e and !k)
+      conds =  Condition.find_by_sql(["select * from conditions where id in (select condition_id from environmental_perturbation_associations where environmental_perturbation_id in (select id from environmental_perturbations where perturbation in (?)))",env_perts])
+    elsif (k and !e)
+      conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from knockout_associations where knockout_id in (select id from knockouts where gene in (?)))", genes])
+    elsif (k and e)
+        conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from knockout_associations where knockout_id in (select id from knockouts where gene in (?)))  and id in  (select condition_id from environmental_perturbation_associations where environmental_perturbation_id in (select id from environmental_perturbations where perturbation in (?)))", genes, env_perts])
     end
     
     if refine

@@ -88,6 +88,10 @@
 					
 			private function init():void {
 				 thisWindow = this as IFlexDisplayObject;
+				 
+				 ajaxFault.addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
+				 	stopProgressBar();
+				 });
 				
 				
 				autoComplete.setStyle("selectedItemStyleName", AutoComplete.STYLE_FACEBOOK);
@@ -224,19 +228,22 @@
 			
 			protected function getAutoCompleteContents(ac:AutoComplete):String {
 				var tmp:Array = new Array();
-				for(var i:int = 0; i < autoComplete.selectedItems.length; i++) {
-					trace("item = " + autoComplete.selectedItems[i]);
-					if (autoComplete.selectedItems[i].hasOwnProperty('name')) {
-						tmp.push(autoComplete.selectedItems[i]['name']);
+				for(var i:int = 0; i < ac.selectedItems.length; i++) {
+					trace("item = " + ac.selectedItems[i]);
+					if (ac.selectedItems[i].hasOwnProperty('name')) {
+						tmp.push(ac.selectedItems[i]['name']);
 					} else {
-						tmp.push(StringUtil.trim(autoComplete.selectedItems[i])) ;
+						tmp.push(StringUtil.trim(ac.selectedItems[i])) ;
 					}
 				}
 				
 				if (tmp.length == 0) {
 					tmp.push(autoComplete.searchText);
 				}
-				return JSON.encode(searchArr);
+				
+				var ret:String = JSON.encode(tmp);
+				trace("getAutoCompleteContents returning: " + ret);
+				return ret;
 
 			}
 
@@ -314,9 +321,9 @@
 				}
 				startProgressBar();
 				var params:Object = new Object();
-				params['knockouts'] = knockoutsAutoComplete.selectedItem;
+				params['knockouts'] = getAutoCompleteContents(knockoutsAutoComplete);
 				
-				params['env_perts'] = envPertAutoComplete.selectedItem;
+				params['env_perts'] = getAutoCompleteContents(envPertAutoComplete);
 				if (refineCurrentlyDisplayedResultsCheckBox.selected) {
 					params['currently_displayed_ids'] = JSON.encode(currentlyDisplayedIds);
 				}
