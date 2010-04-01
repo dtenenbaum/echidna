@@ -101,8 +101,8 @@
 						</mx:columns>
 					</mx:DataGrid>
 				</mx:Canvas>
-				<mx:Canvas label="Tags" width="100%" height="100%" enabled="false">
-				</mx:Canvas>
+				<!---<mx:Canvas label="Tags" width="100%" height="100%" enabled="false">
+				</mx:Canvas>-->
 			</mx:Accordion>
 		</mx:Canvas>
 		
@@ -214,11 +214,11 @@
 
 
 
-												<local:TagCloud id="LocalTagCloudIResultsView" 
+												<!--<local:TagCloud id="LocalTagCloudIResultsView" 
 													MaxFontSize="16" MinFontSize="8" 
 													width="100%" height="80%"  
 													XmlFileSource="test/XmlTest.xml" TagFieldName="author"  
-													BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>
+													BackgroundColor="0xFFFFFF" BackgroundAlpha="1" ></local:TagCloud>-->
 			
 									</mx:Canvas>
 								</mx:VDividedBox>

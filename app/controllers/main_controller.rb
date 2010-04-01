@@ -32,7 +32,6 @@ class MainController < ApplicationController
         unless session['user']
           puts "wadata"
           email = cookie.last.gsub(/echidna_cookie=/,"").gsub("%40","@")
-          value = cookie.last.value
           puts "email = #{email}"
           session['user'] = email
         end
