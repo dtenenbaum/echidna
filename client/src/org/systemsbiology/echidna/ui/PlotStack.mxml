@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:List xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" dataProvider="{dataSource}" click="itemClick(event)" visible="false" labelField="plotName">
+	<mx:Script>
+		<![CDATA[
+			import org.systemsbiology.echidna.events.ShowPlotEvent;
+			import org.systemsbiology.echidna.dialog.PlotDialog;
+			
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			private var dataSource:ArrayCollection = new ArrayCollection();
+			
+			
+			protected function init():void {
+				trace("in PlotStack.init, labelField = " + labelField);
+			}
+			
+			protected function itemClick(event:MouseEvent):void {
+				var spe:ShowPlotEvent = new ShowPlotEvent(ShowPlotEvent.SHOW_PLOT_EVENT);
+				spe.plot = getPlot(this.selectedIndex);
+				
+				dispatchEvent(spe);
+			}
+			
+			public function addItem(plot:PlotDialog):void {
+				// make sure we don't already have the item
+				if (hasItem(plot)) return;
+				
+				var obj:Object = new Object();
+				obj['plot'] = plot;
+				obj['plotName'] = "Plot " + (dataSource.length + 1);
+				
+				var tmp:ArrayCollection = new ArrayCollection();
+				tmp = dataSource;
+				
+				tmp.addItem(obj);
+				
+				dataSource = tmp;
+				
+				this.invalidateDisplayList();
+				this.invalidateList();
+				
+				if (this.visible == false) this.visible = true;
+				trace("# of plots saved: " + dataSource.length);
+				
+				for (var i:int = 0; i < dataSource.length; i++) {
+					trace("plotName[" + i + "] = " + dataSource.getItemAt(i)[this.labelField] + " , " + dataSource.getItemAt(i)['plotName']);
+				}
+				
+			}
+			
+			
+			public function removeItem(plot:PlotDialog):void {
+				if (!hasItem(plot)) return;
+				
+				var tmp:ArrayCollection = new ArrayCollection();
+				for (var i:int = 0;i < dataSource.length; i++) {
+					var obj:Object = dataSource.getItemAt(i);
+					if (i['plot']['uniqueID'] == plot.uniqueID) {
+						// do nothing
+					} else {
+						tmp.addItem(obj);
+					}
+				}
+				
+				
+				for (i = 0; i < tmp.length; i++) {
+					tmp.getItemAt(i)['plotName'] = "Plot " + (i+1);
+				}
+				
+				dataSource = tmp;
+				
+				if (dataSource.length == 0) this.visible = false;
+			}
+			
+			
+			public function hasItem(plot:PlotDialog):Boolean {
+				var uniqueID:String = plot.uniqueID;
+				for (var i:int = 0; i < dataSource.length; i++) {
+					var obj:Object = dataSource.getItemAt(i);
+					if (obj['uniqueId'] == uniqueID) return true;
+				}
+				return false; // todo implement
+			}
+			
+			protected function getPlot(index:int):PlotDialog {
+				return dataSource.getItemAt(index)['plot'];
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+</mx:List>

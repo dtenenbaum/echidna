@@ -19,6 +19,7 @@ class MainController < ApplicationController
   end
 
   def test
+    logger.info "su = #{session[:user]}"
     logger.info cookies
     render :text => "ok"
   end
@@ -36,34 +37,41 @@ class MainController < ApplicationController
     diaghash[:cookies_empty_or_nil] = false
     diaghash[:returning] = ""
     diaghash[:remote_ip] = request.remote_ip
+    email = ''
     
-    for cookie in cookies
-      if cookie.first =~ /echidna_cookie/
-        unless session['user']
-          puts "wadata"
-          email = cookie.last.gsub(/echidna_cookie=/,"").gsub("%40","@")
-          puts "email = #{email}"
-          session['user'] = email
-          diaghash[:email] = email
+    
+    if (session[:user])
+      cookies['echidna_cookie'] = {:value => session[:user], :expires => 1000.days.from_now}
+    else
+      for cookie in cookies
+        if cookie.first =~ /echidna_cookie/
+          unless session[:user]
+            puts "wadata"
+            email = cookie.last.to_s.gsub(/echidna_cookie=/,"").gsub("%40","@") #if cookie.last.respond_to?(:gsub)
+            puts "email = #{email}"
+            session[:user] = email
+            diaghash[:email] = email
+          end
+          puts "hack setting cookie"
+          if (session['user']).respond_to?(:value)
+            diaghash[:rtv] = true
+            session[:user] = session[:user].value
+          else
+            email = session[:user]
+          end
+          puts "e = #{email}"
+
+          cookies['echidna_cookie'] = {:value => email, :expires => 1000.days.from_now}
         end
-        puts "hack setting cookie"
-        if (session['user']).respond_to?(:value)
-          diaghash[:rtv] = true
-          session['user'] = session['user'].value
-        else
-          email = session['user']
-        end
-        puts "e = #{email}"
-        
-        cookies[:echidna_cookie] = {:value => email, :expires => 1000.days.from_now}
       end
     end
     
+    
 
 
-    if session['user'].nil?
+    if session[:user].nil?
       begin
-        session['user'] = cookies['echidna_cookie']['value']
+        session[:user] = cookies['echidna_cookie']['value']
       rescue Exception => ex
         diaghash[:rescue] = true
         logger.info ex.message
@@ -72,13 +80,13 @@ class MainController < ApplicationController
         render :text => "not logged in" and return false
       end
     else
-      cookies[:echidna_cookie] = {:value => session['user'], :expires => 1000.days.from_now}
+      cookies['echidna_cookie'] = {:value => session[:user], :expires => 1000.days.from_now}
     end
 
     
+    logger.info "cookie is #{cookies['echidna_cookie']}"
     
-    
-    if cookies[:echidna_cookie].nil? or cookies[:echidna_cookie].empty?
+    if cookies['echidna_cookie'].nil? or cookies['echidna_cookie'].empty?
       logger.info "cookie is nil or empty"
       diaghash[:cookies_empty_or_nil] = true
       diag_email(diaghash)
@@ -87,10 +95,10 @@ class MainController < ApplicationController
     
     
     
-    logger.info "returning #{session['user']}"
-    diaghash[:returning] = session['user']
+    logger.info "returning #{session[:user]}"
+    diaghash[:returning] = session[:user]
     diag_email(diaghash)
-    render :text => session['user']
+    render :text => session[:user]
   end
   
   def diag_email(diaghash)

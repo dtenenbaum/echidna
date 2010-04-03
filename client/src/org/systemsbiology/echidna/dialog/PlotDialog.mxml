@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="836" height="494" creationComplete="init()" showCloseButton="true"
 	close="PopUpManager.removePopUp(this)" title="DMV Plot">
-	<mx:Button x="10" y="422" label="OK" click="PopUpManager.removePopUp(this)"/>
-	<mx:LineChart x="93" y="10" id="linechart" width="680" height="434" dataProvider="{_plotData}" showDataTips="true">
+	<mx:Button x="10" y="422" label="OK" click="PopUpManager.removePopUp(this)" toolTip="Close Window"/>
+	<mx:Button x="61" y="422" label="Hide" id="hideButton" toolTip="Hide window, so you can restore it later" click="hidePlot()" visible="false"/>
+	<mx:LineChart x="126" y="10" id="linechart" width="680" height="434" dataProvider="{_plotData}" showDataTips="true">
 		
 		<mx:horizontalAxis>
 			<mx:CategoryAxis categoryField="condition" dataProvider="{_plotData}"/>
@@ -13,6 +14,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.HidePlotEvent;
 			import mx.charts.renderers.CircleItemRenderer;
 			import com.adobe.serialization.json.JSON;
 			import mx.charts.series.LineSeries;
@@ -24,6 +26,8 @@
 			protected var _plotData:ArrayCollection = new ArrayCollection();
 			
 			public var geneOrder:Array;
+			
+			public var uniqueID:String;
 			
 			public function init():void {
 			}
@@ -46,6 +50,13 @@
 		     	tmpAC.addItem(value[x]);
 		     }
 		     _plotData = tmpAC;
+			}
+			
+			public function hidePlot():void {
+				var evt:HidePlotEvent = new HidePlotEvent(HidePlotEvent.HIDE_PLOT_EVENT);
+				evt.plot = this;
+				PopUpManager.removePopUp(this); // ? 
+				dispatchEvent(evt);
 			}
 			
 			

@@ -1,5 +1,6 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" backgroundColor="white" pageTitle="DMV -- ratios"
-	applicationComplete="init()" xmlns:bridge="bridge.*" xmlns:ui="flex.utils.ui.*"  width="1595" height="1372" xmlns:hc="com.hillelcoren.components.*">
+	applicationComplete="init()" xmlns:bridge="bridge.*" xmlns:ui="flex.utils.ui.*"  width="1595" height="1372" xmlns:hc="com.hillelcoren.components.*"
+	xmlns:isb="org.systemsbiology.echidna.ui.*">
 	<bridge:FABridge bridgeName="flex"/>
 	<mx:Label x="115" y="797" id="gaggleStatus" width="952" height="18"/>
 	<!-- IMPORTANT! Note that creationPolicy for TabNavigator is set to null by default (it's supposed to be set to auto). 
@@ -32,10 +33,15 @@
 	<mx:Button x="739" y="755" label="Toggle Names" id="toggleNamesButton" click="toggleNames()"/>
 	<mx:Button x="852" y="755" label="Restore Columns" id="restoreOriginalColumnOrderButton" toolTip="Restore Original Column Order" click="restoreOriginalColumnOrder()"/>
 
+	<isb:PlotStack x="1075" y="142" id="plotStack"></isb:PlotStack>
+
+
 	<mx:Script>
 	
 		
 		<![CDATA[
+			import org.systemsbiology.echidna.events.ShowPlotEvent;
+			import org.systemsbiology.echidna.events.HidePlotEvent;
 			import org.systemsbiology.echidna.events.StopProgressBarEvent;
 			import org.systemsbiology.echidna.dialog.ProgressBarDialog;
 			import mx.events.CollectionEvent;
@@ -75,6 +81,9 @@
 			protected var genesAC:ArrayCollection = new ArrayCollection();
 
 
+			[Bindable]
+			protected var plotListAC:ArrayCollection = new ArrayCollection();
+
 			protected var tabs:Array = new Array();
 			
 			
@@ -111,6 +120,8 @@
 				var _mwSupport:ExternalMouseWheelSupport = ExternalMouseWheelSupport.getInstance(stage); 
 				bm = BrowserManager.getInstance();
 				bm.init("","DMV - ratios");
+				
+				plotStack.addEventListener(ShowPlotEvent.SHOW_PLOT_EVENT, showSavedPlot);
 				
 				trace("policy: " + tabNavigator.creationPolicy);
 				
@@ -529,13 +540,31 @@
             	}
             	
             	
-            	var plotDialog:PlotDialog = PlotDialog(PopUpManager.createPopUp(this, PlotDialog, true));
+            	var plotDialog:PlotDialog = PlotDialog(PopUpManager.createPopUp(this, PlotDialog, false));
+            	
+            	plotDialog.uniqueID = "" + new Date();
             	
             	plotDialog.geneOrder = geneOrder;
             	plotDialog.plotData = stuffToPlot;
             	
             	PopUpManager.centerPopUp(plotDialog);
+            	
+            	plotDialog.addEventListener(HidePlotEvent.HIDE_PLOT_EVENT, hidePlot);
+            	
             }
+            
+            protected function hidePlot(event:HidePlotEvent):void {
+            	
+            	var plot:PlotDialog = event.plot;
+				
+				plotStack.addItem(plot);
+            }
+            
+            protected function showSavedPlot(event:ShowPlotEvent):void {
+            	trace("show saved plot");
+            	PopUpManager.addPopUp(event.plot, app);
+            }
+            
             
             protected function onTabChanged():void {
             	trace("tab changed, new index = " + tabNavigator.selectedIndex);
