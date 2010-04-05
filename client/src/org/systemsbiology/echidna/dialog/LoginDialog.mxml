@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="488" height="336" creationComplete="init()"
-	showCloseButton="true" close="PopUpManager.removePopUp(this)">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="488" height="336" creationComplete="init()">
 	<mx:Label x="26" y="10" text="Log in:" width="234"/>
 	<mx:Metadata>
 		[Event(name="gotLoginInfoEvent", type="org.systemsbiology.echidna.events.GetLoginInfoEvent")]
@@ -11,7 +10,7 @@
 	<mx:TextInput id="emailTxt" x="120" y="45" enter="onOk()"/>
 	<mx:TextInput x="120" y="75" displayAsPassword="true" id="passwordText" enter="onOk()"/>
 	<mx:Button x="39" y="132" label="Log In" id="okButton" click="onOk()"/>
-	<mx:Button x="120" y="132" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>
+	<!--<mx:Button x="120" y="132" label="Cancel" id="cancelButton" click="PopUpManager.removePopUp(this)"/>-->
 	<mx:Button x="39" y="200" label="Register" id="registerButton" click="register()"/>
 	<mx:Button x="39" y="256" label="Forgot Password" id="forgotPasswordButton" click="forgotPassword()"/>
 
