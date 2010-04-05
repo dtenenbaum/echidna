@@ -5,7 +5,7 @@ class MainController < ApplicationController
   
   filter_parameter_logging :password
   protect_from_forgery :only => [:create, :update, :destroy] 
-  before_filter :authorize, :except => [:get_logged_in_user, :login, :request_password_refresh]
+  before_filter :authorize, :except => [:get_logged_in_user, :login, :request_password_refresh, :register]
   
   def index
     url = request.url
