@@ -728,8 +728,8 @@
 				geneSearchAutoComplete.selectedItems = new ArrayCollection();
 				geneSearchAutoComplete.text = ""; 
 				geneSearchAutoComplete.label = "";
-				geneSearchAutoComplete.invalidateDisplayList();
 				geneSearchAutoComplete.searchText = "";
+				geneSearchAutoComplete.invalidateDisplayList();
 				geneSearchAutoComplete.setFocus();
 			}				
 

@@ -435,21 +435,7 @@
 			trace("about to ajax: get_logged_in_user");
 			Util.ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault.ajaxFault);
 			
-			/* this is now done in the search dialog:
-			trace("about to ajax: get_auto_completion_items");
-			Util.ajax("main/get_auto_completion_items", null, function(event:ResultEvent):void {
-				trace("in get_auto_completion_items callback");
-				var ary:Array = JSON.decode(event.result.toString());
-				var tmp:ArrayCollection = new ArrayCollection();
-				for (var i:int = 0; i < ary.length; i++) {
-					var obj:Object = new Object();
-					obj['name'] = ary[i];
-					tmp.addItem(obj);
-				}
-				autoCompletionItemsAC = tmp;
-				trace("done with get_auto_completion_items callback");
-			}, ajaxFault.ajaxFault);
-			*/
+			
 		}
 		
 		protected function startProgressBar():void {
@@ -1022,15 +1008,6 @@
 		
 		public function gotEmailAddressFromUser(event:GotLoginInfoEvent):void {
 			loggedInUser = event.email;
-			
-			/*
-			var loginService:mx.rpc.http.HTTPService = new mx.rpc.http.HTTPService();
-			loginService.url = "main/login";
-			loginService.send({email: loggedInUser});
-			loginService.resultFormat = "text";
-			*/
-			
-			// TODO fix: this will break because no password is supplied:
 			
 			Util.ajax('main/login', {"email": loggedInUser}, loggedIn, ajaxFault.ajaxFault); 
 			emailAddressTextBox.text = loggedInUser;

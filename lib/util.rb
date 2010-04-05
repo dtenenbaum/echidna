@@ -1,5 +1,16 @@
 module Util
   require 'pp'
+  
+  def valid_cookie?(cookie)
+    email, hash = cookie.split(";")
+    Password::check("#{email};#{SECRET_SALT}", hash)
+  end
+  
+  def create_cookie(email)
+    plaintext = "#{email};#{SECRET_SALT}"
+    Password::update(plaintext)
+  end
+  
 
   def find_related_groups(group_id)
     sql = "select r.*, t.name, t.inverse from relationships r, relationship_types t where t.id = r.relationship_type_id and  (r.group1 = ? or r.group2 = ?)"

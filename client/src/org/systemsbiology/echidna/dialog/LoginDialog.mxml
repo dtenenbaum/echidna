@@ -52,7 +52,8 @@
 				Util.ajax("main/login",params,
 				function(event:ResultEvent):void {
 					var result:String = event.result.toString();
-					if (result == "invalid login") {
+					trace("result of login attempt: " + result);
+					if (result == "not logged in") {
 						Alert.show("Invalid login! ");
 						return;
 					} else {

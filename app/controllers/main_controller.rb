@@ -5,6 +5,7 @@ class MainController < ApplicationController
   
   filter_parameter_logging :password
   protect_from_forgery :only => [:create, :update, :destroy] 
+  before_filter :authorize, :except => [:get_logged_in_user, :login]
   
   def index
     url = request.url
@@ -19,13 +20,14 @@ class MainController < ApplicationController
   end
 
   def test
-    logger.info "su = #{session[:user]}"
-    logger.info cookies
     render :text => "ok"
   end
   
+  def authorize
+    render :text => "not logged in" and return false unless session[:user]
+  end
   
-  # todo - store secure token in cookie
+  
   def get_logged_in_user
     
     diaghash = {}
@@ -41,7 +43,7 @@ class MainController < ApplicationController
     
     
     if (session[:user])
-      cookies['echidna_cookie'] = {:value => session[:user], :expires => 1000.days.from_now}
+      cookies['echidna_cookie'] = {:value => create_cookie(session[:user]), :expires => 1000.days.from_now}
     else
       for cookie in cookies
         if cookie.first =~ /echidna_cookie/
@@ -61,7 +63,7 @@ class MainController < ApplicationController
           end
           puts "e = #{email}"
 
-          cookies['echidna_cookie'] = {:value => email, :expires => 1000.days.from_now}
+          cookies['echidna_cookie'] = {:value => create_cookie(email), :expires => 1000.days.from_now}
         end
       end
     end
@@ -71,7 +73,11 @@ class MainController < ApplicationController
 
     if session[:user].nil?
       begin
-        session[:user] = cookies['echidna_cookie']['value']
+        if (valid_cookie?(cookies['echidna_cookie']['value']))
+          session[:user] = cookies['echidna_cookie']['value'].split(";").first
+        else
+          render :text => "not logged in" and return false
+        end
       rescue Exception => ex
         diaghash[:rescue] = true
         logger.info ex.message
@@ -80,11 +86,9 @@ class MainController < ApplicationController
         render :text => "not logged in" and return false
       end
     else
-      cookies['echidna_cookie'] = {:value => session[:user], :expires => 1000.days.from_now}
+      cookies['echidna_cookie'] = {:value => create_cookie(session[:user]), :expires => 1000.days.from_now}
     end
 
-    
-    logger.info "cookie is #{cookies['echidna_cookie']}"
     
     if cookies['echidna_cookie'].nil? or cookies['echidna_cookie'].empty?
       logger.info "cookie is nil or empty"
@@ -115,13 +119,13 @@ class MainController < ApplicationController
   
   
   def do_login(user)
-    return "invalid user" unless user
-    puts "in do_login, params[:email] is #{params[:email]}"
+    return "not logged in" unless user
+    puts "in do_login, user.email is #{user.email}"
     user.last_login_date = Time.now
     user.save
-    cookies[:echidna_cookie] = {:value => params[:email],
+    cookies[:echidna_cookie] = {:value => create_cookie(user[:email]),
       :expires => 1000.days.from_now }
-    session[:user] = params['email']
+    session[:user] = user.email
     session[:user_id] = user.id
     user.email
   end
@@ -140,13 +144,13 @@ class MainController < ApplicationController
       end
     elsif params[:token] # user is validating account
       user = User.authenticate(params[:email], params[:password], false)
-      render :text => "invalid login" and return false unless user
+      render :text => "not logged in" and return false unless user
       if (Password::check("#{params[:email]}~~~#{SECRET_SALT}",params[:token]))
         user.validated = true
         user.save
         render :text => do_login(user) and return false
       else
-        render :text => "invalid login" and return false
+        render :text => "not logged in" and return false
       end
     else # it's just a regular login
       user = User.authenticate(params[:email], params[:password]) 
