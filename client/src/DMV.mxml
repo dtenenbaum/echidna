@@ -30,6 +30,8 @@
 		dataProvider="{genesAC}" labelField="name">
 	</hc:AutoComplete>
 	<mx:Button x="375" y="34" label="Select Genes" id="selectGenesButton" click="selectGenes()"/>
+	<mx:Button x="485" y="34" label="Clear Search Box" click="clearGeneSearchBox()"/>
+
 	<mx:Button x="739" y="755" label="Toggle Names" id="toggleNamesButton" click="toggleNames()"/>
 	<mx:Button x="852" y="755" label="Restore Columns" id="restoreOriginalColumnOrderButton" toolTip="Restore Original Column Order" click="restoreOriginalColumnOrder()"/>
 
@@ -704,7 +706,6 @@
 			protected function compareColumnArrays(arr1:Array,arr2:Array):Boolean {
 				if (arr1.length != arr2.length) return false; // shouldn't happen, but....
 				for (var i:int = 0; i < arr1.length; i++) {
-					
 					var d1:DataGridToolTipColumn = arr1[i];
 					var d2:DataGridToolTipColumn = arr2[i];
 					//trace("i = " + i + ", d1 = " + d1.headerText + ", d2 = " + d2.headerText);
@@ -723,7 +724,14 @@
 				PopUpManager.removePopUp(progressDialog);
 			}
 			
-				
+			protected function clearGeneSearchBox():void {
+				geneSearchAutoComplete.selectedItems = new ArrayCollection();
+				geneSearchAutoComplete.text = ""; 
+				geneSearchAutoComplete.label = "";
+				geneSearchAutoComplete.invalidateDisplayList();
+				geneSearchAutoComplete.searchText = "";
+				geneSearchAutoComplete.setFocus();
+			}				
 
 		]]>
 	</mx:Script>
