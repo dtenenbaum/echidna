@@ -83,8 +83,21 @@
 						 "last_name" : lastNameText.text,
 						 "email" : emailText.text,
 						 "password" : passwordText.text},
-						 function(event:ResultEvent):void {
-						 	Alert.show("Registration email has been sent.");
+						 function(registerEvent:ResultEvent):void {
+						 	var ajaxresult:String = registerEvent.result.toString();
+						 	if (ajaxresult.indexOf("error:") > -1) {
+								if (ajaxresult.indexOf("duplicate") > -1) {
+									Alert.show("Duplicate email address.");
+									return;
+								}						 		
+								if (ajaxresult.indexOf("systemsbiology.org") > -1) {
+									Alert.show("Access restricted to ISB email addresses at this time.");
+									return;
+								}
+								
+						 	} else {
+							 	Alert.show("Registration email has been sent.");
+						 	}
 						 }, ajaxFault.ajaxFault, "POST");
 				}, ajaxFault.ajaxFault);
 			}

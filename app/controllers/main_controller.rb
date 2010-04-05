@@ -492,9 +492,15 @@ class MainController < ApplicationController
   end
   
   def register
+    # don't trust the client
+    unless (params[:email].downcase =~ /systemsbiology\.org$/)
+      render :text => "error: must be a systemsbiology.org email address" and return false
+    end
+
     u = User.new(:first_name => params[:first_name], :last_name => params[:last_name], :email => params[:email],
      :password => params[:password], :last_login_date => Time.now, :validated => false)
-    u.save
+    
+    render :text => "error: possible duplicate email" and return false unless u.save
     
     
     # send the email
