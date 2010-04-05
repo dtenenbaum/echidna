@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="836" height="494" creationComplete="init()" showCloseButton="true"
-	close="PopUpManager.removePopUp(this)" title="DMV Plot">
-	<mx:Button x="10" y="422" label="OK" click="PopUpManager.removePopUp(this)" toolTip="Close Window"/>
-	<mx:Button x="61" y="422" label="Hide" id="hideButton" toolTip="Hide window, so you can restore it later" click="hidePlot()" visible="false"/>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="836" height="494" creationComplete="init()" title="DMV Plot">
+	<mx:Button x="10" y="422" label="Close" click="closePlot()" toolTip="Close Window (remove it from saved plots if it is saved)"/>
+	<mx:Button x="67" y="422" label="Hide" id="hideButton" toolTip="Hide window, so you can restore it later" click="hidePlot()"/>
 	<mx:LineChart x="126" y="10" id="linechart" width="680" height="434" dataProvider="{_plotData}" showDataTips="true">
 		
 		<mx:horizontalAxis>
@@ -14,6 +13,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.events.ClosePlotEvent;
 			import org.systemsbiology.echidna.events.HidePlotEvent;
 			import mx.charts.renderers.CircleItemRenderer;
 			import com.adobe.serialization.json.JSON;
@@ -52,10 +52,22 @@
 		     _plotData = tmpAC;
 			}
 			
+			public function setPosition(point:Point):void {
+				this.x = point.x;
+				this.y = point.y;
+			}
+			
 			public function hidePlot():void {
 				var evt:HidePlotEvent = new HidePlotEvent(HidePlotEvent.HIDE_PLOT_EVENT);
 				evt.plot = this;
 				PopUpManager.removePopUp(this); // ? 
+				dispatchEvent(evt);
+			}
+			
+			protected function closePlot():void {
+				var evt:ClosePlotEvent = new ClosePlotEvent(ClosePlotEvent.CLOSE_PLOT_EVENT);
+				evt.plot = this;
+				PopUpManager.removePopUp(this);
 				dispatchEvent(evt);
 			}
 			
