@@ -17,12 +17,14 @@
 			
 			protected function itemClick(event:MouseEvent):void {
 				var spe:ShowPlotEvent = new ShowPlotEvent(ShowPlotEvent.SHOW_PLOT_EVENT);
-				spe.plot = getPlot(this.selectedIndex);
-				//if (!spe.plot.visible) {
-					
+				var plot:PlotDialog = getPlot(this.selectedIndex);
+				trace("is plot visible?" + plot.visible);
+				trace("is plot showing? " + plot.showing);
+				if (!plot.showing) {
+					plot.showing = true;
+					spe.plot = plot;
 					dispatchEvent(spe);
-				//}
-				
+				}
 			}
 			
 			public function addItem(plot:PlotDialog):void {
@@ -98,14 +100,15 @@
 				var point:Point = new Point();
 				var firstPlot:PlotDialog = dataSource.getItemAt(0)['plot'] as PlotDialog;
 				var interval:int = 25;
+				
 
-				point.x = firstPlot.x - interval;
-				point.y = firstPlot.y - interval;
+				point.x = firstPlot.x;
+				point.y = firstPlot.y;
 				
 				
 				for (var i:int = 0; i < dataSource.length; i++) {
 					var plot:PlotDialog = dataSource.getItemAt(i)['plot'] as PlotDialog;
-					if (plot.visible) {
+					if (plot.showing) {
 						var newx:int = Math.min(plot.x, point.x - interval);
 						var newy:int = Math.min(plot.y, point.y - interval);
 						if (newx < point.x) point.x = newx;

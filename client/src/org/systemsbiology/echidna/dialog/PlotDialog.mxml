@@ -29,11 +29,15 @@
 			
 			public var uniqueID:String;
 			
+			public var showing:Boolean;
+			
 			public function init():void {
+				showing = true;
 			}
 			
 			
 			public function set plotData(value:Array):void {
+			 this.showing = true;
 		     var arrayOfSeries:Array = new Array();
 		     var tmpAC:ArrayCollection = new ArrayCollection();
 		     
@@ -59,6 +63,7 @@
 			
 			public function hidePlot():void {
 				var evt:HidePlotEvent = new HidePlotEvent(HidePlotEvent.HIDE_PLOT_EVENT);
+				this.showing = false;
 				evt.plot = this;
 				PopUpManager.removePopUp(this); // ? 
 				dispatchEvent(evt);
@@ -66,6 +71,7 @@
 			
 			protected function closePlot():void {
 				var evt:ClosePlotEvent = new ClosePlotEvent(ClosePlotEvent.CLOSE_PLOT_EVENT);
+				this.showing = false;
 				evt.plot = this;
 				PopUpManager.removePopUp(this);
 				dispatchEvent(evt);
