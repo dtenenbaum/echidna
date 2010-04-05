@@ -8,7 +8,7 @@ module Util
   
   def create_cookie(email)
     plaintext = "#{email};#{SECRET_SALT}"
-    Password::update(plaintext)
+    "#{email};#{Password::update(plaintext)}"
   end
   
 
