@@ -83,6 +83,7 @@ class MainController < ApplicationController
         logger.info ex.message
         logger.info ex.backtrace
         logger.info "problem setting session user"
+        diag_email(diaghash)
         render :text => "not logged in" and return false
       end
     else
