@@ -55,7 +55,7 @@ class MainController < ApplicationController
             diaghash[:email] = email
           end
           puts "hack setting cookie"
-          if (session['user']).respond_to?(:value)
+          if (session[:user]).respond_to?(:value)
             diaghash[:rtv] = true
             session[:user] = session[:user].value
           else
@@ -127,7 +127,7 @@ class MainController < ApplicationController
     puts "in do_login, user.email is #{user.email}"
     user.last_login_date = Time.now
     user.save
-    cookies[:echidna_cookie] = {:value => create_cookie(user[:email]),
+    cookies['echidna_cookie'] = {:value => create_cookie(user[:email]),
       :expires => 1000.days.from_now }
     session[:user] = user.email
     session[:user_id] = user.id
@@ -173,8 +173,6 @@ class MainController < ApplicationController
     render :text => 'logged out'
   end
   
-  #cookies[:gwap2_cookie] = {:value => user.email,
-  #  :expires => 1000.days.from_now }
   
   
   def has_been_imported_already
