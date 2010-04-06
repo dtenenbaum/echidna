@@ -82,6 +82,7 @@ class MainController < ApplicationController
         diaghash[:rescue] = true
         logger.info ex.message
         logger.info ex.backtrace
+        diaghash[:status] = "problem setting session user"
         logger.info "problem setting session user"
         diag_email(diaghash)
         render :text => "not logged in" and return false
@@ -95,6 +96,7 @@ class MainController < ApplicationController
       logger.info "cookie is nil or empty"
       diaghash[:cookies_empty_or_nil] = true
       diag_email(diaghash)
+      
       render :text => 'not logged in' and return false
     end
     
@@ -108,7 +110,7 @@ class MainController < ApplicationController
   
   def diag_email(diaghash)
     s = diaghash.values.join(" ") + diaghash.keys.join(" ")
-    if (RAILS_ENV == 'production' and s !~ /dtenenba/)
+    if (RAILS_ENV == 'production' and s !~ /dtenenbau/)
       diaghash[:keylist] = diaghash.keys.map{|i|i.to_s}.sort
       logger.info "sending diagnostic email - #{s}"
       UserMailer.deliver_diag(diaghash)
