@@ -110,7 +110,8 @@ class MainController < ApplicationController
   
   def diag_email(diaghash)
     s = diaghash.values.join(" ") + diaghash.keys.join(" ")
-    if (RAILS_ENV == 'production' and s !~ /dtenenbau/)
+    #if (RAILS_ENV == 'production' and s !~ /dtenenbau/)
+    if (RAILS_ENV == 'production')
       diaghash[:keylist] = diaghash.keys.map{|i|i.to_s}.sort
       logger.info "sending diagnostic email - #{s}"
       UserMailer.deliver_diag(diaghash)
