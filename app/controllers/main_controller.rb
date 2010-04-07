@@ -39,6 +39,7 @@ class MainController < ApplicationController
     diaghash[:cookies_empty_or_nil] = false
     diaghash[:returning] = ""
     diaghash[:remote_ip] = request.remote_ip
+    diaghash[:user_agent] = request.env["HTTP_USER_AGENT"]
     email = ''
     
     
