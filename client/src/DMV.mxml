@@ -615,13 +615,17 @@
             }
             
 			protected function selectGenes():void {
-				if (geneSearchAutoComplete.selectedItems.length == 0) {
+				
+				var autoCompleteContents:Array = Util.getAutoCompleteContentsArray(geneSearchAutoComplete);
+								
+				if (autoCompleteContents.length == 0) {
 					Alert.show("Nothing to search for!");
 					return;
 				}
+				
 				var searchHash:Object = new Object();
-				for (var i:int = 0; i < geneSearchAutoComplete.selectedItems.length; i++) {
-					searchHash[geneSearchAutoComplete.selectedItems[i]['name']] = 1;
+				for (var i:int = 0; i < autoCompleteContents.length; i++) {
+					searchHash[autoCompleteContents[i]] = 1;
 				}
 				var indicesToSelect:Array = new Array();
 				for (i = 0; i < getDataForCurrentTab().length; i++) {

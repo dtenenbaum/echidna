@@ -1,16 +1,17 @@
 package org.systemsbiology.echidna.common
 {
+	import com.adobe.serialization.json.JSON;
+	import com.hillelcoren.components.AutoComplete;
+	
 	import flash.display.DisplayObject;
 	
 	import mx.collections.ArrayCollection;
-	import mx.controls.Alert;
 	import mx.managers.IBrowserManager;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.http.HTTPService;
+	import mx.utils.StringUtil;
 	import mx.utils.URLUtil;
-	
-	import org.systemsbiology.echidna.events.StopProgressBarEvent;
 	
 	public class Util
 	{
@@ -65,6 +66,49 @@ package org.systemsbiology.echidna.common
 			return(params[key]);
 		}
 		
+		
+		public static function getAutoCompleteContentsArray(ac:AutoComplete):Array {
+				var tmp:Array = new Array();
+				for(var i:int = 0; i < ac.selectedItems.length; i++) {
+					trace("item = " + ac.selectedItems[i]);
+					if (ac.selectedItems[i].hasOwnProperty('name')) {
+						tmp.push(ac.selectedItems[i]['name']);
+					} else {
+						var items:String = StringUtil.trim(ac.selectedItems[i]);
+						if (items.indexOf(" ") > -1) {
+							var segz:Array = items.split(" ");
+							for (var x:int = 0; x < segz.length; x++) {
+								tmp.push(segz[x]);
+							}
+						} else {
+							tmp.push(items);
+						}
+						
+					}
+				}
+				
+				if (tmp.length == 0) {
+					if (ac.searchText.indexOf(" ") > -1) {
+						var segs:Array = StringUtil.trim(ac.searchText).split(" ");
+						for (var j:int = 0; j < segs.length; j++) {
+							tmp.push(segs[j]);
+						}
+					} else {
+						tmp.push(ac.searchText);
+					}
+				}
+				return tmp;			
+
+			}
+
+		public static function getAutoCompleteContents(ac:AutoComplete):String {
+			var tmp:Array = getAutoCompleteContentsArray(ac);
+			var ret:String = JSON.encode(tmp);
+			trace("getAutoCompleteContents returning: " + ret);
+			return ret;
+		}		
+
 
 	}
+	
 }

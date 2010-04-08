@@ -226,50 +226,18 @@
 				trace("autoCompleteValueCommit()");
 			}
 			
-			protected function getAutoCompleteContents(ac:AutoComplete):String {
-				var tmp:Array = new Array();
-				for(var i:int = 0; i < ac.selectedItems.length; i++) {
-					trace("item = " + ac.selectedItems[i]);
-					if (ac.selectedItems[i].hasOwnProperty('name')) {
-						tmp.push(ac.selectedItems[i]['name']);
-					} else {
-						tmp.push(StringUtil.trim(ac.selectedItems[i])) ;
-					}
-				}
-				
-				if (tmp.length == 0) {
-					tmp.push(autoComplete.searchText);
-				}
-				
-				var ret:String = JSON.encode(tmp);
-				trace("getAutoCompleteContents returning: " + ret);
-				return ret;
-
-			}
 
 			protected function search():void {
+				var acItems:Array = Util.getAutoCompleteContentsArray(autoComplete);
 				trace("autoComplete.searchText = " + autoComplete.searchText);
-				if (autoComplete.selectedItems.length == 0 && (autoComplete.searchText == null || autoComplete.searchText == "") ) {
+				if (acItems.length == 0) {
 					Alert.show("Nothing to search for!");
 					return;
 				}
 			
-				trace("num items selected:" +  autoComplete.selectedItems.length);
-				searchArr = new Array();
-				for(var i:int = 0; i < autoComplete.selectedItems.length; i++) {
-					trace("item = " + autoComplete.selectedItems[i]);
-					if (autoComplete.selectedItems[i].hasOwnProperty('name')) {
-						searchArr.push(autoComplete.selectedItems[i]['name']);
-					} else {
-						searchArr.push(StringUtil.trim(autoComplete.selectedItems[i])) ;
-					}
-				}
+				trace("num items selected:" +  acItems.length);
 				
-				if (searchArr.length == 0) {
-					searchArr.push(autoComplete.searchText);
-				}
-				
-
+				searchArr = acItems;
 				
 				var search:String = JSON.encode(searchArr);
 				//loadingLabel.text = "Loading...";
@@ -314,16 +282,24 @@
 			}
 			
 			protected function structuredSearch():void {
-				//todo show progress bar
-				if (knockoutsAutoComplete.selectedItems.length == 0 && envPertAutoComplete.selectedItems.length == 0) {
+
+				var knockoutsItems:Array = Util.getAutoCompleteContentsArray(knockoutsAutoComplete);
+				var envPertsItems:Array = Util.getAutoCompleteContentsArray(envPertAutoComplete);
+				
+				
+				if (knockoutsItems.length == 0 && envPertsItems.length == 0) {
 					Alert.show("Empty Search!");
 					return;
 				}
 				startProgressBar();
+
 				var params:Object = new Object();
-				params['knockouts'] = getAutoCompleteContents(knockoutsAutoComplete);
+				params['knockouts'] = JSON.encode(knockoutsItems);
 				
-				params['env_perts'] = getAutoCompleteContents(envPertAutoComplete);
+				params['env_perts'] = JSON.encode(envPertsItems);
+
+
+
 				if (refineCurrentlyDisplayedResultsCheckBox.selected) {
 					params['currently_displayed_ids'] = JSON.encode(currentlyDisplayedIds);
 				}
