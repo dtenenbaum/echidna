@@ -64,7 +64,7 @@ EOF
     genes = Gene.find :all
     alias_map = {}
     for gene in genes
-      alias_map[gene.name] = gene.gene_name unless gene.gene_name.nil?
+      alias_map[gene.name] = gene.any_synonym unless gene.any_synonym.nil?
     end
     alias_map
   end
