@@ -114,8 +114,9 @@ class MainController < ApplicationController
     #if (RAILS_ENV == 'production' and s !~ /dtenenbau/)
     if (RAILS_ENV == 'production')
       diaghash[:keylist] = diaghash.keys.map{|i|i.to_s}.sort
-      logger.info "sending diagnostic email - #{s}"
-      UserMailer.deliver_diag(diaghash)
+      # disable this for now
+      #logger.info "sending diagnostic email - #{s}"
+      #UserMailer.deliver_diag(diaghash)
     end
   end
   
