@@ -32,7 +32,7 @@
 	<mx:Button x="375" y="34" label="Select Genes" id="selectGenesButton" click="selectGenes()"/>
 	<mx:Button x="485" y="34" label="Clear Search Box" click="clearGeneSearchBox()"/>
 
-	<mx:Button x="739" y="755" label="Toggle Names" id="toggleNamesButton" click="toggleNames()"/>
+	<mx:Button x="739" y="755" label="Toggle Names" id="toggleNamesButton" click="toggleNames()" toolTip="Switch between canonical and common names"/>
 	<mx:Button x="852" y="755" label="Restore Columns" id="restoreOriginalColumnOrderButton" toolTip="Restore Original Column Order" click="restoreOriginalColumnOrder()"/>
 
 	<isb:PlotStack x="1075" y="142" id="plotStack"></isb:PlotStack>

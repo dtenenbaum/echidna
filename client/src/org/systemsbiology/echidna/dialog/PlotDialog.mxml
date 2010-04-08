@@ -2,28 +2,52 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="836" height="494" creationComplete="init()" title="DMV Plot">
 	<mx:Button x="10" y="422" label="Close" click="closePlot()" toolTip="Close Window (remove it from saved plots if it is saved)"/>
 	<mx:Button x="67" y="422" label="Hide" id="hideButton" toolTip="Hide window, so you can restore it later" click="hidePlot()"/>
+	<mx:Button x="11" y="392" label="Clear" click="clearHighlights()"/>	
 	<mx:LineChart x="126" y="10" id="linechart" width="680" height="434" dataProvider="{_plotData}" showDataTips="true">
-		
+	
 		<mx:horizontalAxis>
 			<mx:CategoryAxis categoryField="condition" dataProvider="{_plotData}"/>
 		</mx:horizontalAxis>
 	</mx:LineChart>
-	<mx:Legend dataProvider="{linechart}"/>
+	<mx:Legend dataProvider="{linechart}" itemClick="legendClick(event)" 
+		itemMouseOver="legendMouseOver(event)"/>
+ 
+     <mx:Sequence id="animate" >
+        <mx:AnimateProperty property="alpha" toValue="0.2" duration="{animateDuration}" />
+        <mx:AnimateProperty property="alpha" toValue="1" duration="{animateDuration}" />    
+        <mx:AnimateProperty property="alpha" toValue="0.2" duration="{animateDuration}" />
+        <mx:AnimateProperty property="alpha" toValue="1" duration="{animateDuration}" />    
+        <mx:AnimateProperty property="alpha" toValue="0.2" duration="{animateDuration}" />
+        <mx:AnimateProperty property="alpha" toValue="1" duration="{animateDuration}" />    
+        <mx:AnimateProperty property="alpha" toValue="0.2" duration="{animateDuration}" />
+        <mx:AnimateProperty property="alpha" toValue="1" duration="{animateDuration}" />    
+    </mx:Sequence>
 
+ 
 
 	<mx:Script>
 		<![CDATA[
-			import org.systemsbiology.echidna.events.ClosePlotEvent;
-			import org.systemsbiology.echidna.events.HidePlotEvent;
-			import mx.charts.renderers.CircleItemRenderer;
 			import com.adobe.serialization.json.JSON;
-			import mx.charts.series.LineSeries;
+			
+			import mx.charts.LegendItem;
 			import mx.charts.chartClasses.Series;
+			import mx.charts.events.LegendMouseEvent;
+			import mx.charts.renderers.CircleItemRenderer;
+			import mx.charts.series.LineSeries;
 			import mx.collections.ArrayCollection;
 			import mx.managers.PopUpManager;
 			
+			import org.systemsbiology.echidna.events.ClosePlotEvent; 
+			import org.systemsbiology.echidna.events.HidePlotEvent;
+			
+			protected var hilitMap:Object = new Object();
+			
+			
 			[Bindable]
-			protected var _plotData:ArrayCollection = new ArrayCollection();
+			protected var _plotData:ArrayCollection = new ArrayCollection(); 
+			
+			[Bindable]
+			private var animateDuration:Number = 60;
 			
 			public var geneOrder:Array;
 			
@@ -77,8 +101,75 @@
 				dispatchEvent(evt);
 			}
 			
+			protected function legendMouseOver(event:LegendMouseEvent):void {
+			}
+			
+			
+			protected function legendClick(event:LegendMouseEvent):void {
+				var label:String = event.item.label;
+				trace("legend click: " + label);
+				var series:LineSeries = findSeries(label);
+				if (hilitMap[label] == undefined || hilitMap[label] == false) {
+					hilitMap[label] = true;
+					highlightSeries(series);
+				} else {
+					hilitMap[label] = false;
+					animate.end();
+					series.filters = [];
+				}
+			}
+
+
+			protected function clearHighlights():void {
+				hilitMap = {};
+				animate.end();
+				for (var i:int = 0; i < linechart.series.length; i++) {
+					var series:LineSeries = linechart.series[i];
+					series.filters = [];
+				}
+			}
+			
+			
+			   private function highlightSeries(lineSer:LineSeries):void{
+                //set filter
+                var filter:GlowFilter = getBitmapFilter();
+                var myFilters:Array = new Array();
+                myFilters.push(filter);
+               lineSer.filters = myFilters;
+               
+                // blink series
+                var target:Array = new Array();
+                target.push(lineSer);
+                animate.play(target);
+            }
+			
+			
+			 private function getBitmapFilter():GlowFilter {
+                //var color:Number =  0×FF00;
+                var color:Number  = 65280;
+                var alpha:Number = 1;
+                var blurX:Number = 5;
+                var blurY:Number = 5;
+                var strength:Number = 5;
+                var inner:Boolean = false;
+                var knockout:Boolean = false;
+                var quality:Number = 5;
+    
+                return new GlowFilter(color, alpha, blurX, blurY, strength, quality, inner, knockout);
+            }
+			
+			 private function findSeries(lbl:String):LineSeries{
+                var series:LineSeries = new LineSeries()
+                for(var i:int=0;i<linechart.series.length;i++){
+                    var tmpSeries:LineSeries = linechart.series[i];
+                    if(tmpSeries.displayName == lbl)
+                        series = tmpSeries;
+                }
+                return series;
+            }
 			
 		]]>
 	</mx:Script>
+	
 	
 </mx:TitleWindow>
