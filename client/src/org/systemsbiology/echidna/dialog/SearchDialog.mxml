@@ -24,13 +24,16 @@
 	<mx:Label x="41" y="159" text="Gene"/>
 	<hc:AutoComplete id="knockoutsAutoComplete" x="40" y="185" dataProvider="{knockouts}" allowMultipleSelection="true"
 		matchType="anyPart" prompt="None" width="812"/>
-	<mx:Label x="39" y="225" text="Environment:"/>
-	<hc:AutoComplete x="41" y="265" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="true"
+	<mx:ComboBox x="40" y="215" id="andOrComboBox" dataProvider="{conjunctions}" ></mx:ComboBox>
+	
+
+	<mx:Label x="40" y="239" text="Environment:"/>
+	<hc:AutoComplete x="41" y="260" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="true"
 		matchType="anyPart" prompt="None" width="812"/>
-	<mx:CheckBox id="includeRelatedResultsCheckBox" x="31" y="309" label="Include related results (controls, etc)" enabled="true"/>
-	<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="31" y="358" label="Refine currently displayed results?"/>
-	<mx:Button x="31" y="401" label="Structured Search" click="structuredSearch()"/>
-	<mx:Button x="168" y="401" label="Cancel" click="PopUpManager.removePopUp(this)"/>
+	<mx:CheckBox id="includeRelatedResultsCheckBox" x="31" y="363" label="Include related results (controls, etc)" enabled="true"/>
+	<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="31" y="393" label="Refine currently displayed results?"/>
+	<mx:Button x="31" y="433" label="Structured Search" click="structuredSearch()"/>
+	<mx:Button x="168" y="433" label="Cancel" click="PopUpManager.removePopUp(this)"/>
 	
 
 	
@@ -66,6 +69,12 @@
 			private var envPerts:ArrayCollection;
 			
 			private var searchArr:Array;
+			
+			[Bindable]
+			protected var conjunctions:ArrayCollection = new ArrayCollection(
+				[{label: "AND"},{label:"OR"}]
+			);
+			
 			
 			private var loadedSearchTerms:Boolean = false;
 			private var loadedKnockouts:Boolean = false;
@@ -297,6 +306,8 @@
 				params['knockouts'] = JSON.encode(knockoutsItems);
 				
 				params['env_perts'] = JSON.encode(envPertsItems);
+				
+				params['conjunction'] = andOrComboBox.selectedLabel;
 
 
 

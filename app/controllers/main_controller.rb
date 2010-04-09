@@ -573,7 +573,11 @@ class MainController < ApplicationController
     elsif (k and !e)
       conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from knockout_associations where knockout_id in (select id from knockouts where gene in (?)))", genes])
     elsif (k and e)
+      if (params[:conjunction] == 'AND')
         conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from knockout_associations where knockout_id in (select id from knockouts where gene in (?)))  and id in  (select condition_id from environmental_perturbation_associations where environmental_perturbation_id in (select id from environmental_perturbations where perturbation in (?)))", genes, env_perts])
+      else
+        conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from knockout_associations where knockout_id in (select id from knockouts where gene in (?)))  or id in  (select condition_id from environmental_perturbation_associations where environmental_perturbation_id in (select id from environmental_perturbations where perturbation in (?)))", genes, env_perts])
+      end
     end
     
     if refine
