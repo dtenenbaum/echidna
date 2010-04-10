@@ -9,6 +9,8 @@ package org.systemsbiology.echidna.common
 
 		public var name:String;		
 		
+		public var conjunction:String;
+		
 		public var subSearches:Array = new Array();
 		
 		public function CurrentlyActiveSearch()

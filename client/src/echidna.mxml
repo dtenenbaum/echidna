@@ -22,6 +22,28 @@
 				<mx:TextArea x="219" y="710" width="462" id="groupStatsTextArea"/>
 			</mx:AddChild>
 			<mx:SetProperty target="{smallConditionGrid}" name="width" value="290"/>
+			<mx:SetProperty target="{accordion}" name="width" value="192"/>
+			<mx:SetProperty target="{accordion}" name="height" value="455.3485"/>
+			<mx:SetProperty target="{accordion}" name="x" value="-0.05"/>
+			<mx:SetProperty target="{accordion}" name="y" value="-0.1"/>
+			<!--
+			<mx:RemoveChild target="{saveCurrentSearchButton}"/>
+			<mx:AddChild relativeTo="{groupingCanvas}" position="lastChild" target="{saveCurrentSearchButton}"/>
+			<mx:SetProperty target="{saveCurrentSearchButton}" name="x" value="24.5"/>
+			<mx:SetProperty target="{saveCurrentSearchButton}" name="y" value="508.5"/>
+			<mx:RemoveChild target="{label1}"/>
+			<mx:AddChild relativeTo="{groupingCanvas}" position="lastChild" target="{label1}"/>
+			<mx:SetProperty target="{label1}" name="x" value="40.85"/>
+			<mx:SetProperty target="{label1}" name="y" value="462.85"/>
+			<mx:RemoveChild target="{searchTermsText}"/>
+			<mx:AddChild relativeTo="{groupingCanvas}" position="lastChild" target="{searchTermsText}"/>
+			<mx:SetProperty target="{searchTermsText}" name="x" value="40.85"/>
+			<mx:SetProperty target="{searchTermsText}" name="y" value="482.8"/>
+			<mx:RemoveChild target="{tagCurrentSearchButton}"/>
+			<mx:AddChild relativeTo="{groupingCanvas}" position="lastChild" target="{tagCurrentSearchButton}"/>
+			<mx:SetProperty target="{tagCurrentSearchButton}" name="x" value="24.5"/>
+			<mx:SetProperty target="{tagCurrentSearchButton}" name="y" value="538"/>
+			-->
 		</mx:State>
 		<mx:State name="">
 			<mx:RemoveChild target="{groupStatsTextArea}"/>
@@ -86,7 +108,7 @@
 
 
 
-			<mx:Accordion id="accordion" width="100%" height="100%" enabled="true" click="accordionClick(event)">
+			<mx:Accordion id="accordion" width="192" height="438.68182" enabled="true" click="accordionClick(event)" x="-0.05" y="-0.1">
 				<mx:Canvas label="Conditions" width="100%" height="100%" enabled="true" click="accordionClick(event)">
 					<mx:DataGrid id="resultsChoicesGrid" dataProvider="{resultCategories}" width="100%" showHeaders="false" itemClick="setResultsShown(event)">
 						<mx:columns>
@@ -174,6 +196,9 @@
 				<mx:Label x="213" y="631" text="Selected Conditions:"/>
 				<mx:Text x="340" y="631" id="selectedConditionsText"/>
 				
+
+				
+				
 			</mx:Canvas>
 
 				
@@ -235,11 +260,6 @@
 						<mx:Label text="Selected Rows"/>
 						<mx:Text text="{conditionGrid.selectedItems.length}"/>
 					</mx:HBox>
-					<mx:HBox id="searchTermsHbox" visible="false">
-						<mx:Label text="Search Terms:"/>
-						<mx:Text id="searchTermsText"/>
-						<mx:Button label="Save Current Search" id="saveCurrentSearchButton" click="saveCurrentSearch()" enabled="true"/>
-					</mx:HBox>
 				</mx:VBox>
 
 				</mx:Canvas>						
@@ -249,7 +269,19 @@
 				
 
 			</mx:ViewStack>
+			
+			
 			<mx:Label x="771" y="0" text="Log Out" id="logOutLabel" click="logOut()" toolTip="Click here to log out"/>
+			
+			
+			<mx:HBox id="searchTermsHbox" x="9.1" y="491.15" visible="false">
+				<mx:VBox width="178.86365" height="103.030304" >
+					<mx:Label text="Search Terms:" id="label1"/>
+					<mx:Text id="searchTermsText"/>
+					<mx:Button label="Save Current Search" id="saveCurrentSearchButton" click="saveCurrentSearch()" enabled="true"/>
+					<mx:Button label="Tag Current Results" id="tagCurrentSearchButton" click="tagCurrentSearch()" enabled="true"/>
+				</mx:VBox>
+			</mx:HBox>
 		
 		
 		
@@ -292,6 +324,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.dialog.TaggingDialog;
 			import org.systemsbiology.echidna.events.EchidnaSelectionChangedEvent;
 			import com.adobe.serialization.json.JSON;
 			
@@ -553,7 +586,7 @@
 				return;
 			}
 			if (groupsChoicesGrid.selectedItem.shortname == 'groupSavedSearches') {
-				Alert.show("Coming soon....");
+				showSavedSearchesDialog();
 				return;	
 			}
 			
@@ -577,8 +610,9 @@
 				return;
 			}
 			if (resultsChoicesGrid.selectedItem.shortname == 'savedSearches') {
-				//dante
-				showSavedSearchesDialog();
+				//todo - deal wit dis
+				
+				//showSavedSearchesDialog();
 				return;
 			}
 			
@@ -1276,6 +1310,18 @@
 			
 		}
 		
+		protected function tagCurrentSearch():void {
+			if (true) {
+				Alert.show("Not just yet...");
+				return;
+			}
+			var tagDialog:TaggingDialog = new TaggingDialog();
+			// populate the dialog...
+			tagDialog.groupsAC = groupsAC;
+			PopUpManager.addPopUp(tagDialog, app, true);
+			PopUpManager.centerPopUp(tagDialog);	
+		}
+		
 		protected function showSavedSearchesDialog():void {
 			var showSavedSearchesDialog:ShowSavedSearchesDialog = new ShowSavedSearchesDialog();
 			
@@ -1293,7 +1339,9 @@
 			
 			showSavedSearchesDialog.addEventListener(ResultEvent.RESULT, function(event:ResultEvent):void {
 				stopProgressBar();
-				gotConditions(event);
+				trace("in showSavedSearchesDialog ResultEvent listener");
+				//gotConditions(event);
+				gotGroups(event);
 			});
 			
 			

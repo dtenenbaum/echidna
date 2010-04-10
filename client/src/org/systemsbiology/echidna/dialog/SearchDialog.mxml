@@ -31,7 +31,7 @@
 	<hc:AutoComplete x="41" y="260" id="envPertAutoComplete" dataProvider="{envPerts}" allowMultipleSelection="true"
 		matchType="anyPart" prompt="None" width="812"/>
 	<mx:CheckBox id="includeRelatedResultsCheckBox" x="31" y="363" label="Include related results (controls, etc)" enabled="true"/>
-	<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="31" y="393" label="Refine currently displayed results?"/>
+	<!--<mx:CheckBox id="refineCurrentlyDisplayedResultsCheckBox" x="31" y="393" label="Refine currently displayed results?"/>-->
 	<mx:Button x="31" y="433" label="Structured Search" click="structuredSearch()"/>
 	<mx:Button x="168" y="433" label="Cancel" click="PopUpManager.removePopUp(this)"/>
 	
@@ -308,12 +308,15 @@
 				params['env_perts'] = JSON.encode(envPertsItems);
 				
 				params['conjunction'] = andOrComboBox.selectedLabel;
+				currentlyActiveSearch.conjunction = andOrComboBox.selectedLabel;
 
 
-
+				/*
 				if (refineCurrentlyDisplayedResultsCheckBox.selected) {
 					params['currently_displayed_ids'] = JSON.encode(currentlyDisplayedIds);
 				}
+				*/
+				
 				params['include_related_results'] = (includeRelatedResultsCheckBox.selected) ? "true" : "false";
 				
 				Util.ajax("main/structured_search", params, function(event:ResultEvent):void{
@@ -331,14 +334,17 @@
 					subSearch.includeRelated = includeRelatedResultsCheckBox.selected;
 					subSearch.lastResultsOptionSelected = lastResultsOptionSelected;
 					
-					
+					/*
 					if (refineCurrentlyDisplayedResultsCheckBox.selected) {
 						subSearch.refine = true;
 						currentlyActiveSearch.subSearches.push(subSearch);
 					} else {
+					*/
 						currentlyActiveSearch.subSearches = new Array();
 						currentlyActiveSearch.subSearches.push(subSearch);
+					/*
 					} 
+					*/
 					
 					trace("currently active search:\n" + currentlyActiveSearch.toString()) ;
 					trace("brief name:\n" + currentlyActiveSearch.briefName());
