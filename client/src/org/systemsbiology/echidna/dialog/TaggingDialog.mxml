@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="842" height="504" title="Tagging"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"  layout="absolute" width="810" height="500" title="Tagging"
 	creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.dataGridClasses.DataGridItemRenderer;
+			import mx.events.ListEvent;
+			import com.adobe.serialization.json.JSON;
 			import mx.controls.Alert;
 			import mx.rpc.events.ResultEvent;
 			import org.systemsbiology.echidna.events.StopProgressBarEvent;
@@ -37,7 +40,9 @@
 				var params:Object = new Object();
 				params["group_id"] = groupGrid.selectedItem['id'];
 				Util.ajax(url, params, function(event:ResultEvent):void {
-					
+					var obj:Object = JSON.decode(event.result.toString());
+					conditionsAC = Util.objectToArrayCollection(obj,'condition');
+
 				},ajaxFault.ajaxFault);
 				
 				
@@ -54,6 +59,16 @@
 				
 			}
 			
+		protected function createGridTooltip(event:ListEvent,grid:DataGrid):void {
+			var str:String = DataGridItemRenderer(event.itemRenderer).data.name;
+			grid.toolTip = str;
+		}
+		
+		protected function deleteGridTooltip(event:ListEvent,grid:DataGrid):void {
+			grid.toolTip = null;
+		}
+
+			
 		]]>
 	</mx:Script>
 	<mx:Label x="10" y="10" text="Add results to existing tag?"/>
@@ -63,12 +78,14 @@
 	<mx:Button x="200" y="98" label="-" id="removeGroupButton" click="removeGroups();"/>
 	<mx:Button x="658" y="98" label="-" id="removeConditionButton" click="removeConditions()"/>
 	<mx:DataGrid x="10" y="126" id="groupGrid" dataProvider="{groupsAC}" width="341" allowMultipleSelection="true"
-		dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" click="groupClick()">
+		dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" click="groupClick()"
+		itemRollOver="createGridTooltip(event,groupGrid)" itemRollOut="deleteGridTooltip(event,groupGrid)">
 		<mx:columns>
 			<mx:DataGridColumn headerText="Name" dataField="name"/>
 		</mx:columns>
 	</mx:DataGrid>
-	<mx:DataGrid x="443" y="129" id="conditionGrid" dataProvider="{conditionsAC}" allowMultipleSelection="true">
+	<mx:DataGrid x="359" y="126" id="conditionGrid" dataProvider="{conditionsAC}" allowMultipleSelection="true" width="339" height="156"
+		itemRollOver="createGridTooltip(event,conditionGrid)" itemRollOut="deleteGridTooltip(event,conditionGrid)">
 		<mx:columns>
 			<mx:DataGridColumn headerText="Name" dataField="name"/>
 		</mx:columns>

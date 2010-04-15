@@ -1311,10 +1311,12 @@
 		}
 		
 		protected function tagCurrentSearch():void {
+			/*
 			if (true) {
 				Alert.show("Not just yet...");
 				return;
 			}
+			*/
 			var tagDialog:TaggingDialog = new TaggingDialog();
 			// populate the dialog...
 			tagDialog.groupsAC = groupsAC;
