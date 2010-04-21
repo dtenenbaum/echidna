@@ -1318,9 +1318,12 @@
 			}
 			*/
 			var tagDialog:TaggingDialog = new TaggingDialog();
+			trace("tagging dialog has been constructed");
 			// populate the dialog...
 			tagDialog.groupsAC = groupsAC;
+			trace("groupsAC has been set");
 			PopUpManager.addPopUp(tagDialog, app, true);
+			trace("addpopup has been called");
 			PopUpManager.centerPopUp(tagDialog);	
 		}
 		

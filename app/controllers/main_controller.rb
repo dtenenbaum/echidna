@@ -303,6 +303,12 @@ class MainController < ApplicationController
     conds = find_conditions_for_group(params[:group_id])
       render :text => conds.to_json
   end
+
+  def get_conditions_for_groups()
+    conds = Condition.find_by_sql(["select c.name, g.condition_group_id from conditions c, condition_groupings g where g.condition_id = c.id and g.condition_group_id in (?) order by g.condition_group_id, c.sequence", params[:group_ids].split(",")])
+    render :text => conds.to_json
+  end
+  
   
   def reorder_group
     conds = Condition.find_by_sql(\
@@ -428,6 +434,11 @@ class MainController < ApplicationController
     r = RelationshipType.new(:name => params[:name], :inverse => params[:inverse])
     r.save
     render :text => RelationshipType.find(:all, :order => 'name').to_json
+  end
+  
+  def get_distinct_tags
+    tags = Tag.find_by_sql(["select distinct tag from tags order by tag"]).map{|i|i.tag}
+    render :text => tags.to_json
   end
 
   def create_new_relationship

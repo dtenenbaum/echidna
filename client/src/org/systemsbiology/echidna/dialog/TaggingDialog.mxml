@@ -25,35 +25,113 @@
 			
 			protected var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
 			
+			protected var groupToConditionMap:Object = new Object();
+			
 		
 			protected function init():void {
+				trace("in tagging dialog init");
 				ajaxFault.addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
 				});
+				Util.ajax("main/get_distinct_tags", null, function(event:ResultEvent):void {
+					var obj:Object = JSON.decode(event.result.toString());
+					var array:Array = obj as Array;
+					var tmpAC:ArrayCollection = new ArrayCollection();
+					for (var i:int = 0; i < array.length; i++) {
+						 var o:Object = new Object();
+						 o['label'] = array[i];
+						 tmpAC.addItem(o);
+					}
+					tagsAC = tmpAC;
+					
+					trace("array size: " + array.length);
+				}, ajaxFault.ajaxFault);
+				
+				var params:Object = new Object();
+				var ids:Array = new Array();
+				for (var i:int = 0; i < groupsAC.length; i++) {
+					ids.push(groupsAC.getItemAt(i)['id']);
+				}
+				
+				Util.ajax("main/get_conditions_for_groups", {"group_ids" : ids.join(",")}, function(event:ResultEvent):void {
+					var obj:Object = JSON.decode(event.result.toString());
+					var ac:ArrayCollection = Util.objectToArrayCollection(obj, "condition");
+					for(var i:int = 0; i < ac.length; i++) {
+						var name:String = ac.getItemAt(i)['name'];
+						var id:int = ac.getItemAt(i)['condition_group_id'];
+						if (groupToConditionMap[id] == null) {
+							groupToConditionMap[id] = new ArrayCollection();
+						}
+						var mapAC:ArrayCollection = groupToConditionMap[id];
+						var item:Object = new Object();
+						item['name'] = name;
+						mapAC.addItem(item);
+						groupToConditionMap[id] = mapAC;
+						
+					}
+				}, ajaxFault.ajaxFault);
+				
 			}
+			
+			protected function getGroupIndexById(id:int):int {
+				for (var i:int = 0; i < groupsAC.length; i++) {
+					if (groupsAC.getItemAt(i)['id'] == id) {
+						return i;
+					}	
+				}
+				return -1;
+			}
+			
 			
 			protected function groupClick():void {
 				if (groupGrid.selectedItems.length > 1) {
+					conditionsAC = new ArrayCollection();
 					return;
 				}
 				
-				var url:String = "main/get_conditions_for_group";
-				var params:Object = new Object();
-				params["group_id"] = groupGrid.selectedItem['id'];
-				Util.ajax(url, params, function(event:ResultEvent):void {
-					var obj:Object = JSON.decode(event.result.toString());
-					conditionsAC = Util.objectToArrayCollection(obj,'condition');
-
-				},ajaxFault.ajaxFault);
-				
+				var id:int = groupGrid.selectedItem['id'];
+				conditionsAC = groupToConditionMap[id];
+					
 				
 			}
 			
 			protected function removeGroups():void {
+				if (groupGrid.selectedItems.length > 0) {
+					conditionsAC = new ArrayCollection();
+				}
+				groupsAC = removeFromArrayCollection(groupsAC, groupGrid.selectedItems);
+				
 			}
 			
 			protected function removeConditions():void {
+				var id:int = groupGrid.selectedItem['id'];
+				var ac:ArrayCollection = groupToConditionMap[id];
 				
+				
+				ac = removeFromArrayCollection(ac, conditionGrid.selectedItems);
+				groupToConditionMap[id] = ac;
+				conditionsAC = ac;
 			}
+			
+			
+			protected function removeFromArrayCollection(ac:ArrayCollection, itemsToRemove:Array):ArrayCollection {
+				var ret:ArrayCollection = new ArrayCollection();
+				
+				for(var i:int = 0; i < ac.length; i++) {
+					var name:String = ac.getItemAt(i)['name'];
+					var found:Boolean = false;
+					for (var j:int = 0; j < itemsToRemove.length; j++) {
+						if (name == itemsToRemove[j]['name']) {
+							found = true;
+						}
+					}
+					if (!found) {
+						ret.addItem(ac.getItemAt(i));
+					}
+				}
+				return ret;
+			}
+			
+			
 			
 			protected function saveTag():void {
 				
@@ -72,11 +150,11 @@
 		]]>
 	</mx:Script>
 	<mx:Label x="10" y="10" text="Add results to existing tag?"/>
-	<mx:ComboBox x="10" y="36" id="tagListComboBox"></mx:ComboBox>
+	<mx:ComboBox x="10" y="36" id="tagListComboBox" dataProvider="{tagsAC}"></mx:ComboBox>
 	<mx:Label x="10" y="100" text="Groups (drag to sort):"/>
 	<mx:Label x="443" y="100" text="Conditions:"/>
-	<mx:Button x="200" y="98" label="-" id="removeGroupButton" click="removeGroups();"/>
-	<mx:Button x="658" y="98" label="-" id="removeConditionButton" click="removeConditions()"/>
+	<mx:Button x="200" y="98" label="-" id="removeGroupButton" click="removeGroups();" toolTip="Remove Groups"/>
+	<mx:Button x="658" y="98" label="-" id="removeConditionButton" click="removeConditions()" toolTip="Remove Conditions"/>
 	<mx:DataGrid x="10" y="126" id="groupGrid" dataProvider="{groupsAC}" width="341" allowMultipleSelection="true"
 		dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" click="groupClick()"
 		itemRollOver="createGridTooltip(event,groupGrid)" itemRollOut="deleteGridTooltip(event,groupGrid)">
