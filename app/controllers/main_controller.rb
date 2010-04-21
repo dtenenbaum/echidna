@@ -305,7 +305,7 @@ class MainController < ApplicationController
   end
 
   def get_conditions_for_groups()
-    conds = Condition.find_by_sql(["select c.name, g.condition_group_id from conditions c, condition_groupings g where g.condition_id = c.id and g.condition_group_id in (?) order by g.condition_group_id, c.sequence", params[:group_ids].split(",")])
+    conds = Condition.find_by_sql(["select c.name, g.condition_group_id, g.condition_id from conditions c, condition_groupings g where g.condition_id = c.id and g.condition_group_id in (?) order by g.condition_group_id, c.sequence", params[:group_ids].split(",")])
     render :text => conds.to_json
   end
   
