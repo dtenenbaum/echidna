@@ -3,6 +3,8 @@
 	creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import mx.core.IFlexDisplayObject;
+			import org.systemsbiology.echidna.events.TagNamedEvent;
 			import mx.controls.dataGridClasses.DataGridItemRenderer;
 			import mx.events.ListEvent;
 			import com.adobe.serialization.json.JSON;
@@ -28,6 +30,10 @@
 			protected var groupToConditionMap:Object = new Object();
 			protected var groupToNumConditionsMap:Object = new Object();
 			
+			protected var userId:String;
+			protected var tagName:String;
+			
+			
 		
 			protected function init():void {
 				trace("in tagging dialog init");
@@ -35,16 +41,13 @@
 				});
 				Util.ajax("main/get_distinct_tags", null, function(event:ResultEvent):void {
 					var obj:Object = JSON.decode(event.result.toString());
-					var array:Array = obj as Array;
-					var tmpAC:ArrayCollection = new ArrayCollection();
-					for (var i:int = 0; i < array.length; i++) {
-						 var o:Object = new Object();
-						 o['label'] = array[i];
-						 tmpAC.addItem(o);
-					}
-					tagsAC = tmpAC;
+					tagsAC = Util.objectToArrayCollection(obj,"tag");
 					
-					trace("array size: " + array.length);
+				}, ajaxFault.ajaxFault);
+				
+				
+				Util.ajax("main/get_user_id", null, function(event:ResultEvent):void {
+					userId = event.result.toString();
 				}, ajaxFault.ajaxFault);
 				
 				var params:Object = new Object();
@@ -151,7 +154,34 @@
 					}
 				}	
 				trace("congrats, you selected these conditions: " + condIds.join(", ") + " (" + condIds.length + " total)");
+				
+				if((tagListComboBox.selectedIndex != -1) && (userId == ""  + tagListComboBox.selectedItem['user_id'])) {
+					tagName = tagListComboBox.selectedItem['tag'];
+					saveTagToDatabase(condIds);
+				} else {
+					// pop up naming dialog
+					if (tagListComboBox.selectedIndex != -1) {
+						
+					}
+					var tagNamingDialog:TagNamingDialog = new TagNamingDialog();
+					tagNamingDialog.addEventListener(TagNamedEvent.TAG_NAMED_EVENT, function(event:TagNamedEvent):void {
+						tagName = event.tagName;
+						saveTagToDatabase(condIds);
+					});
+					tagNamingDialog.basedOnExisting = (tagListComboBox.selectedIndex != -1);
+					PopUpManager.addPopUp(tagNamingDialog, this, true);
+					PopUpManager.centerPopUp(tagNamingDialog);
+					
+				}
+				
 			}
+		
+		protected function saveTagToDatabase(condIds:Array):void {
+			var savedThis:IFlexDisplayObject = this;
+			Util.ajax("main/save_tag", {"tag_name" : tagName, "cond_ids": condIds.join(",")}, function(event:ResultEvent):void {
+				PopUpManager.removePopUp(savedThis);
+			}, ajaxFault.ajaxFault);
+		}
 			
 		protected function createGridTooltip(event:ListEvent,grid:DataGrid):void {
 			var str:String = DataGridItemRenderer(event.itemRenderer).data.name;
@@ -166,7 +196,7 @@
 		]]>
 	</mx:Script>
 	<mx:Label x="10" y="10" text="Add results to existing tag?"/>
-	<mx:ComboBox x="10" y="36" id="tagListComboBox" dataProvider="{tagsAC}"></mx:ComboBox>
+	<mx:ComboBox x="10" y="36" id="tagListComboBox" dataProvider="{tagsAC}" labelField="tag" prompt="Select one..."></mx:ComboBox>
 	<mx:Label x="10" y="100" text="Groups (drag to sort):"/>
 	<mx:Label x="443" y="100" text="Conditions:"/>
 	<mx:Button x="200" y="98" label="-" id="removeGroupButton" click="removeGroups();" toolTip="Remove Groups"/>

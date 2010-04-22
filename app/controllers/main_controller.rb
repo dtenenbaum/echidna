@@ -436,8 +436,12 @@ class MainController < ApplicationController
     render :text => RelationshipType.find(:all, :order => 'name').to_json
   end
   
+  def get_user_id
+    render :text => session[:user_id]
+  end
+  
   def get_distinct_tags
-    tags = Tag.find_by_sql(["select distinct tag from tags order by tag"]).map{|i|i.tag}
+    tags = Tag.find_by_sql(["select distinct tag, user_id from tags order by tag"])#.map{|i|i.tag}
     render :text => tags.to_json
   end
 
@@ -658,6 +662,19 @@ class MainController < ApplicationController
     #end
     
 
+  end
+  
+  def save_tag
+    tag_name = params[:tag_name]
+    cond_ids = params[:cond_ids].split(",")
+    seq = 1
+    
+    for cond in cond_ids
+      t = Tag.new(:tag => tag_name, :condition_id => cond, :user_id => session[:user_id], :sequence => seq, :auto => false)
+      t.save
+      seq += 1
+    end
+    render :text => "ok"
   end
   
   def save_search
