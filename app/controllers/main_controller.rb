@@ -168,6 +168,8 @@ class MainController < ApplicationController
     
   end
   
+  
+  
   def logout
     cookies.delete(:echidna_cookie)
     session[:user] = nil  
@@ -215,9 +217,6 @@ class MainController < ApplicationController
  
   # todo rename
   def search_conditions
-    #render :text => "hi"
-    #return false if true
-    puts "in main/search_conditions"
     search = ActiveSupport::JSON.decode(params[:search])
     wildcards = []
     for item in search
@@ -227,7 +226,6 @@ class MainController < ApplicationController
       end
     end
     ids = Condition.find_by_sql(["select distinct condition_id from search_terms where word in (?)", search]).map{|i|i.condition_id}
-    #wildcard_ids = Condition.find_by_sql(["select distinct condition_id from search_terms where word in (?)", search]).map{|i|i.condition_id}
     for wildcard in wildcards
       ids += Condition.find_by_sql(["select distinct condition_id from search_terms where word like ?", wildcard]).map{|i|i.condition_id}
     end
@@ -246,16 +244,8 @@ class MainController < ApplicationController
         ret << {"condition_group" => h}
       end
       render :text => ret.to_json
-      #render :text => groups.to_json(:methods => :ungrouped_ids)
     end
     
-    #sorted_conds = sort_conditions_for_time_series(results)
-    #sorted_conds = Condition.populate_num_groups(sorted_conds)
-    #if (sorted_conds.empty?)
-    #  render :text => "none" and return false
-    #else
-    #  render :text => sorted_conds.to_json(:methods => :num_groups) and return false
-    #end
   end
   
   def get_all_conditions
@@ -264,7 +254,6 @@ class MainController < ApplicationController
     headers['Content-type'] = 'text/plain'
     sql = "select "
     sorted_conds = Condition.populate_num_groups(sorted_conds)
-    #render :text => sorted_conds.to_json() 
     render :text => sorted_conds.to_json(:methods => :num_groups) 
   end
   
@@ -673,7 +662,13 @@ class MainController < ApplicationController
       t = Tag.new(:tag => tag_name, :condition_id => cond, :user_id => session[:user_id], :sequence => seq, :auto => false)
       t.save
       seq += 1
+      
+      s = SearchTerm.new(:word => tag_name, :condition_id => cond, :int_timestamp => Tagime.now.to_i)
+      s.save
+      
     end
+    
+    
     render :text => "ok"
   end
   
@@ -739,6 +734,14 @@ class MainController < ApplicationController
     render :text => conds.to_json
   end
   
+  
+  def get_group_description
+    render :text => group_description(params[:group_id])
+  end
+  
+  def get_condition_description
+    render :text => condition_description(params[:condition_id])
+  end
   
   def get_matrices_for_firegoose
     #qs = query_string.gsub(/&amp;/,"&")

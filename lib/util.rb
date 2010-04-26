@@ -225,5 +225,51 @@ EOF
       end
     end
   end
+  
+  def group_description(group_id)
+    group = ConditionGroup.find(params[:group_id])
+    conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from condition_groupings where condition_group_id = ?) order by sequence",params[:group_id]])
+    ret = "Group Description:\n"
+    ret += "Name: #{group.name}\n"
+    ret += (group.is_time_series) ? "Time Series\n" : "Not Time Series\n"
+    owner = (group.owner_id.nil?) ? nil : User.find(group.owner_id)
+    importer =  (group.owner_id.nil?) ? nil : User.find(group.importer_id)
+    ret += "Owner: #{(owner.nil?)  ? "unknown" : owner.email}\n"
+    ret += "Conditions: #{conds.size}\n\n"
+    for cond in conds
+      ret += condition_description(cond.id)
+    end
+    ret
+  end
+  
+  def condition_description(condition_id)
+    cond = Condition.find(condition_id)
+    species = Species.find(cond.species_id)
+    ref = ReferenceSample.find(cond.reference_sample_id)
+    recipe = GrowthMediaRecipe.find(cond.growth_media_recipe_id)
+    obs = cond.observations
+    ret = "Condition name: #{cond.name}\n"
+    ret += "SBEAMS ID: #{cond.sbeams_project_id}\n"
+    ret += "SBEAMS Timestamp: #{cond.sbeams_timestamp}\n"
+    ret += "Forward Slide #: #{cond.forward_slide_number}\n" if cond.forward_slide_number
+    ret += "Reverse Slide #: #{cond.reverse_slide_number}\n" if cond.reverse_slide_number
+    ret += "Species: #{species.name}\n"
+    ret += "Reference Sample: #{ref.name}\n"
+
+    owner = (cond.owner_id.nil?) ? nil : User.find(cond.owner_id)
+    importer =  (cond.owner_id.nil?) ? nil : User.find(cond.importer_id)
+    ret += "Owner: #{(owner.nil?)  ? "unknown" : owner.email}\n"
+    ret += "Imported By: #{(importer.nil?)  ? "unknown" : importer.email}\n"
+    ret += "Recipe: #{recipe.name}\n"
+    ret += "Observations:\n\n"
+    for ob in obs
+      ret += "#{ob.name} = #{ob.string_value}\n"
+      
+    end
+    
+    ret += "\n"
+    ret
+  end
+  
 
 end

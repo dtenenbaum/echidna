@@ -19,7 +19,7 @@
 			<mx:RemoveChild target="{showAllGroupsButton}"/>
 			<mx:AddChild relativeTo="{relateButton}" position="before" target="{showAllGroupsButton}"/>
 			<mx:AddChild>
-				<mx:TextArea x="219" y="710" width="462" id="groupStatsTextArea"/>
+				<mx:TextArea x="219" y="710" width="462" height="150" id="groupStatsTextArea"/>
 			</mx:AddChild>
 			<mx:SetProperty target="{smallConditionGrid}" name="width" value="290"/>
 			<mx:SetProperty target="{accordion}" name="width" value="192"/>
@@ -487,12 +487,19 @@
 		}
 		
 		protected function smallConditionGridClicked(event:ListEvent):void {
+			if(smallConditionGrid.selectedItems.length == 1) {
+				Util.ajax("main/get_condition_description",{"condition_id" : smallConditionGrid.selectedItem['id']}, function(event:ResultEvent):void {
+					groupStatsTextArea.text = event.result.toString();
+				},ajaxFault.ajaxFault);
+			} else {
+				groupStatsTextArea.text = "";
+			}
 			/*
 			trace("listing of items in small CG:");
 			for (var i:int = 0; i < smallConditionsAC.length; i++) {
 				trace("\t" + smallConditionsAC.getItemAt(i)['id']);
 			}
-			*/	
+			*/
 		}
 		
 		protected function smallConditionGridDragComplete(event:DragEvent):void {
@@ -871,14 +878,17 @@
 			removeConditionsButton.enabled = false;
 			if (groupsGrid.selectedIndices.length == 1) {
 				onGroupRowSelected(event.rowIndex);
+				showSelectedGroupDescription();
 				//dmvButton.enabled = true;
 				relateButton.enabled = false;
 			} else if (groupsGrid.selectedIndices.length == 2) {
 				relateButton.enabled = true;
+				groupStatsTextArea.text = "";
 				//dmvButton.enabled = false;
 			} else {
 				relateButton.enabled = false;
 				//dmvButton.enabled = false;
+				groupStatsTextArea.text = "";
 			}
 			/*
 			removeConditionsButton.enabled = false;
@@ -886,6 +896,13 @@
 			*/
 			trace("firing gaggle event from groupClick");
 			fireGaggleEvent();
+		}
+		
+		protected function showSelectedGroupDescription():void {
+			Util.ajax("main/get_group_description",{"group_id": groupsGrid.selectedItem['id']},function(event:ResultEvent):void {
+				var desc:String = event.result.toString();
+				groupStatsTextArea.text = desc;
+			},ajaxFault.ajaxFault);
 		}
 		
 		protected function createSCGTooltip(event:ListEvent):void {
