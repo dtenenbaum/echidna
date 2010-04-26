@@ -1168,7 +1168,7 @@
 					setCurrentState('groupState');
 					populateGroupGrid(null);
 			    });
-				importExperimentDialog.importConditions();
+				importExperimentDialog.beginImport();
 								
 			} else {
 				mainPanel.enabled = true;

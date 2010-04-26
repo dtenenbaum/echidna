@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="964" height="622" title="Import Experiment" creationComplete="init()">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="1128" height="742" title="Import Experiment" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			import org.systemsbiology.echidna.events.StopProgressBarEvent;
+			import mx.controls.ProgressBar;
+			import org.systemsbiology.echidna.events.ImportStatusEvent;
 			import org.systemsbiology.echidna.events.GetConditionsEvent;
 			import mx.core.IFlexDisplayObject;
 			import mx.managers.PopUpManager;
@@ -20,35 +24,89 @@
 			
 			public var testMode:Boolean = false;
 			
+			private var progressBar:ProgressBarDialog = new ProgressBarDialog();
+			
 			
 			private function init():void {
-			}
-			
-			
-			public function importConditions():void {
-				checkForPriorImport();
-			}
-			
-			protected function checkForPriorImport():void {
+				 ajaxFault.addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
+				 	stopProgressBar();
+				 });
+
 				
-				// todo remove this at some point
-				if (testMode == true) return;
-				// todo remove this at some point^^^
 				
-				Util.ajax("main/has_been_imported_already",{"projectId":projectId,"dateDir":dateDir},function(event:ResultEvent):void {
-					if (event.result.toString() == "true") {
+				addEventListener(ImportStatusEvent.IMPORT_STATUS_EVENT, function(event:ImportStatusEvent):void {
+					if (event.alreadyImported) {
 						Alert.show("This experiment has already been imported into Echidna.", "Error", Alert.OK, null, function():void {
 							PopUpManager.removePopUp(thisWindow);
 							var gce:GetConditionsEvent = new GetConditionsEvent(GetConditionsEvent.GET_CONDITIONS_EVENT);
 							dispatchEvent(gce);
 						});
 						return;
+					} else {
+						importExperiment();
 					}
-					// experiment has not been imported:
-					//Util.ajax("main/yadayadayada					
+				});
+			}
+			
+			
+			
+			public function beginImport():void {
+				checkForPriorImport();
+			}
+			
+			
+			
+
+			public function importExperiment():void {
+				trace("in importExperiment");
+				
+				startProgressBar();
+				
+				Util.ajax("main/import_from_pipeline",
+					{"sbeams_id" : projectId,
+					 "sbeams_timestamp": dateDir,
+					 "test_mode" : testMode}, function(event:ResultEvent):void {
+					 	stopProgressBar();
+					 	var groupObj:Object = JSON.decode(event.result.toString());
+					 	var cg:Object = groupObj['condition_group'];
+					 	var groupNameStr:String = cg['name'];
+					 	trace("imported group id = " + cg['id']); 
+					 	loadingLabel.text = "";
+					 	groupNameText.text = cg['name'];
+					 }, ajaxFault.ajaxFault);
+			} 
+
+			
+			protected function checkForPriorImport():void {
+				var evt:ImportStatusEvent = new ImportStatusEvent(ImportStatusEvent.IMPORT_STATUS_EVENT);
+				// todo remove this at some point
+				if (testMode) {
+					evt.alreadyImported = false;
+					dispatchEvent(evt);
+					return;
+				}
+				// todo remove this at some point^^^
+				
+				Util.ajax("main/has_been_imported_already",{"projectId":projectId,"dateDir":dateDir},function(event:ResultEvent):void {
+					if (event.result.toString() == "true") {
+						evt.alreadyImported = true;
+					} else {
+						evt.alreadyImported = false;
+					}
+					dispatchEvent(evt);
 				},ajaxFault.ajaxFault);
 			}
 			
+			protected function startProgressBar():void {
+				trace("trying to start progress bar...");
+				progressBar = ProgressBarDialog(PopUpManager.createPopUp(this, ProgressBarDialog, true));
+				PopUpManager.centerPopUp(progressBar);
+			}
+			
+			protected function stopProgressBar():void {
+				PopUpManager.removePopUp(progressBar);
+			}
+
 			
 			
 			
@@ -58,5 +116,13 @@
 	<mx:Text x="163" y="10" id="sbeamsProjectIdText" width="107" text="{projectId}"/>
 	<mx:Label x="10" y="36" text="SBEAMS Timestamp:"/>
 	<mx:Text x="163" y="36" width="180" id="sbeamsDateDirText" text="{dateDir}"/>
-	<mx:Label x="10" y="84" text="Loading..." id="loadingLabel"/>
+	<mx:Label x="10" y="62" text="Loading data, this will take several minutes..." id="loadingLabel"/>
+	<mx:VBox x="10" y="88" height="110" width="657" borderStyle="solid" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+		<mx:CheckBox label="Make a new Condition Group containing these conditions?" width="379" selected="true" id="makeNewGroupCheckbox"/>
+		<mx:CheckBox label="Is this a time series?" id="isTimeSeriesCheckbox"/>
+		<mx:HBox width="493">
+			<mx:Label text="Group Name:"/>
+			<mx:TextInput width="377" id="groupNameText"/>
+		</mx:HBox>
+	</mx:VBox>
 </mx:TitleWindow>

@@ -106,7 +106,12 @@ class MainController < ApplicationController
     logger.info "returning #{session[:user]}"
     diaghash[:returning] = session[:user]
     diag_email(diaghash)
-    render :text => session[:user]
+    render :text => get_email_from_session_user
+  end
+  
+  
+  def get_email_from_session_user()
+    session[:user].split("%").first
   end
   
   def diag_email(diaghash)
@@ -779,4 +784,17 @@ class MainController < ApplicationController
     render :text => as_matrix(data)
   end
   
+  def import_from_pipeline
+    puts "Session user = #{get_email_from_session_user}"
+    user = User.find_by_email(get_email_from_session_user)
+    puts "about to import with user = #{user.email}"
+    tmode = (params[:test_mode] == 'true') ? true : false
+    # todo  - stop doing this big fakeout and uncomment the last line of this method!
+    #group = ConditionGroup.find(309) # comment this out!
+    #render :text => group.to_json(:methods => :conditions) # this too!
+    render :text => PipelineImporter.import_experiment(params[:sbeams_id], params[:sbeams_timestamp], user, tmode).to_json(:methods => :conditions) # uncomment this!
+  end
+  
+  
 end
+

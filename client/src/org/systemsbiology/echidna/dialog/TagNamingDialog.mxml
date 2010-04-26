@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="690" height="280" title="Name This Tag" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import com.adobe.utils.StringUtil;
+			import org.systemsbiology.echidna.events.TagNamedEvent;
+			import mx.managers.PopUpManager;
+			public var basedOnExisting:Boolean;
+			
+			protected function init():void {
+				if (basedOnExisting) {
+					infoLabel.text = "You chose to add to a tag that is owned by another user. Since you don't have permission to modify another user's tag, you must provide your own name for this tag.";
+				}
+				tagNameText.setFocus();
+			}
+			
+			
+			protected function ok():void {
+				var tagName:String = StringUtil.trim(tagNameText.text);
+				if (tagName.length == 0) {
+					Alert.show("Please specify a tag name!");
+					return;
+				}
+				var evt:TagNamedEvent = new TagNamedEvent(TagNamedEvent.TAG_NAMED_EVENT);
+				evt.tagName = tagNameText.text;
+				dispatchEvent(evt);
+				PopUpManager.removePopUp(this); 
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:Label x="28" y="27" text="Please choose a name for this tag:" width="484"/>
+	<mx:Label x="28" y="62" width="442" id="infoLabel"/>
+	<mx:Button x="28" y="164" label="OK" click="ok()"/>
+	<mx:Button x="79" y="164" label="Cancel" click="PopUpManager.removePopUp(this)"/>
+	<mx:TextInput x="28" y="101" width="375" id="tagNameText"/>
+</mx:TitleWindow>
