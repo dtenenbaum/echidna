@@ -1145,6 +1145,15 @@
 				stopProgressBar();
 				var sbeamsProjectId:String = Util.getQueryStringItem(bm, "projectId");
 				var sbeamsTimestamp:String = Util.getQueryStringItem(bm, "dateDir");
+				var testStr:String = Util.getQueryStringItem(bm,"test");
+				var test:Boolean = false;
+				if (testStr != null) {
+					trace("in test mode");
+					test = true;
+					
+				} else {
+					trace("not in test mode");
+				}
 				mainPanel.enabled = true;
 				emailAddressTextBox.text = email;
 				
@@ -1152,11 +1161,14 @@
 				PopUpManager.centerPopUp(importExperimentDialog);
 				importExperimentDialog.projectId = sbeamsProjectId;
 			    importExperimentDialog.dateDir = sbeamsTimestamp;
+			    importExperimentDialog.testMode = test;
 			    importExperimentDialog.addEventListener(GetConditionsEvent.GET_CONDITIONS_EVENT, function(event:GetConditionsEvent):void {
 			    	startProgressBar();
-			    	getConditions();
+			    	//getConditions();
+					setCurrentState('groupState');
+					populateGroupGrid(null);
 			    });
-				importExperimentDialog.checkForPriorImport();
+				importExperimentDialog.importConditions();
 								
 			} else {
 				mainPanel.enabled = true;

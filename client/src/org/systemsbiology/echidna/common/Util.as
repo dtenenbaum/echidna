@@ -106,7 +106,10 @@ package org.systemsbiology.echidna.common
 			var ret:String = JSON.encode(tmp);
 			trace("getAutoCompleteContents returning: " + ret);
 			return ret;
-		}		
+		}	
+		
+		
+	
 
 
 	}

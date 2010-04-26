@@ -18,12 +18,23 @@
 			
 			private var thisWindow:IFlexDisplayObject = IFlexDisplayObject(this);
 			
+			public var testMode:Boolean = false;
+			
 			
 			private function init():void {
-				
 			}
 			
-			public function checkForPriorImport():void {
+			
+			public function importConditions():void {
+				checkForPriorImport();
+			}
+			
+			protected function checkForPriorImport():void {
+				
+				// todo remove this at some point
+				if (testMode == true) return;
+				// todo remove this at some point^^^
+				
 				Util.ajax("main/has_been_imported_already",{"projectId":projectId,"dateDir":dateDir},function(event:ResultEvent):void {
 					if (event.result.toString() == "true") {
 						Alert.show("This experiment has already been imported into Echidna.", "Error", Alert.OK, null, function():void {
@@ -39,10 +50,13 @@
 			}
 			
 			
+			
+			
 		]]>
 	</mx:Script>
 	<mx:Label x="10" y="10" text="SBEAMS Project ID:"/>
 	<mx:Text x="163" y="10" id="sbeamsProjectIdText" width="107" text="{projectId}"/>
 	<mx:Label x="10" y="36" text="SBEAMS Timestamp:"/>
 	<mx:Text x="163" y="36" width="180" id="sbeamsDateDirText" text="{dateDir}"/>
+	<mx:Label x="10" y="84" text="Loading..." id="loadingLabel"/>
 </mx:TitleWindow>
