@@ -2,6 +2,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="1128" height="742" title="Import Experiment" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.ui.ConditionPanel;
 			import mx.collections.ArrayCollection;
 			import com.adobe.serialization.json.JSON;
 			import org.systemsbiology.echidna.events.StopProgressBarEvent;
@@ -28,15 +29,28 @@
 			private var progressBar:ProgressBarDialog = new ProgressBarDialog();
 			
 			
+			private  var names:ArrayCollection;
+			private var units:ArrayCollection;
+			
+			private var gotBoth:Boolean = false;
+			private var alreadyImported:Boolean = false;
+			private var doneWithImport:Boolean = false;
+			private var checkedForPriorImport:Boolean = false;
+			private var proceedCalledAlready:Boolean = false;
+			
 			private function init():void {
 				 ajaxFault.addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
 				 	stopProgressBar();
 				 });
 
 				
+				getStuff("main/get_controlled_vocab_names", true);
+				getStuff("main/get_units", false);
 				
 				addEventListener(ImportStatusEvent.IMPORT_STATUS_EVENT, function(event:ImportStatusEvent):void {
+					checkedForPriorImport = true;
 					if (event.alreadyImported) {
+						alreadyImported = true;
 						Alert.show("This experiment has already been imported into Echidna.", "Error", Alert.OK, null, function():void {
 							PopUpManager.removePopUp(thisWindow);
 							var gce:GetConditionsEvent = new GetConditionsEvent(GetConditionsEvent.GET_CONDITIONS_EVENT);
@@ -44,16 +58,52 @@
 						});
 						return;
 					} else {
-						importExperiment();
+						//importExperiment();
+						proceed();
 					}
 				});
 			}
 			
+			protected function proceed():void {
+				if (alreadyImported) return;
+				
+				
+				
+				if (gotBoth && checkedForPriorImport && (!proceedCalledAlready)) {
+					proceedCalledAlready = true;
+					importExperiment();
+				}
+			}
+			
+			protected function getStuff(url:String, namesFlag:Boolean):void {
+				Util.ajax(url, null, function(event:ResultEvent):void {
+					trace("in getStuff callback function with url = " + url);
+					var tmp:Array = JSON.decode(event.result.toString());
+					var tmpAC:ArrayCollection = new ArrayCollection();
+					for (var i:int = 0; i < tmp.length; i++) {
+						var o:Object = new Object();
+						o['label'] = tmp[i];
+						tmpAC.addItem(o);
+					}
+					if (namesFlag) {
+						names = tmpAC;
+					} else {
+						units = tmpAC;
+					}
+					if (names != null && units != null) {
+						gotBoth = true;
+					}
+					proceed();
+				}, ajaxFault.ajaxFault);
+				
+			}
 			
 			
+			//gets called from external code
 			public function beginImport():void {
 				checkForPriorImport();
 			}
+			
 			
 			
 			
@@ -76,6 +126,24 @@
 					 	trace("imported group id = " + cg['id']); 
 					 	loadingLabel.text = "";
 					 	groupNameText.text = cg['name'];
+					 	
+					 	trace("units size: " + units.length);
+					 	trace("name size: " + names.length);
+					 	
+					 	for (var i:int = 0; i < conditions.length; i++) {
+					 		var cpanel:ConditionPanel = new ConditionPanel();
+					 		conditionsVBox.addChild(cpanel);
+					 		cpanel.names = names;
+					 		cpanel.units = units;
+					 		var condition:Object = conditions[i]['condition'];
+					 		trace("cond name = " + condition['name']);
+					 		cpanel.conditionName = condition['name'];
+					 		//cpanel._conditionNameText.text = "blah";
+					 		//cpanel.conditionName = "blah";
+					 	}
+					 	
+					 	
+					 	
 					 }, ajaxFault.ajaxFault);
 			} 
 
@@ -127,5 +195,8 @@
 			<mx:Label text="Group Name:"/>
 			<mx:TextInput width="377" id="groupNameText"/>
 		</mx:HBox>
+	</mx:VBox>
+	<mx:Label x="10" y="206" text="Conditions:"/>
+	<mx:VBox x="10" y="232" height="10%" width="657" id="conditionsVBox" verticalScrollPolicy="off">
 	</mx:VBox>
 </mx:TitleWindow>

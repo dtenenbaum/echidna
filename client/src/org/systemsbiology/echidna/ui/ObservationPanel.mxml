@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="510" height="80">
+	<mx:Label x="10" y="10" text="Name:"/>
+	<mx:Label x="178" y="10" text="Value:"/>
+	<mx:Label x="341" y="10" text="Units:"/>
+	<mx:ComboBox x="10" y="26" id="namesComboBox" dataProvider="{names}" width="160"></mx:ComboBox>
+	<mx:TextInput x="178" y="26"/>
+	<mx:ComboBox x="346" y="26" id="unitsComboBox" dataProvider="{units}" width="154"></mx:ComboBox>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var names:ArrayCollection;
+			[Bindable]
+			public var units:ArrayCollection;
+		]]>
+	</mx:Script>
+	
+	
+</mx:Canvas>

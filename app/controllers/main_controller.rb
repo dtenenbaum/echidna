@@ -795,6 +795,18 @@ class MainController < ApplicationController
     #render :text => PipelineImporter.import_experiment(params[:sbeams_id], params[:sbeams_timestamp], user, tmode).to_json(:methods => :conditions) # uncomment this!
   end
   
+  def get_controlled_vocab_names
+    # todo - show only approved
+    names = ControlledVocabItem.find(:all, :order => 'name').map{|i|i.name}
+    render :text => names.to_json
+  end
+  
+  def get_units
+    units = Unit.find(:all, :order => :name, :conditions => 'parent_id is not null and name is not null').map{|i|i.name}
+    units.unshift("None")
+    render :text => units.to_json
+  end
+  
   
 end
 

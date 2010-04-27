@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="568" height="210" xmlns:echidna="org.systemsbiology.echidna.ui.*">
+	<mx:Label x="19" y="21" text="Name:"/>
+	<mx:TextInput x="69" y="19" id="conditionNameText"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			private var _units:ArrayCollection;
+			private var _names:ArrayCollection;
+
+			public function set names(ac:ArrayCollection):void {
+				_names = ac;
+				obPanel.names = ac;
+			}
+			
+			public function set units(ac:ArrayCollection):void {
+				_units = ac;
+				obPanel.units = ac;
+			}
+			
+		
+			public function set conditionName(cName:String):void {
+				conditionNameText.text = cName;
+			}
+		]]>
+	</mx:Script>
+		
+	<mx:Button x="19" y="47" label="Add Observation" id="addObservationButton"/>
+	<mx:VBox x="19" y="77" height="107" width="524" id="observationsVBox" verticalScrollPolicy="off">
+		<echidna:ObservationPanel id="obPanel">
+		</echidna:ObservationPanel>
+	</mx:VBox>
+</mx:Canvas>

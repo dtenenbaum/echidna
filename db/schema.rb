@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100421175406) do
+ActiveRecord::Schema.define(:version => 20100427184903) do
 
   create_table "citations", :force => true do |t|
     t.integer "paper_id",     :limit => 11
@@ -209,12 +209,12 @@ ActiveRecord::Schema.define(:version => 20100421175406) do
     t.integer "sequence",        :limit => 11
   end
 
-  create_table "tmp", :id => false, :force => true do |t|
-    t.integer "cid", :limit => 11
-  end
-
-  create_table "tmp_table_1270146666", :id => false, :force => true do |t|
-    t.integer "cid", :limit => 11
+  create_table "units", :force => true do |t|
+    t.integer  "parent_id",  :limit => 11
+    t.string   "name"
+    t.boolean  "approved"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "user_searches", :force => true do |t|
