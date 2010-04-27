@@ -7,7 +7,7 @@ class ConditionGroup < ActiveRecord::Base
   end
   
   def conditions
-    Condition.find_by_sql(["select * from conditions where id in (select condition_id from condition_groupings where condition_id = ?) order by sequence",id])
+    Condition.find_by_sql(["select * from conditions where id in (select condition_id from condition_groupings where condition_group_id = ?) order by sequence",id])
   end
   
 end

@@ -2,6 +2,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="1128" height="742" title="Import Experiment" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import com.adobe.serialization.json.JSON;
 			import org.systemsbiology.echidna.events.StopProgressBarEvent;
 			import mx.controls.ProgressBar;
@@ -69,6 +70,8 @@
 					 	stopProgressBar();
 					 	var groupObj:Object = JSON.decode(event.result.toString());
 					 	var cg:Object = groupObj['condition_group'];
+					 	var conditions:Array = cg['conditions'];
+					 	trace("there are " + conditions.length + " conditions");
 					 	var groupNameStr:String = cg['name'];
 					 	trace("imported group id = " + cg['id']); 
 					 	loadingLabel.text = "";

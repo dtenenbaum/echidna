@@ -67,7 +67,7 @@ class PipelineImporter
       c = Condition.new( :name => cond, :sequence => i+1,
         :forward_slide_number => slidenums[cond].first, :reverse_slide_number => slidenums[cond].last)
       c.save        
-      cg = ConditionGrouping.new(:condition_group_id => group.id, :condition_id => :c.id, :sequence => i+1)
+      cg = ConditionGrouping.new(:condition_group_id => group.id, :condition_id => c.id, :sequence => i+1)
       cg.save
       #puts "saving condition:"
       #pp c
@@ -155,6 +155,7 @@ class PipelineImporter
       Condition.transaction do
         for cond in g.conditions
           Feature.connection.execute("delete from features where condition_id = #{cond.id}")
+          ConditionGrouping.execute("delete from condition_groupings where condition_id = #{cond.id}")
           Observation.connection.execute("deletre from observations where condition_id = #{cond.id}")
           Condition.delete cond.id
         end
