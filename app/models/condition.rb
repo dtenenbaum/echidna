@@ -47,7 +47,7 @@ class Condition < ActiveRecord::Base
   end
   
   def get_obs
-    raw = Observation.find_by_sql(["select c.name, o.string_value from observations o, controlled_vocab_items c where o.name_id = c.id and o.condition_id = ? order by name", self.id])
+    raw = Observation.find_by_sql(["select c.name, o.string_value, o.name_id from observations o, controlled_vocab_items c where o.name_id = c.id and o.condition_id = ? order by name", self.id])
     res = {}
     for item in raw
       res[item.name] = item.string_value

@@ -802,7 +802,7 @@ class MainController < ApplicationController
   end
   
   def get_units
-    units = Unit.find(:all, :order => :name, :conditions => 'parent_id is not null and name is not null').map{|i|i.name}
+    units = Unit.find(:all, :order => :name, :conditions => 'parent_id is not null and name is not null ').map{|i|i.name}
     units.unshift("None")
     render :text => units.to_json
   end
