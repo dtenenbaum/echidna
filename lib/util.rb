@@ -233,7 +233,7 @@ EOF
     ret += "Name: #{group.name}\n"
     ret += (group.is_time_series) ? "Time Series\n" : "Not Time Series\n"
     owner = (group.owner_id.nil?) ? nil : User.find(group.owner_id)
-    importer =  (group.owner_id.nil?) ? nil : User.find(group.importer_id)
+    importer =  (group.importer_id.nil?) ? nil : User.find(group.importer_id)
     ret += "Owner: #{(owner.nil?)  ? "unknown" : owner.email}\n"
     ret += "Conditions: #{conds.size}\n\n"
     for cond in conds
@@ -257,7 +257,7 @@ EOF
     ret += "Reference Sample: #{ref.name}\n"
 
     owner = (cond.owner_id.nil?) ? nil : User.find(cond.owner_id)
-    importer =  (cond.owner_id.nil?) ? nil : User.find(cond.importer_id)
+    importer =  (cond.importer_id.nil?) ? nil : User.find(cond.importer_id)
     ret += "Owner: #{(owner.nil?)  ? "unknown" : owner.email}\n"
     ret += "Imported By: #{(importer.nil?)  ? "unknown" : importer.email}\n"
     ret += "Recipe: #{recipe.name}\n"
