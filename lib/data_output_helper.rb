@@ -36,6 +36,50 @@ EOF
       #unsorted_data = Feature.find_by_sql([query,cond_ids,data_type])
       #sort_by_condition_group_sequence(Feature.find_by_sql([query,cond_ids,data_type]),cond_ids)
   end
+
+
+
+
+
+      def get_matrix_data_small(cond_ids,data_type_str)
+        puts "cond_ids = "
+        pp cond_ids
+        data_types = DataType.find :all
+
+        data_type = data_types.detect{|i|i.name.downcase =~ /#{data_type_str}/}.id
+
+        tmp_table_name = "tmp_table_#{Time.now.to_i}"
+
+      query = <<"EOF"
+      select f.value, f.gene_id, f.condition_id from features f, genes g, #{tmp_table_name} t
+      where g.id = f.gene_id                                           
+      and f.condition_id = t.cid
+      and f.data_type = ?
+      order by g.name, t.cid
+EOF
+
+        begin
+          Condition.transaction do
+            Condition.connection.execute("create table #{tmp_table_name} (cid int)")
+            Condition.connection.execute("CREATE INDEX cid_index USING BTREE ON #{tmp_table_name} (cid)")
+            for cond_id in cond_ids
+              puts "in cond_id loop"
+              Condition.connection.execute("insert into #{tmp_table_name} values (#{cond_id})")
+            end
+            data = Feature.find_by_sql([query,data_type])
+            Condition.connection.execute("drop table #{tmp_table_name}")
+            puts "data size is #{data.length}"
+            return data
+          end
+
+        rescue Exception => ex
+        end
+    end
+
+
+
+
+
   
   def get_matrix_data_for_group(group_id, data_type_str)
     data_types = DataType.find :all
@@ -69,7 +113,21 @@ EOF
     alias_map
   end
   
+  
+  def as_binary(data)
+    puts "entering as_binary at #{Time.now}"
+    values = data.map{|i|i.value}
+    puts "data length = #{data.length}"
+    puts "values length  = #{values.length}"
+    data = nil
+    packed = values.pack("G#{values.length}")
+    puts "packed = \n#{packed}"
+    puts "----"
+    packed
+  end
+  
   def as_json(data)
+    puts "entering as_json at #{Time.now}"
     alias_map = get_alias_map
     columns = data.map{|i|i.condition_name}.uniq
     col_ids = {}
@@ -110,7 +168,9 @@ EOF
     
     h['rows'] = rows
     puts "NUMBER OF ROWS!!!!!! #{rows.size}"
-    h.to_json
+    ret = h.to_json
+    puts "leaving as_json at #{Time.now}, sending #{ret.length} bytes"
+    ret
   end
 
   def small_form_of(item, col_ids, alias_map)

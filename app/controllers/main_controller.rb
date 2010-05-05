@@ -5,7 +5,7 @@ class MainController < ApplicationController
   
   filter_parameter_logging :password
   protect_from_forgery :only => [:create, :update, :destroy] 
-  before_filter :authorize, :except => [:get_logged_in_user, :login, :request_password_refresh, :register]
+  before_filter :authorize, :except => [:get_logged_in_user, :login, :request_password_refresh, :register] 
   
   def index
     url = request.url
@@ -408,6 +408,7 @@ class MainController < ApplicationController
   
   
   def get_data_for_groups
+    puts "in get_data_for_groups action at #{Time.now}"
     group_ids = params[:group_ids].split(",")
     cond_ids = []
     for group_id in group_ids
@@ -415,8 +416,31 @@ class MainController < ApplicationController
     end
     # silently removes redundant groups--we may not want to do it this way:
     data = get_matrix_data(cond_ids.map{|i|i.condition_id}.uniq,params[:data_type])
+    puts "rendering action at #{Time.now}"
     render :text => as_json(data)
   end
+  
+  def get_binary_data_for_groups
+    puts "in get_binary_data_for_groups action at #{Time.now}"
+    group_ids = params[:group_ids].split(",")
+    puts "group_ids = "
+    pp group_ids
+    cond_ids = []
+    for group_id in group_ids
+      cond_ids += ConditionGrouping.find_by_sql(["select condition_id from condition_groupings where condition_group_id = ? order by sequence",group_id.to_i])
+    end
+    puts "cond_ids:"
+    pp cond_ids
+    # silently removes redundant groups--we may not want to do it this way:
+    data = get_matrix_data_small(cond_ids.map{|i|i.condition_id}.uniq,params[:data_type])
+    headers['Content-type'] = 'application/octet-stream'
+    
+    puts "rendering action at #{Time.now}"
+    render :text => as_binary(data)
+    #render :text => "ok"
+  end
+  
+  
   
   def get_data_for_group
     data = get_matrix_data_for_group(params[:group_id],params[:data_type])
@@ -748,6 +772,11 @@ class MainController < ApplicationController
     render :text => condition_description(params[:condition_id])
   end
   
+
+  def get_gene_alias_map
+    render :text => get_alias_map.to_json
+  end
+  
   def get_matrices_for_firegoose
     #qs = query_string.gsub(/&amp;/,"&")
     data_type = ""
@@ -783,6 +812,10 @@ class MainController < ApplicationController
     
     render :text => as_matrix(data)
   end
+
+
+  alias :get_matrix :get_matrices_for_firegoose
+
   
   def import_from_pipeline
     puts "Session user = #{get_email_from_session_user}"

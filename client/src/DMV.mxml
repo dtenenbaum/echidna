@@ -148,6 +148,8 @@
 				if (dataProvided) {
 					loadingLabel.text = "Loading data...";
 					var params:Object = getParamsObject();
+					trace("making ajax request from dmv at " + new Date());
+					trace("url = " + params['url']);
 					Util.ajax(params['url'],params, onGotData, ajaxFault.ajaxFault);
 					startProgressBar();
 				
@@ -157,25 +159,23 @@
 			}
 			
 			
-			private function getParamsObject(ratios:Boolean = true):Object {
+			private function getParamsObject(ratios:Boolean = true):Object { 
 				var ret:Object = new Object();
+				ret['url'] = 'main/get_matrix';
 				if (ratios) {
 					ret['data_type'] = 'ratio';
 				} else {
 					ret['data_type'] = 'lambda';
 				}
 				if (groupId != null) {
-					ret['url'] = "main/get_data_for_group";
 					ret['group_id'] = groupId;
 				}
 				
 				if (conditionIds != null) {
-					ret['url'] = "main/get_data_for_conditions";
 					ret['condition_ids'] = conditionIds;
 				}
 				
 				if (groupIds != null) {
-					ret['url'] = 'main/get_data_for_groups';
 					ret['group_ids'] = groupIds;
 				}
 				
@@ -381,8 +381,84 @@
 				ac = null;
 			}
 			
+
 			protected function onGotData(event:ResultEvent):void {
 				trace("server returned DMV data");
+				trace("in ajax callback at " + new Date());
+				var matrixString:String = event.result.toString();
+				if (matrixString == "") {
+					Alert.show("No data matches your query.");
+					stopProgressBar();
+					loadingLabel.text = "";
+					return;
+				}
+				
+				addDataGridColumn('gene','Gene', false);
+
+				var lines:Array = matrixString.split("\n");
+				matrixString = null;
+				var genes:Array = new Array();
+				var conditions:Array = new Array();
+				var tmpAC:ArrayCollection = new ArrayCollection();
+				for (var i:int = 0; i < lines.length; i++) {
+					var line:String = lines[i];
+					if (i == 0) {
+						conditions = line.split("\t");
+						conditions.shift();
+						for (var r:int = 0; r < conditions.length; r++) {
+							addDataGridColumn(conditions[r], conditions[r]);
+						}
+						continue;
+					}
+					var values:Array = line.split("\t");
+					var gene:String = values.shift();
+					var rowObj:Object = new Object();
+					rowObj['id'] = gene;
+					rowObj['gene'] = gene;
+					rowObj['alias'] = gene;
+					for (var z:int = 0; z < values.length; z++) {
+						rowObj[conditions[z]] =  parseFloat(values[z]);
+					}
+					tmpAC.addItem(rowObj);
+				}
+				
+				
+				var colOrder:Array = new Array();
+				for (var x:int = 0; x < getGridForCurrentTab().columnCount; x++) {
+					var dgtc:DataGridToolTipColumn = getGridForCurrentTab().columns[x] as DataGridToolTipColumn;
+					colOrder.push(dgtc);
+				}
+
+				originalColumnOrder[getIndexForCurrentTab()] = colOrder;
+				previousColumnOrder[getIndexForCurrentTab()] = colOrder;
+
+				
+				Util.ajax("main/get_gene_alias_map", null, function(event:ResultEvent):void {
+					 var map:Object = JSON.decode(event.result.toString());
+					 for (var i:int = 0; i < tmpAC.length; i++) {
+					 	var rowObj:Object = tmpAC.getItemAt(i);
+					 	var id:String = rowObj['id'];
+					 	if (map[id] != null) {
+					 		//trace("map[" + id + "] = " + map[id]);
+					 		rowObj['alias'] = map[id];
+					 		tmpAC.setItemAt(rowObj,i);
+					 	} 
+					 }
+					
+					loadingLabel.text = "";
+					setDataForCurrentTab(tmpAC);
+					stopProgressBar();
+					trace("finished rendering data at " + new Date());
+					
+					
+					
+				}, ajaxFault.ajaxFault);
+				
+			}
+			
+			protected function onGotDataOLD(event:ResultEvent):void {
+				trace("server returned DMV data");
+				trace("in ajax callback at " + new Date());
 				
 				// do i want to do this?
 				geneList = new Object();
@@ -473,6 +549,7 @@
 				tmpAC = null;
 				
 				stopProgressBar();
+				trace("finished rendering data at " + new Date());
 				trace("current tab data size = " + getDataForCurrentTab().length);
 			}
 			
@@ -599,15 +676,19 @@
             }	
             
             protected function toggleNames():void {
+            	//todo remove VNG terminology
             	showingVNGNames = !showingVNGNames;
             	trace("toggling names...showing vng names? " + showingVNGNames); 
         		// change to aliases
         		for (var i:int = 0; i < getDataForCurrentTab().length; i++) {
         			//dante
+        			
         			if (showingVNGNames) {
-        				getDataForCurrentTab()[i]['gene'] = aliasToVngMap[getDataForCurrentTab()[i]['gene']];
+        				//getDataForCurrentTab()[i]['gene'] = aliasToVngMap[getDataForCurrentTab()[i]['gene']];
+        				getDataForCurrentTab()[i]['gene'] = getDataForCurrentTab()[i]['id'];
         			} else {
-	        			getDataForCurrentTab()[i]['gene'] = vngToAliasMap[getDataForCurrentTab()[i]['id']];
+        				getDataForCurrentTab()[i]['gene'] = getDataForCurrentTab()[i]['alias'];
+	        			//getDataForCurrentTab()[i]['gene'] = vngToAliasMap[getDataForCurrentTab()[i]['id']];
         			}
         			//trace("gene = " + getDataForCurrentTab()[i]['gene']);
         		}
