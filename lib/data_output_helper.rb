@@ -15,15 +15,16 @@ module DataOutputHelper
     and c.id = f.condition_id
     and f.condition_id = t.cid
     and f.data_type = ?
-    order by g.name, t.cid
+    order by g.name, t.id
 EOF
 
       begin
         Condition.transaction do
-          Condition.connection.execute("create table #{tmp_table_name} (cid int)")
+          Condition.connection.execute("create table #{tmp_table_name} (id int not null auto_increment, cid int, primary key(id))")
           Condition.connection.execute("CREATE INDEX cid_index USING BTREE ON #{tmp_table_name} (cid)")
+          Condition.connection.execute("CREATE INDEX id_index USING BTREE ON #{tmp_table_name} (id)")
           for cond_id in cond_ids
-            Condition.connection.execute("insert into #{tmp_table_name} values (#{cond_id})")
+            Condition.connection.execute("insert into #{tmp_table_name} (cid) values (#{cond_id})")
           end
           data = Feature.find_by_sql([query,data_type])
           Condition.connection.execute("drop table #{tmp_table_name}")
