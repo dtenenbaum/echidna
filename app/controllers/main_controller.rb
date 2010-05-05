@@ -791,6 +791,11 @@ class MainController < ApplicationController
     
     cond_ids = []
     data = ''
+    
+    if (params[:group_id])
+      params[:group_ids] = params[:group_id]
+    end
+    
     if (params[:group_ids])
       group_ids = params[:group_ids].split(",")
       cond_ids = []
