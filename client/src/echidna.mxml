@@ -542,10 +542,10 @@
 			
 			if (currentState == 'groupState') {
 				url += "group_ids=";
-				items = getSelectedItemsInCorrectOrder(groupsGrid,groupsAC);
+				items = Util.getSelectedItemsInCorrectOrder(groupsGrid,groupsAC);
 				event.size = "" + items.length + " group";
 			} else {
-				items = getSelectedItemsInCorrectOrder(conditionGrid,conditionsAC);
+				items = Util.getSelectedItemsInCorrectOrder(conditionGrid,conditionsAC);
 				url += "condition_ids=";
 				event.size = "" + items.length + " condition";
 			}
@@ -1206,7 +1206,7 @@
 			} else {
 				groupsGrid.invalidateList();
 				var ids:Array = new Array();
-				var items:Array = getSelectedItemsInCorrectOrder(groupsGrid, groupsAC);
+				var items:Array = Util.getSelectedItemsInCorrectOrder(groupsGrid, groupsAC);
 				for (var i:int = 0; i < items.length; i++) {
 					ids.push(items[i]['id']);
 				}
@@ -1283,7 +1283,7 @@
 			var originalUrl:String = bm.url;
 			var url:String = URLUtil.getFullURL(originalUrl, "/DMV.html");
 			var ids:Array = new Array();
-			var items:Array = getSelectedItemsInCorrectOrder(conditionGrid,conditionsAC);
+			var items:Array = Util.getSelectedItemsInCorrectOrder(conditionGrid,conditionsAC);
 			
 			for (var i:int = 0; i < items.length; i++) {
 				ids.push(items[i]['id']);
@@ -1403,24 +1403,6 @@
 				numSelected += groupsGrid.selectedItems[i]['num_results'];
 			}
 			selectedConditionsText.text = "" + numSelected;
-		}
-		
-		protected function getSelectedItemsInCorrectOrder(grid:DataGrid, dataSource:ArrayCollection, nameProperty:String="name"):Array {
-			var selHash:Object = new Object();
-			var results:Array = new Array();
-			//todo use id instead of name as hash key?
-			for (var x:int = 0; x < grid.selectedItems.length; x++) {
-				var item:Object = grid.selectedItems[x];
-				selHash[item[nameProperty]] = 1;
-			}
-			for (var i:int = 0; i < dataSource.length; i++) {
-				if (selHash[dataSource[i][nameProperty]] == 1) {
-					trace("found a match: " + dataSource[i][nameProperty]);
-					results.push(dataSource[i]);
-				}	
-			}
-			trace("'correct' selected items length: " + results.length);
-			return results;
 		}
 		
 		

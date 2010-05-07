@@ -8,13 +8,13 @@
 	<mx:TabNavigator id="tabNavigator" x="119" y="99" width="948" height="649" change="onTabChanged()" creationPolicy="all">
 		<mx:Canvas id="ratiosCanvas" label="ratios" width="100%" height="100%">
 			<mx:DataGrid id="ratiosGrid" x="10" y="10" width="917" height="585" dataProvider="{ratiosData}" allowMultipleSelection="true"
-				itemClick="gridClick(event)" change="dmvSelectionChanged(event)" headerRelease="dmvSelectionChanged(event)" headerShift="headerShift(event)"
+				itemClick="gridClick(event)" change="dmvSelectionChanged(event)"   headerRelease="headerRelease(event)" headerShift="headerShift(event)"
 				horizontalScrollPolicy="auto" verticalScrollPolicy="auto">
 			</mx:DataGrid>
 		</mx:Canvas>
 		<mx:Canvas id="lambdasCanvas" label="lambdas" width="100%" height="100%">
 			<mx:DataGrid id="lambdasGrid" x="10" y="10" width="917" height="585" dataProvider="{lambdasData}" allowMultipleSelection="true"
-				itemClick="gridClick(event)" change="dmvSelectionChanged(event)"  headerRelease="dmvSelectionChanged(event)" headerShift="headerShift(event)"
+				itemClick="gridClick(event)" change="dmvSelectionChanged(event)"   headerRelease="headerRelease(event)"  headerShift="headerShift(event)"
 				horizontalScrollPolicy="auto" verticalScrollPolicy="auto">
 			</mx:DataGrid>
 		</mx:Canvas>
@@ -42,6 +42,8 @@
 	
 		
 		<![CDATA[
+			import mx.collections.IViewCursor;
+			import mx.events.DataGridEvent;
 			import org.systemsbiology.echidna.events.ClosePlotEvent;
 			import org.systemsbiology.echidna.events.ShowPlotEvent;
 			import org.systemsbiology.echidna.events.HidePlotEvent;
@@ -102,7 +104,7 @@
 
 			private var ajaxFault:EchidnaAjaxFault;
 			
-			private var showingVNGNames:Boolean = true;
+			private var showingOriginalNames:Boolean = true;
 
 			private var vngToAliasMap:Object = new Object();
 			private var aliasToVngMap:Object = new Object();	
@@ -125,6 +127,15 @@
 				bm.init("","DMV - ratios");
 				
 				plotStack.addEventListener(ShowPlotEvent.SHOW_PLOT_EVENT, showSavedPlot);
+				
+				ratiosGrid.addEventListener(CollectionEvent.COLLECTION_CHANGE, collectionChange);
+				lambdasGrid.addEventListener(CollectionEvent.COLLECTION_CHANGE, collectionChange);
+								
+				/*
+				ratiosData.addEventListener(CollectionEvent.COLLECTION_CHANGE, collectionChange);
+				lambdasData.addEventListener(CollectionEvent.COLLECTION_CHANGE, collectionChange);
+				*/
+				
 				
 				trace("policy: " + tabNavigator.creationPolicy);
 				
@@ -157,6 +168,7 @@
 					loadingLabel.text = "No data selected.";
 				}
 			}
+			
 			
 			
 			private function getParamsObject(ratios:Boolean = true):Object { 
@@ -271,8 +283,9 @@
 				
 				for (var j:int = 0; j < getDataForCurrentTab().length ; j++) {
 					var name:String = getDataForCurrentTab()[j]['gene'];
+					var alias:String = getDataForCurrentTab()[j]['alias'];
 					//trace("name = " + name);
-					if (namesHash[name] == 1) {
+					if (namesHash[name] == 1 || namesHash[alias] == 1) {
 						trace("we have a match");
 						if (match == false) {
 							//clearSelections();
@@ -302,17 +315,25 @@
 			protected function gridClick(event:ListEvent):void {
 			}
 			
+			
+			private function collectionChange(event:CollectionEvent):void {
+				trace("in collection change event!!!!!!!!");
+				//trace("in collection change event, kind = " + event.kind);
+				//trace("first item is: " + getDataForCurrentTab().getItemAt(0)['gene']); 
+			}
+
+			
 			// todo also fire event if column order is changed
 			// todo - only fire event if we know we are running firefox(+firegoose)
 			protected function dmvSelectionChanged(event:Event):void {
 				
-				
+				/*
 				for (var z:int = 0; z < getGridForCurrentTab().columnCount; z++) {
 					var dgtc:DataGridToolTipColumn = getGridForCurrentTab().columns[z] as DataGridToolTipColumn;
 					
 					trace("column " + z + " = " + dgtc.headerText);
 				}
-				
+				*/
 				
 				gaggleStatus.text = "";
 				trace("in dmvSelectionChanged, # rows selected is " + getGridForCurrentTab().selectedIndices.length);
@@ -339,15 +360,21 @@
 				}
 				matrix.push(headers);
 
-
+				for (var zz:int = 0; zz < getGridForCurrentTab().selectedIndices.length; zz++) {
+					trace("selected index = " + getGridForCurrentTab().selectedIndices[zz]);
+				}
 				
 				if (getGridForCurrentTab().selectedItems.length < 200) {
-					for (var i:int = 0; i < getGridForCurrentTab().selectedItems.length; i++) {
+					//var correctSelectedItems:Array = getGridForCurrentTab().selectedItems; //Util.getSelectedItemsInCorrectOrder(getGridForCurrentTab(), getDataForCurrentTab(), "gene");
+					var correctSelectedItems:Array = Util.getSelectedItemsInCorrectOrder(getGridForCurrentTab(), getDataForCurrentTab(), "gene");
+					for (var i:int = 0; i < correctSelectedItems.length; i++) {
 						var row:Array = new Array();
-						namelist.push(getGridForCurrentTab().selectedItems[i]['gene']);
+						
+						//trace("adding " + correctSelectedItems[i]['gene'] + " to namelist");
+						namelist.push(correctSelectedItems[i]['gene']);
 						for (var j:int = 0; j < getGridForCurrentTab().columnCount; j++) {
 							var columnField:String = getGridForCurrentTab().columns[j].dataField;
-							row.push(getGridForCurrentTab().selectedItems[i][columnField]);
+							row.push(correctSelectedItems[i][columnField]);
 						}
 						matrix.push(row);
 					}
@@ -676,23 +703,19 @@
             }	
             
             protected function toggleNames():void {
-            	//todo remove VNG terminology
-            	showingVNGNames = !showingVNGNames;
-            	trace("toggling names...showing vng names? " + showingVNGNames); 
+            	showingOriginalNames = !showingOriginalNames;
+            	trace("toggling names...showing original names? " + showingOriginalNames); 
         		// change to aliases
         		for (var i:int = 0; i < getDataForCurrentTab().length; i++) {
-        			//dante
         			
-        			if (showingVNGNames) {
-        				//getDataForCurrentTab()[i]['gene'] = aliasToVngMap[getDataForCurrentTab()[i]['gene']];
+        			if (showingOriginalNames) {
         				getDataForCurrentTab()[i]['gene'] = getDataForCurrentTab()[i]['id'];
         			} else {
         				getDataForCurrentTab()[i]['gene'] = getDataForCurrentTab()[i]['alias'];
-	        			//getDataForCurrentTab()[i]['gene'] = vngToAliasMap[getDataForCurrentTab()[i]['id']];
         			}
-        			//trace("gene = " + getDataForCurrentTab()[i]['gene']);
         		}
         		getGridForCurrentTab().invalidateList();
+        		dmvSelectionChanged(null);
             }
             
 			protected function selectGenes():void {
@@ -728,8 +751,27 @@
 			}        
 			
 			
+			protected function onCallLater():void {
+				/*
+				trace("in onCallLater");
+				trace("first item in grid is: " + getDataForCurrentTab().getItemAt(0)['gene']);
+				if (getGridForCurrentTab().selectedItems.length > 0) {
+					trace("first selected item is: " + getGridForCurrentTab().selectedItems[0]['gene']);
+					for (var i:int = 0; i < getGridForCurrentTab().selectedIndices.length; i++) {
+						trace("selected index " + i + " = " + getGridForCurrentTab().selectedIndices[i]);
+					}
+				}
+				*/
+				dmvSelectionChanged(null);
+			}
+			
+			protected function headerRelease(event:DataGridEvent):void {
+				DataGrid(event.currentTarget).callLater(onCallLater);
+			}
+			
 			
 			protected function headerShift(event:IndexChangedEvent):void {
+				trace("in headerShift()");
 				//trace("old index = " + event.oldIndex + ", new index = " + event.newIndex);
 				if ( event.newIndex == 0) {
 					trace("you are trying to do a bad thing!");

@@ -6,6 +6,7 @@ package org.systemsbiology.echidna.common
 	import flash.display.DisplayObject;
 	
 	import mx.collections.ArrayCollection;
+	import mx.controls.DataGrid;
 	import mx.managers.IBrowserManager;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
@@ -109,7 +110,24 @@ package org.systemsbiology.echidna.common
 		}	
 		
 		
-	
+		public static function getSelectedItemsInCorrectOrder(grid:DataGrid, dataSource:ArrayCollection, nameProperty:String="name"):Array {
+			var selHash:Object = new Object();
+			var results:Array = new Array();
+			//todo use id instead of name as hash key?
+			for (var x:int = 0; x < grid.selectedItems.length; x++) {
+				var item:Object = grid.selectedItems[x];
+				selHash[item[nameProperty]] = 1;
+			}
+			for (var i:int = 0; i < dataSource.length; i++) {
+				if (selHash[dataSource[i][nameProperty]] == 1) {
+					trace("found a match: " + dataSource[i][nameProperty]);
+					results.push(dataSource[i]);
+				}	
+			}
+			trace("'correct' selected items length: " + results.length);
+			return results;
+		}
+
 
 
 	}
