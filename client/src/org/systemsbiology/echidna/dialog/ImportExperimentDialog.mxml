@@ -162,7 +162,8 @@
 					 	cancelButton.addEventListener(FlexEvent.BUTTON_DOWN, cancel);
 					 	cancelButton.label = "Cancel";
 					 	hbox.addChild(cancelButton);
-					 	addChild(hbox);
+					 	//addChild(hbox);
+					 	conditionsVBox.addChild(hbox);
 					 	
 					 	
 					 }, ajaxFault.ajaxFault);
