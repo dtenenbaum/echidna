@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="510" height="80">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="996" height="224" horizontalScrollPolicy="off">
 	<mx:Label x="10" y="10" text="Name:"/>
 	<mx:Label x="178" y="10" text="Value:"/>
 	<mx:Label x="341" y="10" text="Units:"/>
@@ -17,6 +17,8 @@
 			public var units:ArrayCollection;
 		]]>
 	</mx:Script>
+	<mx:Label x="17" y="56" text="Name if not included in box above:"/>
+	<mx:TextInput x="17" y="82"/>
 	
 	
 </mx:Canvas>

@@ -2,6 +2,11 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="1128" height="742" title="Import Experiment" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.controls.Button;
+			import mx.containers.HBox;
+			import mx.controls.ButtonBar;
+			import mx.core.ScrollPolicy;
 			import org.systemsbiology.echidna.ui.ConditionPanel;
 			import mx.collections.ArrayCollection;
 			import com.adobe.serialization.json.JSON;
@@ -132,16 +137,32 @@
 					 	
 					 	for (var i:int = 0; i < conditions.length; i++) {
 					 		var cpanel:ConditionPanel = new ConditionPanel();
+					 		cpanel.horizontalScrollPolicy = ScrollPolicy.OFF;
 					 		conditionsVBox.addChild(cpanel);
+					 		cpanel.horizontalScrollPolicy = ScrollPolicy.OFF;
 					 		cpanel.names = names;
 					 		cpanel.units = units;
 					 		var condition:Object = conditions[i]['condition'];
 					 		trace("cond name = " + condition['name']);
-					 		cpanel.conditionName = condition['name'];
+					 		var conditionName:String = condition['name'];
+					 		if (testMode) {
+					 			conditionName += "_test";
+					 		}
+					 		cpanel.conditionName = conditionName;
+					 		
 					 		//cpanel._conditionNameText.text = "blah";
 					 		//cpanel.conditionName = "blah";
 					 	}
-					 	
+					 	var hbox:HBox = new HBox();
+					 	var saveButton:Button = new Button();
+					 	saveButton.label = "Save";
+					 	saveButton.addEventListener(FlexEvent.BUTTON_DOWN,save);
+					 	hbox.addChild(saveButton);
+					 	var cancelButton:Button = new Button();
+					 	cancelButton.addEventListener(FlexEvent.BUTTON_DOWN, cancel);
+					 	cancelButton.label = "Cancel";
+					 	hbox.addChild(cancelButton);
+					 	addChild(hbox);
 					 	
 					 	
 					 }, ajaxFault.ajaxFault);
@@ -178,7 +199,13 @@
 				PopUpManager.removePopUp(progressBar);
 			}
 
+			protected function save():void {
+				
+			}
 			
+			protected function cancel():void {
+				PopUpManager.removePopUp(this);
+			}
 			
 			
 		]]>

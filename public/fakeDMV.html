@@ -1,0 +1,158 @@
+<script src="javascripts/jquery-1.3.2.min.js"></script>
+
+
+fake dmv page
+
+<br/>
+
+<script type="text/javascript">
+
+
+jQuery.noConflict();  
+
+
+
+
+
+var fb_lite = false;
+try {
+	if (firebug) {
+		fb_lite = true;  
+		firebug.d.console.cmd.log("initializing firebug logging");
+	}
+} catch(e) {
+	// do nothing
+}
+
+function FG_fireDataEvent() {
+  // events are documented in the Flanagan Javascript book
+  var ev = document.createEvent("Events");
+  // initEvent(eventType, canBubble, cancelable)
+  ev.initEvent("gaggleDataEvent", true, false); 
+  document.dispatchEvent(ev);
+} 
+
+
+function log(message) {
+	//if (typeof(window['console']) != 'undefined') {
+	if (fb_lite) {  
+		console.log(message);
+		/*
+		try {
+			firebug.d.console.cmd.log(message);  
+		} catch (e) {
+			//alert("oops");
+		} 
+		*/
+	} else {
+		if (window.console) {
+			console.log(message);
+		} 
+	}
+	if (window.dump) {
+	    dump(message + "\n");
+	}
+}                          
+ 
+String.prototype.trim = function() {
+	return this.replace(/^\s+|\s+$/g,"");
+}
+String.prototype.ltrim = function() {
+	return this.replace(/^\s+/,"");
+}
+String.prototype.rtrim = function() {
+	return this.replace(/\s+$/,"");
+}                                                       
+
+
+jQuery(document).ready(function(){
+
+     document.addEventListener("GaggleEvent", gaggleListener, false, true);
+});
+
+
+
+var gaggleListener = function(e) {
+    var eventName = e.target.getAttribute("eventName");
+    if (eventName == "sendMeA") {
+        var gaggleType = e.target.getAttribute("sendMeA");
+        if (gaggleType == "namelist") {
+            var rawNames = jQuery("#fg_namelist_content").html();
+            var namelist = rawNames.split(",")
+            fireEventToFG("namelist", namelist);
+        } else if (gaggleType == "matrix") {
+            
+            var rawMatrix = jQuery("#fg_matrix_content").html();
+
+            
+            
+            fireEventToFG("matrix", rawMatrix);
+            /*
+            FG_GaggleData.jsToJavaDataMatrix = function(name, species, jsDataMatrix) {
+            	var matrix = javaFiregooseLoader.createDataMatrix();
+            	matrix.setName(name);
+            	matrix.setSpecies(species);
+            	matrix.setRowTitlesTitle(jsDataMatrix.rowTitlesTitle)
+            	matrix.setRowTitles(javaFiregooseLoader.toJavaStringArray(jsDataMatrix.rowTitles));
+            	matrix.setColumnTitles(javaFiregooseLoader.toJavaStringArray(jsDataMatrix.columnTitles))
+            	matrix.set(javaFiregooseLoader.toJavaDoubleMatrix(jsDataMatrix.data));
+            	return matrix;
+            };
+            
+             */
+        }
+    } else if (eventName == "firegoose_version") {
+        jQuery("#fg_version").html(e.target.getAttribute(eventName));
+        //todo - look at version and tell user if they need to update.
+    }
+    
+    
+}
+
+var fireEventToFG = function(name, value) {
+    var element = document.getElementById("fg_event");
+    element.setAttribute("eventName", name);
+    element.innerHTML = value;
+    //element.setAttribute(name, value);
+
+    //create a custom event and dispatch it 
+    // using the custom element as its target
+
+    var ev = document.createEvent("Events");
+    ev.initEvent("GaggleEvent", true, false);
+    element.dispatchEvent(ev);
+}
+
+
+
+</script>
+
+
+Namelist:<br/>
+species = <span id="fg_meta_species">platypus</span><br/>
+size = <span id="fg_meta_namelist_size">2</span><br/>
+list = <span id="fg_namelist_content">agene1,agene2</span><br/>
+
+<p>&nbsp;</p>
+Matrix:
+size = <span id="fg_meta_matrix_size">2x2</span><br/>
+content = 
+<span id="fg_matrix_content">GENE   col1    col2
+    row1    0.01    0.02
+    row2    0.03    0.04</span><br/>
+
+
+<br/>
+    fg_info = <span id="fg_info"></span><br/>
+    
+    
+    js = <span id="js"></span><br/>
+    
+    
+    fg_version = <span id="fg_version"></span><br/>
+    
+    fg_event = <span id="fg_event"></span><br/>
+
+    fg_event2 = <span id="EventFromFiregooseElement"></span><br/>
+    
+    
