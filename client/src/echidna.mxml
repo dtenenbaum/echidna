@@ -140,6 +140,7 @@
 					<mx:HDividedBox x="0" y="0" width="725" height="100%">
 						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  change="groupClick(event)"
 							allowMultipleSelection="true" dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragComplete="groupsGridDragComplete(event)">
+							<!--addedToStage="addedToStage(event)"-->
 							<mx:columns>
 								<mx:DataGridColumn headerText="Name" dataField="name"/>
 								<mx:DataGridColumn headerText="# of Conditions" dataField="num_results"/>
@@ -158,7 +159,7 @@
 									itemRollOver="createSCGTooltip(event)" itemRollOut="deleteSCGTooltip(event)"
 									dragComplete="conditionDropped(event)"  itemClick="smallConditionGridClicked(event)" 
 									change="smallConditionGridChangeListener()"
-									allowMultipleSelection="true">
+									allowMultipleSelection="true" addedToStage="addedToStage(event)">
 									<mx:columns>
 										<mx:DataGridColumn headerText="Name" dataField="name" />
 										<!--<mx:DataGridColumn headerText="ID" dataField="description"/>-->
@@ -210,7 +211,8 @@
 							<mx:Canvas width="547" height="439" borderStyle="solid">
 								<mx:DataGrid x="10" y="10" id="conditionGrid"  width="535" height="427" dataProvider="{conditionsAC}"
 									allowMultipleSelection="true" change="conditionGridItemClick(event)"
-									dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragComplete="conditionGridDragComplete(event)">
+									dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragComplete="conditionGridDragComplete(event)"
+									addedToStage="addedToStage(event)">
 									<mx:columns>
 										<ui:DataGridToolTipColumn headerText="#"
 										 headerToolTip="Number of groups this condition appears in"  dataField="num_groups" width="20"/>
@@ -324,6 +326,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import org.systemsbiology.echidna.dialog.EditConditionDialog;
 			import org.systemsbiology.echidna.dialog.TaggingDialog;
 			import org.systemsbiology.echidna.events.EchidnaSelectionChangedEvent;
 			import com.adobe.serialization.json.JSON;
@@ -429,6 +432,8 @@
 			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
+
+
 			
 			
 			ajaxFault = new EchidnaAjaxFault();
@@ -442,6 +447,10 @@
 			setCurrentState('groupState');
 			//setCurrentState('');
 			trace("app init, current state is " + currentState);
+
+
+
+
 			
 			resultsChoicesGrid.selectedItem = resultCategories[0];
 			accordion.selectedIndex = 1;
@@ -456,6 +465,8 @@
 			});
 			
 			
+			
+			
 			ajaxFault.addEventListener(StopProgressBarEvent.STOP_PROGRESS_BAR_EVENT, function(event:StopProgressBarEvent):void {
 				trace("got stop progress bar event");
 				stopProgressBar();
@@ -468,7 +479,45 @@
 			trace("about to ajax: get_logged_in_user");
 			Util.ajax('main/get_logged_in_user', null, populateEmailAddress, ajaxFault.ajaxFault);
 			
+
 			
+		}
+		
+		protected function addedToStage(event:Event):void {
+			var editMenuItem:ContextMenuItem = new ContextMenuItem("Edit");
+			editMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, editItem);
+			
+			var dispObj:DataGrid = event.target as DataGrid;
+			dispObj.contextMenu = new ContextMenu();	
+			
+			
+			dispObj.contextMenu.customItems.push(editMenuItem);
+			
+			trace("done adding context menu item"); 
+		}
+		
+		protected function editItem(event:ContextMenuEvent):void {
+			trace("context menu item clicked");
+			trace("is mousetarget null? " + (event.mouseTarget == null));
+			trace("mousetarget name = " + event.mouseTarget.name);
+			var dgir:DataGridItemRenderer = event.mouseTarget as DataGridItemRenderer;
+			trace("dgir text = " + dgir.text);
+			trace("item id = " + dgir.data['id']);
+			trace("parent name = " + event.mouseTarget.parent.name);
+			trace("grampa: "+ event.mouseTarget.parent.parent.name);
+			var grampa:String = event.mouseTarget.parent.parent.name;
+			var isCondition:Boolean = (grampa == "conditionGroup" || grampa == "smallConditionGrid");
+			var dg:DataGrid = event.mouseTarget.parent.parent as DataGrid;
+			trace("id of datagrid = " + dg.id);
+			trace("# selected items = " + dg.selectedItems.length);
+			if (isCondition) {
+				var ecd:EditConditionDialog = new EditConditionDialog();
+				ecd.conditionId = dgir.data['id'];
+				PopUpManager.addPopUp(ecd, this, true);
+				PopUpManager.centerPopUp(ecd);
+			} else {
+				
+			}
 		}
 		
 		protected function startProgressBar():void {

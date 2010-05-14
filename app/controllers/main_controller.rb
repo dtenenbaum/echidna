@@ -7,6 +7,22 @@ class MainController < ApplicationController
   protect_from_forgery :only => [:create, :update, :destroy] 
   before_filter :authorize, :except => [:get_logged_in_user, :login, :request_password_refresh, :register] 
   
+#  def log_actions(controller)
+#    puts "hello from big brother, #{controller.action_name}, id = #{session}"
+#  end
+
+
+
+  before_filter do |controller|
+    #puts "hello from big brother, #{controller.action_name}, id = #{controller.get_email_from_session_user}"
+    unless (controller.session[:user].nil?)
+      user = User.find_by_email controller.get_email_from_session_user
+      la = LoggedAction.new(:user_id => user.id, :action => controller.action_name)
+      la.save
+    end
+  end
+  
+  
   def index
     url = request.url
     if RAILS_ENV == 'production'
@@ -26,6 +42,7 @@ class MainController < ApplicationController
   def authorize
     render :text => "not logged in" and return false unless session[:user]
   end
+  
   
   
   def get_logged_in_user
@@ -763,6 +780,10 @@ class MainController < ApplicationController
     render :text => conds.to_json
   end
   
+  def get_condition
+    cond = Condition.find params[:condition_id] 
+    render :text => cond.to_json(:include => [:observations, :growth_media_recipe, :reference_sample, :species, :owner, :importer])
+  end
   
   def get_group_description
     render :text => group_description(params[:group_id])

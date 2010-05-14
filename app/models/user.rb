@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   validates_uniqueness_of :email
+  has_one :condition
   
   delegate :name,  :to => :experiment, :prefix => :owner
 #  delegate :email,  :to => :experiment, :prefix => :owner

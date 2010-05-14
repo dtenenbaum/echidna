@@ -154,16 +154,25 @@
 					 		//cpanel.conditionName = "blah";
 					 	}
 					 	var hbox:HBox = new HBox();
+					 	conditionsVBox.horizontalScrollPolicy = ScrollPolicy.OFF;
 					 	var saveButton:Button = new Button();
 					 	saveButton.label = "Save";
+					 	saveButton.toolTip = "Save";
 					 	saveButton.addEventListener(FlexEvent.BUTTON_DOWN,save);
 					 	hbox.addChild(saveButton);
 					 	var cancelButton:Button = new Button();
 					 	cancelButton.addEventListener(FlexEvent.BUTTON_DOWN, cancel);
 					 	cancelButton.label = "Cancel";
+					 	cancelButton.toolTip = "Cancel";
 					 	hbox.addChild(cancelButton);
 					 	//addChild(hbox);
 					 	conditionsVBox.addChild(hbox);
+					 	for (var z:int = 0; z < 10; z++) {
+					 		var l:Label = new Label();
+					 		l.text = "hi! ";
+					 		conditionsVBox.addChild(l);
+					 	}
+					 	
 					 	
 					 	
 					 }, ajaxFault.ajaxFault);

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100427184903) do
+ActiveRecord::Schema.define(:version => 20100514181731) do
 
   create_table "citations", :force => true do |t|
     t.integer "paper_id",     :limit => 11
@@ -128,6 +128,13 @@ ActiveRecord::Schema.define(:version => 20100427184903) do
     t.integer "ranking",     :limit => 11
     t.string  "control_for"
     t.integer "parent_id",   :limit => 11
+  end
+
+  create_table "logged_actions", :force => true do |t|
+    t.integer  "user_id",    :limit => 11
+    t.string   "action"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "observations", :force => true do |t|

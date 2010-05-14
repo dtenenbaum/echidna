@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="1102" height="758" title="Edit Condition">
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			import mx.rpc.events.ResultEvent;
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
+			import org.systemsbiology.echidna.common.Util;
+			
+			protected var _conditionId:String;
+			
+			protected var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
+			
+			public function set conditionId(conditionId:String):void {
+				_conditionId = conditionId;
+				load();
+			}
+			
+			
+			protected function load():void {
+				trace("condition id = " + _conditionId);
+				Util.ajax("main/get_condition", {"condition_id": _conditionId}, onGotData, ajaxFault.ajaxFault);					
+			}
+			
+			protected function onGotData(event:ResultEvent):void {
+				var condition:Object = JSON.decode(event.result.toString())['condition'];
+				conditionNameText.text = condition['name'];
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:Button x="19" y="686" label="Save Changes"/>
+	<mx:Button x="132" y="686" label="Cancel"/>
+	<mx:Label x="19" y="10" text="Name:"/>
+	<mx:TextInput x="99" y="8" id="conditionNameText"/>
+</mx:TitleWindow>

@@ -110,6 +110,7 @@ var gaggleListener = function(e) {
 }
 
 var fireEventToFG = function(name, value) {
+    log ("in fireEvent to FG, name  = " + name);
     var element = document.getElementById("fg_event");
     element.setAttribute("eventName", name);
     element.innerHTML = value;

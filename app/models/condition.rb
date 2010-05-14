@@ -2,7 +2,11 @@ class Condition < ActiveRecord::Base
   belongs_to :condition_groupings
   belongs_to :species
   has_many :observations
+  belongs_to :reference_sample
+  belongs_to :growth_media_recipe
   
+  belongs_to :importer, :class_name => "User"
+  belongs_to :owner, :class_name => "User"
   
   attr_accessor :num_groups
   
