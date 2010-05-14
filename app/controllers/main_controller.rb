@@ -16,8 +16,10 @@ class MainController < ApplicationController
   before_filter do |controller|
     unless (controller.session[:user].nil?)
       user = User.find_by_email controller.get_email_from_session_user
-      la = LoggedAction.new(:user_id => user.id, :action => controller.action_name)
-      la.save
+      unless user.nil?
+        la = LoggedAction.new(:user_id => user.id, :action => controller.action_name)
+        la.save
+     end
     end
   end
   
