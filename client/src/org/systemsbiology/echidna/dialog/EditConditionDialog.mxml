@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="1102" height="758" title="Edit Condition">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="1102" height="758" title="Edit Condition" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
 			import com.adobe.serialization.json.JSON;
+			import com.adobe.utils.StringUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.IFlexDisplayObject;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
-			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
+			
 			import org.systemsbiology.echidna.common.Util;
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
+			import org.systemsbiology.echidna.ui.ObservationPanel;
 			
 			protected var _conditionId:String;
 			
 			protected var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
+			
+			protected var names:ArrayCollection;
+			protected var units:ArrayCollection;
+			protected var gotAll:Boolean = false;
+			protected var observations:Array;
+			protected var condition:Object;
+			
+			
+			protected function init():void {
+				getStuff("main/get_controlled_vocab_names", true);
+				getStuff("main/get_units", false);
+
+			}
 			
 			public function set conditionId(conditionId:String):void {
 				_conditionId = conditionId;
@@ -23,14 +45,123 @@
 			}
 			
 			protected function onGotData(event:ResultEvent):void {
-				var condition:Object = JSON.decode(event.result.toString())['condition'];
+				condition = JSON.decode(event.result.toString())['condition'];
 				conditionNameText.text = condition['name'];
+				if (names != null && units != null && _conditionId != null) {
+					gotAll = true;
+				}
+				proceed();
+				
+			} 
+			
+			
+			protected function getStuff(url:String, namesFlag:Boolean):void {
+				Util.ajax(url, null, function(event:ResultEvent):void {
+					trace("in getStuff callback function with url = " + url);
+					
+					//var tmp:Array = JSON.decode(event.result.toString());
+					var tmpAC:ArrayCollection = new ArrayCollection();
+					var type:String = (namesFlag) ? "controlled_vocab_item" : "unit";
+					tmpAC = Util.objectToArrayCollection(JSON.decode(event.result.toString()),type);
+					/*
+					for (var i:int = 0; i < tmp.length; i++) {
+						var o:Object = new Object();
+						o['label'] = tmp[i];
+						tmpAC.addItem(o);
+					}
+					*/
+					if (namesFlag) {
+						names = tmpAC;
+					} else {
+						units = tmpAC;
+					}
+					if (names != null && units != null && _conditionId != null) {
+						gotAll = true;
+					}
+					proceed();
+				}, ajaxFault.ajaxFault);
+				
 			}
+			
+			protected function proceed():void {
+				if (!gotAll) return;
+				// this sometimes throws npe:
+				observations = condition['observations'];
+				for (var i:int = 0; i < observations.length; i++) {
+					var op:ObservationPanel = new ObservationPanel();
+					observationVbox.addChild(op);
+					op.names = names;
+					op.units = units;
+					op.isTimeMeasurement = (observations[i]['name_id'] == 21);//bad!!! todo unhardcode
+					op.isMeasurement = (observations[i]['is_measurement'] == null) ? false : observations[i]['is_measurement'];
+					op.nameID = observations[i]['name_id'];
+					op.unitsID = observations[i]['units_id'];
+					op.echidna_id = observations[i]['id'];
+					op.initialValue = observations[i]['string_value'];
+				}
+
+				
+			}
+			
+			protected function gatherChanges():void {
+				trace("in gatherChanges()");
+				var valid:Boolean = true;
+				var conditionObject:Object = new Object();
+				var name:String = StringUtil.trim(conditionNameText.text);
+				if (name.length == 0) valid = false;
+				conditionObject['name'] = name;
+				conditionObject['id'] = parseInt(_conditionId);
+				var obs:Array = new Array();
+				for (var i:int = 0; i < observationVbox.getChildren().length; i++) {
+					var op:ObservationPanel = observationVbox.getChildAt(i) as ObservationPanel;
+					if (!op.isValidState()) valid == false;
+					obs.push(op.getState());
+				}
+				
+				
+				conditionObject['observations'] = JSON.encode(obs);
+				
+				
+				if (!valid) {
+					Alert.show("Please fill in all fields.");
+					return;
+				}
+				
+				//todo - put another confirm box up before doing the save, telling the user that condition metadata should normally not be changed unless it is wrong
+				
+				if (name != condition['name']) {
+					Alert.show("You changed the condition name. Are you sure you want to do this? Changing the condition name can affect cMonkey runs and other operations.",
+						"Confirm Condition Name Change", Alert.YES|Alert.NO, this, function(event:CloseEvent):void {
+							if (event.detail == Alert.YES) {
+								saveChanges(conditionObject);
+							}
+						}, null, Alert.NO);
+				} else {
+					saveChanges(conditionObject);
+				}
+			}
+			
+			protected function saveChanges(condToSave:Object):void {
+				trace("in saveChanges()");
+				var savedThis:IFlexDisplayObject = this;
+				Util.ajax("main/save_condition", condToSave, function(event:ResultEvent):void{
+					if (event.result.toString() == "error") {
+						ajaxFault.ajaxFault(null);
+						return;
+					}
+					Alert.show("Saved!");
+					PopUpManager.removePopUp(savedThis);
+					//todo - repopulate condition detail box IF it is displayed
+				}, ajaxFault.ajaxFault);
+			}
+			
 			
 		]]>
 	</mx:Script>
-	<mx:Button x="19" y="686" label="Save Changes"/>
-	<mx:Button x="132" y="686" label="Cancel"/>
+	<mx:Button x="19" y="686" label="Save Changes" click="gatherChanges()"/>
+	<mx:Button x="132" y="686" label="Cancel" click="PopUpManager.removePopUp(this)"/>
 	<mx:Label x="19" y="10" text="Name:"/>
 	<mx:TextInput x="99" y="8" id="conditionNameText"/>
+	<mx:VBox id="observationVbox" x="19" y="38" height="640" width="974">
+	</mx:VBox>
 </mx:TitleWindow>

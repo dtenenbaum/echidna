@@ -488,7 +488,8 @@
 			editMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, editItem);
 			
 			var dispObj:DataGrid = event.target as DataGrid;
-			dispObj.contextMenu = new ContextMenu();	
+			dispObj.contextMenu = new ContextMenu();
+			dispObj.contextMenu.hideBuiltInItems();
 			
 			
 			dispObj.contextMenu.customItems.push(editMenuItem);

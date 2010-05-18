@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100514181731) do
+ActiveRecord::Schema.define(:version => 20100518163955) do
 
   create_table "citations", :force => true do |t|
     t.integer "paper_id",     :limit => 11
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(:version => 20100514181731) do
     t.integer  "owner_id",               :limit => 11
     t.integer  "importer_id",            :limit => 11
     t.integer  "growth_media_recipe_id", :limit => 11
+    t.integer  "last_updated_by",        :limit => 11
   end
 
   add_index "conditions", ["id"], :name => "index_conditions_on_id"

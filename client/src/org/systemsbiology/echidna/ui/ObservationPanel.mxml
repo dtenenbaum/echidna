@@ -3,22 +3,92 @@
 	<mx:Label x="10" y="10" text="Name:"/>
 	<mx:Label x="178" y="10" text="Value:"/>
 	<mx:Label x="341" y="10" text="Units:"/>
-	<mx:ComboBox x="10" y="26" id="namesComboBox" dataProvider="{names}" width="160"></mx:ComboBox>
-	<mx:TextInput x="178" y="26"/>
-	<mx:ComboBox x="346" y="26" id="unitsComboBox" dataProvider="{units}" width="154"></mx:ComboBox>
+	<mx:ComboBox x="10" y="26" id="namesComboBox" dataProvider="{names}" labelField="name" width="160"></mx:ComboBox>
+	<mx:TextInput id="valueText" x="178" y="26" text="{initialValue}"/>
+	<mx:ComboBox x="346" y="26" id="unitsComboBox" dataProvider="{units}" labelField="name" width="154"></mx:ComboBox>
 	
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.utils.StringUtil;
+			
 			import mx.collections.ArrayCollection;
 			
 			[Bindable]
 			public var names:ArrayCollection;
 			[Bindable]
 			public var units:ArrayCollection;
+			
+			public var echidna_id:int;
+			
+			protected var _nameID:int;
+			protected var _unitsID:int;
+			
+			[Bindable] public var initialName:String;
+			[Bindable] public var initialValue:String;
+			[Bindable] public var initialUnits:String;
+			[Bindable] public var isMeasurement:Boolean;
+			[Bindable] public var isTimeMeasurement:Boolean;
+			
+			public function set nameID(id:int):void {
+				setInitialComboBoxValue(namesComboBox, names, id);
+			}
+			
+			public function set unitsID(id:int):void {
+				setInitialComboBoxValue(unitsComboBox, units, id);
+			}
+			
+			protected function setInitialComboBoxValue(cb:ComboBox, ac:ArrayCollection, id:int):void {
+				trace("in setInitialComboBoxValue, id = " + id );
+				for(var i:int = 0; i < ac.length; i++) {
+					var o:Object = ac.getItemAt(i);
+					if (o['id'] == id) {
+						trace("is combobox null? " + (cb == null));
+						cb.selectedIndex = i;
+						return;
+					}
+				}
+			}
+			
+			
+			protected function init():void {
+				
+			}
+			
+			protected function isTime():Boolean {
+				var thingy:String = namesComboBox.selectedItem['name'];
+				trace("thingy = " + thingy);
+				return (thingy == 'time');
+			}
+			
+			public function getState():Object {
+				var ret:Object = new Object();
+				if (StringUtil.trim(otherNameText.text) != "") {
+					ret['other_name'] = StringUtil.trim(otherNameText.text); 
+				}
+				ret['name_id'] = namesComboBox.selectedItem['id'];
+				ret['units_id'] = unitsComboBox.selectedItem['id'];
+				ret['string_value'] = StringUtil.trim(valueText.text);
+				ret['id'] = echidna_id;
+				ret['is_measurement' ] = measurementCheckBox.selected;
+				ret['is_time_measurement'] = timeMeasurementCheckbox.selected;
+				
+				
+				return ret;
+			}
+			
+			public function isValidState():Boolean {
+				var obj:Object = getState();
+				var stringValue:String = obj['string_value'];
+				return (stringValue.length > 0);
+			}
+			
+			
 		]]>
 	</mx:Script>
 	<mx:Label x="17" y="56" text="Name if not included in box above:"/>
-	<mx:TextInput x="17" y="82"/>
+	<mx:TextInput id="otherNameText" x="17" y="82"/>
+	<mx:CheckBox x="17" y="112" label="Is this a measurement?" id="measurementCheckBox" selected="{isMeasurement}"/>
+	<mx:CheckBox x="17" y="138" label="Is this a time measurement?" id="timeMeasurementCheckbox" selected="{isTimeMeasurement}"/>
 	
 	
 </mx:Canvas>

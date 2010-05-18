@@ -857,14 +857,65 @@ class MainController < ApplicationController
   
   def get_controlled_vocab_names
     # todo - show only approved
-    names = ControlledVocabItem.find(:all, :order => 'name').map{|i|i.name}
+    names = ControlledVocabItem.find(:all, :order => 'name')#.map{|i|i.name}
     render :text => names.to_json
   end
   
   def get_units
-    units = Unit.find(:all, :order => :name, :conditions => 'parent_id is not null and name is not null ').map{|i|i.name}
-    units.unshift("None")
+    units = Unit.find(:all, :order => :name, :conditions => 'parent_id is not null and name is not null ')#.map{|i|i.name}
+#    units.unshift(units.detect{|i|i.name == "None"})
+    none = Unit.new()
+    none.name = "None"
+    none.id = 0
+    units.unshift(none)
     render :text => units.to_json
+  end
+  
+  
+  def save_condition
+    obs = ActiveSupport::JSON.decode(params[:observations])
+    puts "obs=\n"
+    pp obs
+    # todo - actually save the condition
+    begin
+      Condition.transaction do
+        cond = Condition.find params[:id]
+        cond.name = params[:name]
+        cond.last_updated_by = session[:user_id]
+        puts "cond:"
+        pp cond
+        for ob in obs
+          old_ob = Observation.find ob["id"]
+          old_ob.name_id = ob["name_id"]
+          old_ob.units_id = (ob["units_id"] == 0) ? nil : ob["units_id"]
+          old_ob.string_value = ob["string_value"]
+          old_ob.is_measurement = ob["is_measurement"]
+          old_ob.is_time_measurement = ob["is_time_measurement"] # comment this out?
+          begin
+            old_ob.int_value = Kernel.Integer(ob["string_value"])
+          rescue Exception => ex
+            old_ob.int_value = nil
+          end
+          
+          begin
+            old_ob.float_value = Kernel.Float(ob["string_value"])
+          rescue Exception => ex
+            old_ob.float_value = nil
+          end
+          puts "ob:"
+          pp old_ob
+          old_ob.save
+        end
+        
+        cond.save
+      end
+    rescue Exception => ex
+      puts ex.message
+      puts ex.backtrace
+      render :text => "error" and return false
+    end
+    
+    render :text => "ok"
   end
   
   
