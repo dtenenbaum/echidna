@@ -105,40 +105,50 @@
 			
 			protected function gatherChanges():void {
 				trace("in gatherChanges()");
-				var valid:Boolean = true;
-				var conditionObject:Object = new Object();
-				var name:String = StringUtil.trim(conditionNameText.text);
-				if (name.length == 0) valid = false;
-				conditionObject['name'] = name;
-				conditionObject['id'] = parseInt(_conditionId);
-				var obs:Array = new Array();
-				for (var i:int = 0; i < observationVbox.getChildren().length; i++) {
-					var op:ObservationPanel = observationVbox.getChildAt(i) as ObservationPanel;
-					if (!op.isValidState()) valid == false;
-					obs.push(op.getState());
-				}
+				
+				Alert.show("Are you sure you want to change condition metadata? This information should only be changed if the current information is incorrectly curated.",
+					"Confirm Condition Save", Alert.YES|Alert.NO, this, function(event:CloseEvent):void {
+						if (event.detail == Alert.NO) return;
+						
+						
+					}, null, Alert.NO);
+				
+					var valid:Boolean = true;
+					var conditionObject:Object = new Object();
+					var name:String = StringUtil.trim(conditionNameText.text);
+					if (name.length == 0) valid = false;
+					conditionObject['name'] = name;
+					conditionObject['id'] = parseInt(_conditionId);
+					var obs:Array = new Array();
+					for (var i:int = 0; i < observationVbox.getChildren().length; i++) {
+						var op:ObservationPanel = observationVbox.getChildAt(i) as ObservationPanel;
+						if (!op.isValidState()) valid == false;
+						obs.push(op.getState());
+					}
+					
+					
+					conditionObject['observations'] = JSON.encode(obs);
+					
+					
+					if (!valid) {
+						Alert.show("Please fill in all fields.");
+						return;
+					}
+					
+					//todo - put another confirm box up before doing the save, telling the user that condition metadata should normally not be changed unless it is wrong
+					
+					if (name != condition['name']) {
+						Alert.show("You changed the condition name. Are you sure you want to do this? Changing the condition name can affect cMonkey runs and other operations.",
+							"Confirm Condition Name Change", Alert.YES|Alert.NO, this, function(event:CloseEvent):void {
+								if (event.detail == Alert.YES) {
+									saveChanges(conditionObject);
+								}
+							}, null, Alert.NO);
+					} else {
+						saveChanges(conditionObject);
+					}
 				
 				
-				conditionObject['observations'] = JSON.encode(obs);
-				
-				
-				if (!valid) {
-					Alert.show("Please fill in all fields.");
-					return;
-				}
-				
-				//todo - put another confirm box up before doing the save, telling the user that condition metadata should normally not be changed unless it is wrong
-				
-				if (name != condition['name']) {
-					Alert.show("You changed the condition name. Are you sure you want to do this? Changing the condition name can affect cMonkey runs and other operations.",
-						"Confirm Condition Name Change", Alert.YES|Alert.NO, this, function(event:CloseEvent):void {
-							if (event.detail == Alert.YES) {
-								saveChanges(conditionObject);
-							}
-						}, null, Alert.NO);
-				} else {
-					saveChanges(conditionObject);
-				}
 			}
 			
 			protected function saveChanges(condToSave:Object):void {
