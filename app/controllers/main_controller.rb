@@ -852,7 +852,7 @@ class MainController < ApplicationController
     tmode = (params[:test_mode] == 'true') ? true : false
     # todo  - stop doing this big fakeout and uncomment the last line of this method!
     
-    group_id = (RAILS_ENV == /production/) ? 430 : 313 # comment this out!
+    group_id = (RAILS_ENV == "production") ? 430 : 313 # comment this out!
     group = ConditionGroup.find(group_id) # comment this out!
     render :text => group.to_json(:methods => :conditions) # this too!
     #render :text => PipelineImporter.import_experiment(params[:sbeams_id], params[:sbeams_timestamp], user, tmode).to_json(:methods => :conditions) # uncomment this!
