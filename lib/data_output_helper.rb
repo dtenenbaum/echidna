@@ -215,8 +215,8 @@ EOF
     #out += "\n"
     rows_per_sample = data.size / count
     
-    puts "count = #{count}" 
-    puts "rows_per_sample = #{rows_per_sample}"
+    #puts "count = #{count}" 
+    #puts "rows_per_sample = #{rows_per_sample}"
    
     line = ""
     count = 1

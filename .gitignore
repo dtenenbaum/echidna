@@ -1,3 +1,6 @@
+client/flexbuilder
+client/flashbuilder
+client/.*.bak
 client/.actionScriptProperties
 20100305_echidna_database_backup.sql.gz
 README.boilerplate

@@ -15,6 +15,7 @@ try {
 }
 
 function FG_fireDataEvent() {
+  log("in FG_fireDataEvent");
   // events are documented in the Flanagan Javascript book
   var ev = document.createEvent("Events");
   // initEvent(eventType, canBubble, cancelable)
