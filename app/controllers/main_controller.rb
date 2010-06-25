@@ -129,7 +129,8 @@ class MainController < ApplicationController
   
   
   def get_email_from_session_user()
-    session[:user].split("%").first
+    tmp = session[:user].split("%").first
+    tmp.split(";").first
   end
   
   def diag_email(diaghash)
