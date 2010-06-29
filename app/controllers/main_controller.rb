@@ -711,7 +711,7 @@ class MainController < ApplicationController
       t.save
       seq += 1
       
-      s = SearchTerm.new(:word => tag_name, :condition_id => cond, :int_timestamp => Tagime.now.to_i)
+      s = SearchTerm.new(:word => tag_name, :condition_id => cond, :int_timestamp => Time.now.to_i)
       s.save
       
     end
