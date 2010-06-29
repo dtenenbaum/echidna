@@ -203,10 +203,14 @@ EOF
     puts "ungrouped_ids:"
     pp ungrouped_ids
     
-    groups = ConditionGroup.find_by_sql(["select * from condition_groups where id in (?)", group_ids_to_get.keys])
+    groups = ConditionGroup.find_by_sql(["select * from condition_groups where id in (?) order by name", group_ids_to_get.keys])
     ungroup = ConditionGroup.new(:name => 'Ungrouped Results')
     ungroup.ungrouped_ids = ungrouped_ids
     groups << ungroup unless ungrouped_ids.empty?
+    
+    #groups.sort! do |a,b|
+      
+    #end
     
     groups
   end
