@@ -27,7 +27,7 @@ EOF
             Condition.connection.execute("insert into #{tmp_table_name} (cid) values (#{cond_id})")
           end
           data = Feature.find_by_sql([query,data_type])
-          #Condition.connection.execute("drop table #{tmp_table_name}")
+          Condition.connection.execute("drop table #{tmp_table_name}")
           return data
         end
         
