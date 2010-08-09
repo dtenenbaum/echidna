@@ -149,7 +149,7 @@
 						<mx:VDividedBox height="100%" width="295" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 							<mx:HBox id="hbox1">
 								<mx:Button id="removeConditionsButton" label="Remove" click="removeSelectedConditions()" enabled="false"/>
-								<mx:Button id="dmvButton" label="DMV" enabled="true" toolTip="View selected group in Data Matrix Viewer (DMV)" click="launchDmv()"/>
+								<mx:Button id="dmvButton" label="WebDMV" enabled="true" toolTip="View selected group in Data Matrix Viewer (DMV)" click="launchDmv()"/>
 								<mx:Button label="Show All" enabled="true" toolTip="Show all groups" click="showAllGroups()" id="showAllGroupsButton"/>
 							</mx:HBox>
 							<mx:VBox id="vbox1">
@@ -276,12 +276,13 @@
 			<mx:Label x="771" y="0" text="Log Out" id="logOutLabel" click="logOut()" toolTip="Click here to log out"/>
 			
 			
-			<mx:HBox id="searchTermsHbox" x="9.1" y="491.15" visible="false">
+			<mx:HBox id="searchTermsHbox" x="9.1" y="491.15">
 				<mx:VBox width="178.86365" height="103.030304" >
 					<mx:Label text="Search Terms:" id="label1"/>
 					<mx:Text id="searchTermsText"/>
-					<mx:Button label="Save Current Search" id="saveCurrentSearchButton" click="saveCurrentSearch()" enabled="true"/>
+					<mx:Button label="Save Current Search" id="saveCurrentSearchButton" click="saveCurrentSearch()" enabled="false"/>
 					<mx:Button label="Tag Current Results" id="tagCurrentSearchButton" click="tagCurrentSearch()" enabled="true"/>
+					<mx:Button label="View Tags" id="viewTagsButton" click="viewTags()"/>
 				</mx:VBox>
 			</mx:HBox>
 		
@@ -326,9 +327,6 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import org.systemsbiology.echidna.dialog.EditConditionDialog;
-			import org.systemsbiology.echidna.dialog.TaggingDialog;
-			import org.systemsbiology.echidna.events.EchidnaSelectionChangedEvent;
 			import com.adobe.serialization.json.JSON;
 			
 			import flash.utils.setInterval;
@@ -359,6 +357,7 @@
 			import org.systemsbiology.echidna.common.Util;
 			import org.systemsbiology.echidna.dialog.AddToExistingGroupDialog;
 			import org.systemsbiology.echidna.dialog.CreateRelationshipDialog;
+			import org.systemsbiology.echidna.dialog.EditConditionDialog;
 			import org.systemsbiology.echidna.dialog.ImportExperimentDialog;
 			import org.systemsbiology.echidna.dialog.LoginDialog;
 			import org.systemsbiology.echidna.dialog.NewGroupDialog;
@@ -369,7 +368,10 @@
 			import org.systemsbiology.echidna.dialog.SaveCurrentSearchDialog;
 			import org.systemsbiology.echidna.dialog.SearchDialog;
 			import org.systemsbiology.echidna.dialog.ShowSavedSearchesDialog;
+			import org.systemsbiology.echidna.dialog.TaggingDialog;
+			import org.systemsbiology.echidna.dialog.ViewTagsDialog;
 			import org.systemsbiology.echidna.events.CreatedRelationshipEvent;
+			import org.systemsbiology.echidna.events.EchidnaSelectionChangedEvent;
 			import org.systemsbiology.echidna.events.GetConditionsEvent;
 			import org.systemsbiology.echidna.events.GotExistingGroupIdEvent;
 			import org.systemsbiology.echidna.events.GotLoginInfoEvent;
@@ -721,7 +723,8 @@
 		
 		protected function accordionClick(event:MouseEvent):void {
 			lastAccordionItemClicked = null;
-			searchTermsHbox.visible = false;
+			//searchTermsHbox.visible = false;
+			saveCurrentSearchButton.enabled = false;
 			groupedInAC = new ArrayCollection();
 			trace("accordion clicked, current state is " + currentState);
 			if (accordion.selectedIndex == 0) { // Results/conditions
@@ -1369,7 +1372,8 @@
 			});
 			searchDialog.addEventListener(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT, function(event:SearchResultsReturnedEvent):void {
 				trace("curr items free search length: " + currentlyActiveSearch.freeTextSearch.length);
-				searchTermsHbox.visible = true;
+				//searchTermsHbox.visible = true;
+				saveCurrentSearchButton.enabled = true;
 				searchTermsText.text = event.searchTerms.join(", ");
 			});
 		}
@@ -1414,7 +1418,8 @@
 			});
 			showSavedSearchesDialog.addEventListener(SearchResultsReturnedEvent.SEARCH_RESULTS_RETURNED_EVENT, function(event:SearchResultsReturnedEvent):void {
 				trace("curr items free search length: " + currentlyActiveSearch.freeTextSearch.length);
-				searchTermsHbox.visible = true;
+				//searchTermsHbox.visible = true;
+				saveCurrentSearchButton.enabled = true;
 				searchTermsText.text = event.searchTerms.join(", ");
 			});
 			showSavedSearchesDialog.addEventListener(StartProgressBarEvent.START_PROGRESS_BAR_EVENT, function (event:StartProgressBarEvent):void {
@@ -1453,6 +1458,20 @@
 				numSelected += groupsGrid.selectedItems[i]['num_results'];
 			}
 			selectedConditionsText.text = "" + numSelected;
+		}
+			
+		protected function viewTags():void {
+			Util.ajax("main/get_tags", null, function(event:ResultEvent):void {
+				var obj:Object = JSON.decode(event.result.toString());
+				var tagsAC:ArrayCollection = Util.objectToArrayCollection(obj, "tag");
+				var viewTagsDialog:ViewTagsDialog = new ViewTagsDialog();
+				viewTagsDialog.addEventListener(ResultEvent.RESULT, function(event:ResultEvent):void {
+					gotGroups(event);
+				});
+				viewTagsDialog.tagsAC = tagsAC;
+				PopUpManager.addPopUp(viewTagsDialog, app, true);
+				PopUpManager.centerPopUp(viewTagsDialog);
+			}, ajaxFault.ajaxFault);
 		}
 		
 		

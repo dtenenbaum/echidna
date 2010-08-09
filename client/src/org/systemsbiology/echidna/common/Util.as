@@ -26,9 +26,6 @@ package org.systemsbiology.echidna.common
 		}
 		
 		
-		public static function foo():void {
-			
-		}
 		
 		
 		

@@ -116,7 +116,7 @@ EOF
     begin
       Condition.transaction do
         Condition.connection.execute "truncate table search_terms"
-        #add_search_term("Condition", "name")
+        add_search_term("Condition", "name")
         add_group_names()
         add_controlled_vocab_items()
         add_environmental_perturbations()
@@ -233,8 +233,13 @@ EOF
   def group_description(group_id)
     group = ConditionGroup.find(params[:group_id])
     conds = Condition.find_by_sql(["select * from conditions where id in (select condition_id from condition_groupings where condition_group_id = ?) order by sequence",params[:group_id]])
+    tags = Tag.find_by_sql(["select * from tags where condition_id in (#{conds.map{|i|i.id}.join(",")}) order by tag"])
+    auto_tags = tags.find_all{|i|i.auto}.map{|i|i.tag}.uniq
+    manual_tags = tags.reject{|i|i.auto}.map{|i|i.tag}.uniq
     ret = "Group Description:\n"
     ret += "Name: #{group.name}\n"
+    ret += "Manual Tags: #{manual_tags.map.join(", ")}\n"
+    ret += "Auto Tags: #{auto_tags.map.join(", ")}\n"
     ret += (group.is_time_series) ? "Time Series\n" : "Not Time Series\n"
     owner = (group.owner_id.nil?) ? nil : User.find(group.owner_id)
     importer =  (group.importer_id.nil?) ? nil : User.find(group.importer_id)

@@ -169,7 +169,7 @@
 					 	conditionsVBox.addChild(hbox);
 					 	for (var z:int = 0; z < 10; z++) {
 					 		var l:Label = new Label();
-					 		l.text = "hi! ";
+					 		//l.text = "hi! ";
 					 		conditionsVBox.addChild(l);
 					 	}
 					 	

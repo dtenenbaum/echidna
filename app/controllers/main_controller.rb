@@ -239,6 +239,33 @@ class MainController < ApplicationController
     render :text => "ok"
   end
  
+  def get_groups_by_tags
+    cond_ids = []
+    tags = params[:tags].split(",")
+    
+    tags.each do |i|
+      res = Condition.find_by_sql(["select distinct condition_id from tags where tag = ?", i])
+      cond_ids += res.map{|item|item.condition_id.to_i}
+    end
+    
+    
+    results = Condition.find_by_sql(["select * from conditions where id in (?)",cond_ids.uniq])
+    
+    groups = get_groups_for_conditions(results)
+    if (groups.empty?)
+      render :text => "none" and return false
+    else
+      ret = []
+      groups.each do |g|
+        h = g.attributes
+        h['num_results'] = g.num_results
+        ret << {"condition_group" => h}
+      end
+      render :text => ret.to_json
+    end
+    
+  end
+ 
   # todo rename
   def search_conditions
     search = ActiveSupport::JSON.decode(params[:search])
@@ -800,6 +827,50 @@ class MainController < ApplicationController
     render :text => get_alias_map.to_json
   end
   
+  
+  def glop
+    #qs = query_string.gsub(/&amp;/,"&")
+    data_type = ""
+    if (params["amp;data_type"])
+      data_type = params["amp;data_type"]
+    elsif (params["data_type"])
+      data_type = params["data_type"]
+    end
+
+
+    
+    
+    cond_ids = []
+    data = ''
+    
+    if (params[:group_id])
+      params[:group_ids] = params[:group_id]
+    end
+    
+    if (params[:group_ids])
+      group_ids = params[:group_ids].split(",")
+      cond_ids = []
+      conds = []
+      for group_id in group_ids
+        conds += ConditionGrouping.find_by_sql(["select condition_id from condition_groupings where condition_group_id = ? order by sequence",group_id])
+      end
+      cond_ids = conds.map{|i|i.condition_id}
+    elsif (params[:condition_ids])
+      cond_ids = params[:condition_ids].split(",")
+    end
+
+    #render :text => "ok" and return false if true
+
+
+    data_filename = get_matrix_data(cond_ids,data_type)
+
+    headers['Content-type'] = 'text/plain'
+    
+    #render :text => as_matrix(data)
+    render_matrix_file(data_filename)
+    render :text => "hello"
+  end
+  
   def get_matrices_for_firegoose
     #qs = query_string.gsub(/&amp;/,"&")
     data_type = ""
@@ -921,6 +992,11 @@ class MainController < ApplicationController
     render :text => "ok"
   end
   
+  
+  def get_tags
+    tags = Tag.find_by_sql(["select distinct tag, auto from tags order by tag"])
+    render :text => tags.to_json
+  end
   
 end
 

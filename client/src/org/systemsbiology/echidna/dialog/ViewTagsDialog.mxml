@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="456" height="508" title="View Tags">
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.ListEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			
+			import org.systemsbiology.echidna.common.Util;
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
+			
+			[Bindable]
+			private var _tagsAC:ArrayCollection;
+			private var allTags:ArrayCollection;
+			
+			private var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
+			
+			
+			public function set tagsAC(tagsAC:ArrayCollection):void {
+				_tagsAC = tagsAC;
+				allTags = tagsAC;
+			}
+			
+			public function toggle():void {
+				if (toggleAutoButton.label == "Hide Auto Tags") {
+					var tmpAC:ArrayCollection = new ArrayCollection();
+					for(var i:int = 0; i < allTags.length; i++) {
+						if (!allTags[i]['auto']) {
+							tmpAC.addItem(allTags[i]);
+						}
+					}
+					_tagsAC = tmpAC;
+					toggleAutoButton.label = "Show Auto Tags";
+				} else {
+					_tagsAC = allTags;
+					toggleAutoButton.label = "Hide Auto Tags";
+				}
+			}
+			
+			
+
+			protected function tagsList_itemClickHandler(event:ListEvent):void {
+				var enabled:Boolean = (tagsList.selectedItems.length == 1 && !tagsList.selectedItem['auto']);
+				deleteTagButton.enabled = enabled;
+				renameTagButton.enabled = enabled;
+				
+				viewResultsButton.enabled = (tagsList.selectedItems.length > 0);
+			}
+			
+			protected function deleteTag():void {
+				
+			}
+			
+			protected function renameTag():void {
+				
+			}
+			
+			protected function cancel():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function viewResults():void {
+				var selectedTags:Array = new Array();
+				for(var i:int = 0; i < tagsList.selectedItems.length; i++) {
+					selectedTags.push(tagsList.selectedItems[i]['tag']);
+				}
+				var savedThis:TitleWindow = this;
+				var tagsString:String = selectedTags.join(",");
+				Util.ajax("main/get_groups_by_tags", {tags: tagsString}, function(event:ResultEvent):void {
+					PopUpManager.removePopUp(savedThis);
+					dispatchEvent(event);
+				}, ajaxFault.ajaxFault);
+			}
+
+		]]>
+	</mx:Script>
+	
+	<mx:List x="31" y="51" id="tagsList" dataProvider="{_tagsAC}" allowMultipleSelection="true" labelField="tag" width="242" height="244" itemClick="tagsList_itemClickHandler(event)">
+		<mx:itemRenderer>
+			<mx:Component>
+				<mx:Label text="{data.tag}">
+					<mx:Script>
+						<![CDATA[
+							override public function set data( value:Object ) : void {
+								super.data = value;
+								if( data['auto'] ) setStyle("fontWeight","normal");
+								else setStyle("fontWeight","bold");
+							}
+						]]>
+					</mx:Script>
+				</mx:Label>
+			</mx:Component>
+		</mx:itemRenderer>
+	</mx:List> 
+	<mx:Button x="31" y="318" label="Hide Auto Tags" id="toggleAutoButton" click="toggle()"/>
+	<mx:Label x="31" y="25" text="Manually created tags are listed in bold below:"/>
+	<mx:Button x="31" y="414" label="View Results" id="viewResultsButton" click="viewResults()" enabled="false"/>
+	<mx:Button x="162" y="318" label="Delete" id="deleteTagButton" click="deleteTag()" enabled="false"/>
+	<mx:Button x="234" y="318" label="Rename" id="renameTagButton" click="renameTag()" enabled="false"/>
+	<mx:Button x="137" y="414" label="Cancel" id="cancelButton" click="cancel()"/>
+	
+</mx:TitleWindow>

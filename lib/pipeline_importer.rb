@@ -54,6 +54,8 @@ class PipelineImporter
     end
     map
   end
+
+
   
   def self.create_conditions(group, headers, slidenums)
     puts "creating conditions..."
@@ -155,8 +157,8 @@ class PipelineImporter
       Condition.transaction do
         for cond in g.conditions
           Feature.connection.execute("delete from features where condition_id = #{cond.id}")
-          ConditionGrouping.execute("delete from condition_groupings where condition_id = #{cond.id}")
-          Observation.connection.execute("deletre from observations where condition_id = #{cond.id}")
+          ConditionGrouping.connection.execute("delete from condition_groupings where condition_id = #{cond.id}")
+          Observation.connection.execute("delete from observations where condition_id = #{cond.id}")
           Condition.delete cond.id
         end
         ConditionGroup.delete(group_id)
@@ -168,5 +170,7 @@ class PipelineImporter
     
   end
   
+  
+ 
   
 end

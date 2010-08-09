@@ -9,6 +9,7 @@
 			private var _names:ArrayCollection;
 
 			public function set names(ac:ArrayCollection):void {
+				trace("BLAGH!!!!!!!!");
 				_names = ac;
 				obPanel.names = ac;
 			}

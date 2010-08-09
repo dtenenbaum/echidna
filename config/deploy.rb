@@ -31,6 +31,7 @@ load 'deploy'
 
   set :rails_env, "production"
 
+  # todo - don't hardcode repository url, so other users can fork
   set :repository, "git://github.com/dtenenbaum/echidna.git"
 
   set :runner, "user to run as with sudo"
@@ -38,8 +39,11 @@ load 'deploy'
   set :scm, "git"
 
   set :use_sudo, false
-
-  set :user, "dtenenba"
+  
+  # todo - don't hardcode this
+  who = `whoami`
+  who = 'dtenenba' if who == 'dtenenbaum'
+  set :user, who
 
 
 
