@@ -1,6 +1,10 @@
 package flex.utils.ui
 {
 	//stolen from http://imtiyaz-dev.blogspot.com/2008/06/test-post.html and modified a bit
+	import adobe.utils.CustomActions;
+	
+	import com.adobe.serialization.json.JSON;
+	
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.system.System;
@@ -21,6 +25,7 @@ package flex.utils.ui
 		[Bindable] public var enableCopy : Boolean = true;
 		// for creating conext menu item for copying functionality				
 		private var copyContextItem:ContextMenuItem;		
+		private var selectAllContextItem:ContextMenuItem;
 		// for storing the header text at only once.
 		//private var headerString : String = '';
 		
@@ -48,6 +53,12 @@ package flex.utils.ui
 		      copyContextItem.enabled = true;
 			  copyContextItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,copyDataHandler);		
 			  contextMenu.customItems.push(copyContextItem);
+			  
+			  selectAllContextItem = new ContextMenuItem("select all rows");
+			  selectAllContextItem.enabled = true;
+			  selectAllContextItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, selectAllHandler);
+			  contextMenu.customItems.push(selectAllContextItem);
+			  
 			  // comment the following line if you want default items in context menu.
 			  contextMenu.hideBuiltInItems();
 		}
@@ -76,6 +87,19 @@ package flex.utils.ui
 			doTheActualCopy();
 		}
 		
+		private function selectAllHandler(event:Event):void {
+			var dataSource:ArrayCollection = this.dataProvider as ArrayCollection;
+
+			var indices:Array = new Array();
+			trace("num rows = " + dataSource.length);
+			for(var i:int = 0; i < dataSource.length; i++) {
+				indices[i] = i;
+				//trace("i = " + i);
+			}
+			selectedIndices = indices;
+			invalidateList();
+		}
+		
 		private function handleAlertClose(event:CloseEvent):void{
 			trace("handling .. the event");
 			if(event.detail == 1)
@@ -98,7 +122,28 @@ package flex.utils.ui
 		 		return headerString;	 	
 		}	
 		
+		private function getSelectedRowsFromGroupTable():String {
+			var dataSource:ArrayCollection = this.dataProvider as ArrayCollection;
+			
+			
+
+			var outStr:String = "";
+			for (var i:int = 0; i < selectedItems.length; i++) {
+				//trace("row = " + JSON.encode(dataSource.getItemAt(i)));
+				outStr += selectedItems[i]['name'] + "\t" + selectedItems[i]['num_results'] + "\n";
+			}
+			return outStr;
+		}
+		
 		private function getSelectedRowsData():String{
+			/*
+			for (var i:int = 0; i < columns.length; i++) {
+				trace("column " + JSON.encode(columns[i]));
+			}
+			*/
+			if (columns[0]['headerText'] != 'Gene') {
+				return getSelectedRowsFromGroupTable();
+			}
 			
 			var dataSource:ArrayCollection = this.dataProvider as ArrayCollection;
 			var correctSelectedItems:Array = Util.getSelectedItemsInCorrectOrder(this, dataSource, "gene");

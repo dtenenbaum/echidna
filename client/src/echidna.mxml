@@ -138,14 +138,14 @@
 			<mx:Canvas id="groupView">
 				<mx:VBox>
 					<mx:HDividedBox x="0" y="0" width="725" height="100%">
-						<mx:DataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  change="groupClick(event)"
+						<ui:IBDataGrid width="50%" id="groupsGrid" height="567" dataProvider="{groupsAC}"  change="groupClick(event)"
 							allowMultipleSelection="true" dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragComplete="groupsGridDragComplete(event)">
 							<!--addedToStage="addedToStage(event)"-->
-							<mx:columns>
+							<ui:columns>
 								<mx:DataGridColumn headerText="Name" dataField="name"/>
 								<mx:DataGridColumn headerText="# of Conditions" dataField="num_results"/>
-							</mx:columns>
-						</mx:DataGrid>
+							</ui:columns>
+						</ui:IBDataGrid>
 						<mx:VDividedBox height="100%" width="295" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 							<mx:HBox id="hbox1">
 								<mx:Button id="removeConditionsButton" label="Remove" click="removeSelectedConditions()" enabled="false"/>

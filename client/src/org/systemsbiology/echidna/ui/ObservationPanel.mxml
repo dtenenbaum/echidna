@@ -30,6 +30,8 @@
 			[Bindable] public var isMeasurement:Boolean;
 			[Bindable] public var isTimeMeasurement:Boolean;
 			
+			[Bindable] public var blaData:Array = new Array();
+			
 			public function set nameID(id:int):void {
 				trace("in nameID setter");
 				setInitialComboBoxValue(namesComboBox, names, id);
@@ -88,6 +90,8 @@
 			protected function init(event:FlexEvent):void
 			{
 				trace("in init of ObservationPanel");
+				blaData.push({label: "foo"})
+				blaData.push({label: "bar"});
 			}
 
 		]]>
@@ -96,6 +100,7 @@
 	<mx:TextInput id="otherNameText" x="17" y="82"/>
 	<mx:CheckBox x="17" y="112" label="Is this a measurement?" id="measurementCheckBox" selected="{isMeasurement}"/>
 	<mx:CheckBox x="17" y="138" label="Is this a time measurement?" id="timeMeasurementCheckbox" selected="{isTimeMeasurement}"/>
+	<mx:ComboBox x="218" y="82" id="blabox" dataProvider="{blaData}"></mx:ComboBox>
 	
 	
 </mx:Canvas>

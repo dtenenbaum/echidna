@@ -4,12 +4,13 @@
 	<mx:TextInput x="114.35" y="19" id="conditionNameText"/>
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			
 			import mx.collections.ArrayCollection;
 			private var _units:ArrayCollection;
 			private var _names:ArrayCollection;
 
 			public function set names(ac:ArrayCollection):void {
-				trace("BLAGH!!!!!!!!");
 				_names = ac;
 				obPanel.names = ac;
 			}
@@ -17,6 +18,7 @@
 			public function set units(ac:ArrayCollection):void {
 				_units = ac;
 				obPanel.units = ac;
+				//var str:String = JSON.encode(ac); trace("names = \n" + str);
 			}
 			
 		

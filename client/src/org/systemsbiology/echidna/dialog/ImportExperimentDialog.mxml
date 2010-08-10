@@ -2,24 +2,26 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="1128" height="742" title="Import Experiment" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
-			import mx.events.FlexEvent;
-			import mx.controls.Button;
-			import mx.containers.HBox;
-			import mx.controls.ButtonBar;
-			import mx.core.ScrollPolicy;
-			import org.systemsbiology.echidna.ui.ConditionPanel;
-			import mx.collections.ArrayCollection;
 			import com.adobe.serialization.json.JSON;
-			import org.systemsbiology.echidna.events.StopProgressBarEvent;
-			import mx.controls.ProgressBar;
-			import org.systemsbiology.echidna.events.ImportStatusEvent;
-			import org.systemsbiology.echidna.events.GetConditionsEvent;
-			import mx.core.IFlexDisplayObject;
-			import mx.managers.PopUpManager;
+			
+			import mx.collections.ArrayCollection;
+			import mx.containers.HBox;
 			import mx.controls.Alert;
+			import mx.controls.Button;
+			import mx.controls.ButtonBar;
+			import mx.controls.ProgressBar;
+			import mx.core.IFlexDisplayObject;
+			import mx.core.ScrollPolicy;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
-			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
+			
 			import org.systemsbiology.echidna.common.Util;
+			import org.systemsbiology.echidna.events.GetConditionsEvent;
+			import org.systemsbiology.echidna.events.ImportStatusEvent;
+			import org.systemsbiology.echidna.events.StopProgressBarEvent;
+			import org.systemsbiology.echidna.ui.ConditionPanel;
+			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			[Bindable]
 			public var projectId:String;
 			[Bindable]
@@ -83,13 +85,22 @@
 			protected function getStuff(url:String, namesFlag:Boolean):void {
 				Util.ajax(url, null, function(event:ResultEvent):void {
 					trace("in getStuff callback function with url = " + url);
+					
+					var outer:String = (namesFlag) ? "controlled_vocab_item" : "unit";
+					
+					var ta:Array = new Array();
+					
 					var tmp:Array = JSON.decode(event.result.toString());
 					var tmpAC:ArrayCollection = new ArrayCollection();
 					for (var i:int = 0; i < tmp.length; i++) {
-						var o:Object = new Object();
-						o['label'] = tmp[i];
+						var o:Object = {};//new Object();
+						o['label'] = tmp[i][outer]['name'];
+						//trace("the thing of it is: \n" + JSON.encode(o));
 						tmpAC.addItem(o);
+						ta.push(o);
 					}
+					var vato:ArrayCollection = new ArrayCollection(ta);
+					trace("vato = \n" + JSON.encode(vato));
 					if (namesFlag) {
 						names = tmpAC;
 					} else {
