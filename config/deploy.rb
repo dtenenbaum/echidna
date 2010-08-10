@@ -41,7 +41,7 @@ load 'deploy'
   set :use_sudo, false
   
   # todo - don't hardcode this
-  who = `whoami`
+  who = `whoami`.chomp
   who = 'dtenenba' if who == 'dtenenbaum'
   set :user, who
 
