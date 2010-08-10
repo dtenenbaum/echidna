@@ -998,5 +998,15 @@ class MainController < ApplicationController
     render :text => tags.to_json
   end
   
+  def delete_tag
+    Tag.delete_all(["tag = ?", params[:tag]])
+    render :text => "ok"
+  end
+  
+  def rename_tag
+    Tag.update_all({:tag => params[:new_name]}, ["tag = ?", params[:old_name]])
+    render :text => "ok"
+  end
+  
 end
 

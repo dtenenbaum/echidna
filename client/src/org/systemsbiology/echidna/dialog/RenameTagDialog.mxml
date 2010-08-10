@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="656" height="174" title="Rename Tag" creationComplete="init()">
+	<mx:Label x="34" y="30" text="Old name:"/>
+	<mx:Label x="107" y="30" id="oldNameLabel" width="478"/>
+	<mx:Label x="34" y="56" text="New name:"/>
+	<mx:TextInput x="109" y="54" width="476" id="newNameText"/>
+	<mx:Button x="36" y="82" label="Rename" id="renameButton" click="rename()"/>
+	<mx:Button x="117" y="82" label="Cancel" id="cancelButton" click="cancel()"/>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import mx.utils.StringUtil;
+			
+			import org.systemsbiology.echidna.common.Util;
+			import org.systemsbiology.echidna.events.RenameTagEvent;
+			
+			protected function init():void {
+				newNameText.setFocus(); 
+			}
+			
+			public function set oldName(oldName:String):void {
+				trace("is oldNameLabel null? " + (oldNameLabel == null));
+				oldNameLabel.text = oldName;
+			}
+			
+			public var existingTags:ArrayCollection;
+			
+			
+			protected function cancel():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function rename():void {
+				var newName:String = StringUtil.trim(newNameText.text);
+				if (newName == "") {
+					Alert.show("Please enter a valid name.","Invalid Name");
+					return;
+				}
+				for (var i:int = 0; i < existingTags.length; i++) {
+					if (existingTags[i]['tag'] == newName) {
+						Alert.show("Can't rename '" + oldNameLabel.text + "' to '" + newName + "'; destination tag already exists.","Error");
+						return;
+					}	
+				}
+				var evt:RenameTagEvent = new RenameTagEvent(RenameTagEvent.RENAME_TAG_EVENT);
+				evt.newName = newName;
+				PopUpManager.removePopUp(this);
+				dispatchEvent(evt);
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:TitleWindow>

@@ -2,19 +2,25 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="456" height="508" title="View Tags">
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			
 			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
 			import mx.events.ListEvent;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 			
 			import org.systemsbiology.echidna.common.Util;
+			import org.systemsbiology.echidna.events.RenameTagEvent;
 			import org.systemsbiology.echidna.ui.EchidnaAjaxFault;
 			
 			[Bindable]
-			private var _tagsAC:ArrayCollection;
+			private var _tagsAC:ArrayCollection = new ArrayCollection();
 			private var allTags:ArrayCollection;
 			
 			private var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
+			
 			
 			
 			public function set tagsAC(tagsAC:ArrayCollection):void {
@@ -48,15 +54,41 @@
 				viewResultsButton.enabled = (tagsList.selectedItems.length > 0);
 			}
 			
+			public function getTags():void {
+				Util.ajax("main/get_tags", null, function(event:ResultEvent):void {
+					var obj:Object = JSON.decode(event.result.toString());
+					tagsAC = Util.objectToArrayCollection(obj, "tag");
+				}, ajaxFault.ajaxFault);
+			}
+			
 			protected function deleteTag():void {
-				
+				var tagToDelete:String = tagsList.selectedItem['tag'];
+				Alert.show("Are you sure you want to delete the tag '" + tagToDelete + "'?", 
+					 "Confirm Delete", Alert.YES|Alert.NO, this, function(event:CloseEvent):void {
+						 if (event.detail == Alert.YES) {
+							 Util.ajax("main/delete_tag", {tag: tagToDelete}, function(event:ResultEvent):void {
+								 getTags();
+							 }, ajaxFault.ajaxFault);
+						 }
+					 }, null, Alert.NO);
 			}
 			
 			protected function renameTag():void {
-				
+				var rtd:RenameTagDialog = new RenameTagDialog();
+				var oldName:String = tagsList.selectedItem['tag'];
+				trace("oldName = " + oldName);
+				PopUpManager.addPopUp(rtd, this, true);
+				PopUpManager.centerPopUp(rtd);
+				rtd.oldName = oldName;
+				rtd.existingTags = allTags;
+				rtd.addEventListener(RenameTagEvent.RENAME_TAG_EVENT, function(event:RenameTagEvent):void {
+					Util.ajax("main/rename_tag", {old_name: oldName, new_name: event.newName}, function(event:ResultEvent):void {
+						getTags();
+					}, ajaxFault.ajaxFault);
+				});
 			}
 			
-			protected function cancel():void {
+			protected function closeDialog():void {
 				PopUpManager.removePopUp(this);
 			}
 			
@@ -98,6 +130,6 @@
 	<mx:Button x="31" y="414" label="View Results" id="viewResultsButton" click="viewResults()" enabled="false"/>
 	<mx:Button x="162" y="318" label="Delete" id="deleteTagButton" click="deleteTag()" enabled="false"/>
 	<mx:Button x="234" y="318" label="Rename" id="renameTagButton" click="renameTag()" enabled="false"/>
-	<mx:Button x="137" y="414" label="Cancel" id="cancelButton" click="cancel()"/>
+	<mx:Button x="137" y="414" label="Close" id="closeDialogButton" click="closeDialog()"/>
 	
 </mx:TitleWindow>
