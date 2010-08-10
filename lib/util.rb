@@ -238,8 +238,8 @@ EOF
     manual_tags = tags.reject{|i|i.auto}.map{|i|i.tag}.uniq
     ret = "Group Description:\n"
     ret += "Name: #{group.name}\n"
-    ret += "Manual Tags: #{manual_tags.map.join(", ")}\n"
-    ret += "Auto Tags: #{auto_tags.map.join(", ")}\n"
+    ret += "Manual Tags: #{manual_tags.join(", ")}\n"
+    ret += "Auto Tags: #{auto_tags.join(", ")}\n"
     ret += (group.is_time_series) ? "Time Series\n" : "Not Time Series\n"
     owner = (group.owner_id.nil?) ? nil : User.find(group.owner_id)
     importer =  (group.importer_id.nil?) ? nil : User.find(group.importer_id)
