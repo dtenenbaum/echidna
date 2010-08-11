@@ -1008,5 +1008,18 @@ class MainController < ApplicationController
     render :text => "ok"
   end
   
+  def get_envmap
+    ids = params[:condition_ids].split(",")
+    headers['Content-type'] = 'text/plain'
+    render :text =>  EnvmapHelper.get_envmap(ids)
+  end
+
+  def get_colmap
+    ids = params[:condition_ids].split(",")
+    headers['Content-type'] = 'text/plain'
+    render :text =>  ColmapHelper.get_colmap(ids)
+  end
+
+  
 end
 

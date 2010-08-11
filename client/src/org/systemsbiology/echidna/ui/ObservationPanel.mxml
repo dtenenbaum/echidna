@@ -15,9 +15,9 @@
 			import mx.events.FlexEvent;
 			
 			[Bindable]
-			public var names:ArrayCollection;
+			public var names:Array;
 			[Bindable]
-			public var units:ArrayCollection;
+			public var units:Array;
 			
 			public var echidna_id:int;
 			
@@ -42,7 +42,7 @@
 				setInitialComboBoxValue(unitsComboBox, units, id);
 			}
 			
-			protected function setInitialComboBoxValue(cb:ComboBox, ac:ArrayCollection, id:int):void {
+			protected function setInitialComboBoxValue(cb:ComboBox, ac:Array, id:int):void {
 				trace("in setInitialComboBoxValue, id = " + id );
 				for(var i:int = 0; i < ac.length; i++) {
 					var o:Object = ac.getItemAt(i);

@@ -49,6 +49,17 @@ package org.systemsbiology.echidna.common
 			return ac;
 		}
 		
+
+		public static function objectToArray(obj:Object, type:String):Array {
+			var a:Array = new Array();
+			for (var i:Object in obj) {
+				var item:Object = obj[i][type];
+				a.push(item);
+			}
+			return a;
+		}
+
+		
 		public static function getQueryStringItem(bm:IBrowserManager, key:String):String {
 			trace("bm.base = " + bm.base);
 			trace("bm.url = " + bm.url);

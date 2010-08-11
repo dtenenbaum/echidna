@@ -36,8 +36,8 @@
 			private var progressBar:ProgressBarDialog = new ProgressBarDialog();
 			
 			
-			private  var names:ArrayCollection;
-			private var units:ArrayCollection;
+			private  var names:Array;
+			private var units:Array;
 			
 			private var gotBoth:Boolean = false;
 			private var alreadyImported:Boolean = false;
@@ -88,23 +88,18 @@
 					
 					var outer:String = (namesFlag) ? "controlled_vocab_item" : "unit";
 					
-					var ta:Array = new Array();
-					
 					var tmp:Array = JSON.decode(event.result.toString());
-					var tmpAC:ArrayCollection = new ArrayCollection();
+					var tmpAC:Array = new Array();
 					for (var i:int = 0; i < tmp.length; i++) {
-						var o:Object = {};//new Object();
-						o['label'] = tmp[i][outer]['name'];
-						//trace("the thing of it is: \n" + JSON.encode(o));
-						tmpAC.addItem(o);
-						ta.push(o);
+						var o:Object = {};
+						o = tmp[i][outer];
+						o['label'] = o['name'];
+						tmpAC.push(o);
 					}
-					var vato:ArrayCollection = new ArrayCollection(ta);
-					trace("vato = \n" + JSON.encode(vato));
 					if (namesFlag) {
 						names = tmpAC;
 					} else {
-						units = tmpAC;
+						units = tmpAC; 
 					}
 					if (names != null && units != null) {
 						gotBoth = true;

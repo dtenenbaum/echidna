@@ -7,15 +7,15 @@
 			import com.adobe.serialization.json.JSON;
 			
 			import mx.collections.ArrayCollection;
-			private var _units:ArrayCollection;
-			private var _names:ArrayCollection;
+			private var _units:Array;
+			private var _names:Array;
 
-			public function set names(ac:ArrayCollection):void {
+			public function set names(ac:Array):void {
 				_names = ac;
 				obPanel.names = ac;
 			}
 			
-			public function set units(ac:ArrayCollection):void {
+			public function set units(ac:Array):void {
 				_units = ac;
 				obPanel.units = ac;
 				//var str:String = JSON.encode(ac); trace("names = \n" + str);

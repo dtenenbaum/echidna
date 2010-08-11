@@ -20,8 +20,8 @@
 			
 			protected var ajaxFault:EchidnaAjaxFault = new EchidnaAjaxFault();
 			
-			protected var names:ArrayCollection;
-			protected var units:ArrayCollection;
+			protected var names:Array;
+			protected var units:Array;
 			protected var gotAll:Boolean = false;
 			protected var observations:Array;
 			protected var condition:Object;
@@ -60,9 +60,9 @@
 					trace("in getStuff callback function with url = " + url);
 					
 					//var tmp:Array = JSON.decode(event.result.toString());
-					var tmpAC:ArrayCollection = new ArrayCollection();
+					var tmpAC:Array = new Array();
 					var type:String = (namesFlag) ? "controlled_vocab_item" : "unit";
-					tmpAC = Util.objectToArrayCollection(JSON.decode(event.result.toString()),type);
+					tmpAC = Util.objectToArray(JSON.decode(event.result.toString()),type);
 					/*
 					for (var i:int = 0; i < tmp.length; i++) {
 						var o:Object = new Object();
