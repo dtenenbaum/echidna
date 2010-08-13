@@ -7,7 +7,8 @@ class PipelineImporter
     oligo_files = `ls -1 #{NET_ARRAYS}/Slide_Templates/halo_oligo*.map`
 
     tmp = []
-    oligo_files.each do |i|
+    lines = oligo_files.split("\n")
+    lines.each do |i|
       num = i.split("_").last.gsub(/\.map$/,"")
       items = num.split("-")
       tmp << [items.first.to_i, items.last.to_i, i]
