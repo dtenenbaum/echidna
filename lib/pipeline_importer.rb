@@ -139,7 +139,7 @@ class PipelineImporter
         end
         @@textfile.close
         puts "bulk inserting features..."
-        Condition.connection.execute("LOAD DATA INFILE '#{textfilename}'  INTO TABLE features FIELDS TERMINATED BY '\\t' LINES TERMINATED BY '\\n' (data_type, value, condition_id, gene_id)")
+        Condition.connection.execute("LOAD DATA LOCAL INFILE '#{textfilename}'  INTO TABLE features FIELDS TERMINATED BY '\\t' LINES TERMINATED BY '\\n' (data_type, value, condition_id, gene_id)")
         File.delete(textfilename)
         puts "Created group #{group.id}." 
         return group
