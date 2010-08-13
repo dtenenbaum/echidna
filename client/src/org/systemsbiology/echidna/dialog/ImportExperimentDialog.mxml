@@ -130,6 +130,7 @@
 					 "test_mode" : testMode}, function(event:ResultEvent):void {
 					 	stopProgressBar();
 					 	var groupObj:Object = JSON.decode(event.result.toString());
+						trace("la la land");
 						trace("groupObj = " + event.result.toString());
 					 	var cg:Object = groupObj['condition_group'];
 					 	var conditions:Array = cg['conditions'];
